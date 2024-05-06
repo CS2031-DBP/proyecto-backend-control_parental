@@ -1,5 +1,6 @@
 package org.control_parental.padre.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 
 import jakarta.persistence.ManyToMany;
@@ -20,7 +21,7 @@ import java.util.List;
 @Entity
 public class Padre extends Usuario {
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL) // si eliminamos al padre tambien se eliminaran a los hijos relacionados al padre
     List<Hijo> hijos;
 
     @OneToMany
