@@ -30,4 +30,6 @@ public class Padre extends Usuario {
     @ManyToMany
     List<Post> posts_likeados;
 
+
+
 }
