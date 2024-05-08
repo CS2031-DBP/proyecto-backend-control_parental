@@ -1,8 +1,8 @@
-package org.control_parental.post.application;
+package org.control_parental.publicacion.application;
 
-import org.control_parental.post.domain.NewPostDTO;
-import org.control_parental.post.domain.PostRequestDTO;
-import org.control_parental.post.domain.PostService;
+import org.control_parental.publicacion.domain.NewPublicacionDTO;
+import org.control_parental.publicacion.domain.PostRequestDTO;
+import org.control_parental.publicacion.domain.PublicacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController("/posts")
-public class PostController {
+public class PublicacionController {
 
     @Autowired
-    PostService service;
+    PublicacionService service;
 
     @GetMapping("/{salon_id}")
     public ResponseEntity<List<PostRequestDTO>> findPostsBySalonId(@PathVariable Long salon_id) {
@@ -21,7 +21,7 @@ public class PostController {
     }
 
     @PostMapping("/{salon_id}")
-    public ResponseEntity<Void> createPost(@PathVariable Long salon_id, @RequestParam List<Long> hijos_id, @RequestBody NewPostDTO newPostData) {
+    public ResponseEntity<Void> createPost(@PathVariable Long salon_id, @RequestParam List<Long> hijos_id, @RequestBody NewPublicacionDTO newPostData) {
         service.createPost(newPostData, salon_id, hijos_id);
         return ResponseEntity.created(null).build();
     }

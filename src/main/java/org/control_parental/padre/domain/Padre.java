@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.control_parental.comentario.domain.Comentario;
 import org.control_parental.hijo.domain.Hijo;
-import org.control_parental.post.domain.Post;
+import org.control_parental.publicacion.domain.Publicacion;
 import org.control_parental.usuario.domain.Usuario;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class Padre extends Usuario {
     List<Comentario> comentarios;
 
     @ManyToMany
-    List<Post> posts_likeados;
+    List<Publicacion> posts_likeados;
 
 
 

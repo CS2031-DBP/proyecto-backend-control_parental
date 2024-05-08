@@ -1,6 +1,6 @@
-package org.control_parental.post.domain;
+package org.control_parental.publicacion.domain;
 
-import org.control_parental.post.infrastructure.PostRepository;
+import org.control_parental.publicacion.infrastructure.PublicacionRepository;
 import org.control_parental.salon.domain.Salon;
 import org.control_parental.salon.infrastructure.SalonRepository;
 import org.modelmapper.ModelMapper;
@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PostService {
+public class PublicacionService {
     @Autowired
-    PostRepository repository;
+    PublicacionRepository repository;
 
     @Autowired
     SalonRepository salonRepository;
@@ -25,25 +25,25 @@ public class PostService {
 
     public List<PostRequestDTO> findPostsBySalonId(Long salon_id) {
         Salon salon = salonRepository.findById(salon_id).orElseThrow();
-        List<Post> posts = repository.findAllBySalon(salon);
+        List<Publicacion> publicaciones = repository.findAllBySalon(salon);
 
         List<PostRequestDTO> posts_data = new ArrayList<>();
 
-        for(Post post : posts) {
-            posts_data.add(modelMapper.map(post, PostRequestDTO.class));
+        for(Publicacion publicacion : publicaciones) {
+            posts_data.add(modelMapper.map(publicacion, PostRequestDTO.class));
         }
 
         return posts_data;
     }
 
-    public void createPost(NewPostDTO newPostData, Long salon_id, List<Long> hijos_id) {
-        Post post = modelMapper.map(newPostData, Post.class);
+    public void createPost(NewPublicacionDTO newPostData, Long salon_id, List<Long> hijos_id) {
+        Publicacion publicacion = modelMapper.map(newPostData, Publicacion.class);
         Salon salon = salonRepository.findById(salon_id).orElseThrow();
 
-        post.setFecha(LocalDateTime.now());
-        post.setSalon(salon);
+        publicacion.setFecha(LocalDateTime.now());
+        publicacion.setSalon(salon);
 
 
-        repository.save(post);
+        repository.save(publicacion);
     }
 }

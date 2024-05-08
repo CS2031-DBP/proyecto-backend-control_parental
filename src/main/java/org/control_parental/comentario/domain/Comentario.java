@@ -3,7 +3,7 @@ package org.control_parental.comentario.domain;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.control_parental.padre.domain.Padre;
-import org.control_parental.post.domain.Post;
+import org.control_parental.publicacion.domain.Publicacion;
 
 import java.time.LocalDateTime;
 
@@ -22,5 +22,5 @@ public class Comentario {
     Padre padre;
 
     @ManyToOne
-    Post post;
+    Publicacion publicacion;
 }

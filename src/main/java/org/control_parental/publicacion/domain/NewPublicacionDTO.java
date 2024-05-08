@@ -1,9 +1,9 @@
-package org.control_parental.post.domain;
+package org.control_parental.publicacion.domain;
 
 import lombok.Data;
 
 @Data
-public class NewPostDTO {
+public class NewPublicacionDTO {
 
     String titulo;
 

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.control_parental.padre.domain.Padre;
-import org.control_parental.post.domain.Post;
+import org.control_parental.publicacion.domain.Publicacion;
 import org.control_parental.salon.domain.Salon;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class Hijo {
     List<Padre> padres;
 
     @ManyToMany
-    List<Post> posts;
+    List<Publicacion> publicaciones;
 
     @ManyToMany
     List<Salon> salones;

@@ -3,8 +3,8 @@ package org.control_parental.salon.domain;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.control_parental.hijo.domain.Hijo;
-import org.control_parental.post.domain.Post;
-import org.control_parental.profesor.Profesor;
+import org.control_parental.publicacion.domain.Publicacion;
+import org.control_parental.profesor.domain.Profesor;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class Salon {
     List<Profesor> profesores;
 
     @OneToMany
-    List<Post> posts;
+    List<Publicacion> publicaciones;
 
     @ManyToMany
     List<Hijo> hijos;
