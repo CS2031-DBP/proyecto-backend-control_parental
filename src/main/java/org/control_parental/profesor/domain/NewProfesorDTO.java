@@ -1,4 +1,4 @@
-package org.control_parental.profesor;
+package org.control_parental.profesor.domain;
 
 import jakarta.validation.constraints.Email;
 import lombok.Data;
