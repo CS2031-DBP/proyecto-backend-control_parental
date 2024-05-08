@@ -6,6 +6,7 @@ import lombok.Data;
 public class NewPostDTO {
 
     String titulo;
+
     String descripcion;
 
     String foto;
