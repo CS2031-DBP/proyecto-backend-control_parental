@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class NewComentarioDTO {
-    String descripcion;
+    String contenido;
 }

@@ -16,7 +16,7 @@ public class Comentario {
 
     LocalDateTime fecha;
 
-    String descripion;
+    String contenido;
 
     @ManyToOne
     Padre padre;
