@@ -26,4 +26,11 @@ public class Salon {
     @ManyToMany
     List<Hijo> hijos;
 
+    void addStudent(Hijo hijo) {
+        hijos.add(hijo);
+    }
+
+    List<Hijo> getAllStudents() {
+        return hijos;
+    }
 }

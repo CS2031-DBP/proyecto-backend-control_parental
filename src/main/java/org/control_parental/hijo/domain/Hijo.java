@@ -32,6 +32,6 @@ public class Hijo {
     @ManyToMany
     List<Publicacion> publicaciones;
 
-    @ManyToMany
-    List<Salon> salones;
+    @OneToOne
+    Salon salon;
 }
