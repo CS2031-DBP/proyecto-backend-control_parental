@@ -30,6 +30,12 @@ public class HijoController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
+        hijoService.deleteHijo(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @PostMapping("/csv")
     public ResponseEntity<Void> csvStudents(@RequestParam("file")MultipartFile file) throws IOException {
         if (CSVHelper.hasCSVFormat(file)) {

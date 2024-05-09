@@ -35,5 +35,7 @@ public class HijoService {
         return hijoRepository.findAll();
     }
 
-
+    public void deleteHijo(Long id) {
+        hijoRepository.deleteById(id);
+    }
 }
