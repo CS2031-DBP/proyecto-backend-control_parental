@@ -1,6 +1,7 @@
 package org.control_parental.salon.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.publicacion.domain.Publicacion;
@@ -15,6 +16,8 @@ public class Salon {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
+    @Column(nullable = false)
+    @Size(min = 2, max = 50)
     String nombre;
 
     @ManyToMany
