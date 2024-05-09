@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class NewPublicacionDTO {
 
+
     String titulo;
 
     String descripcion;
