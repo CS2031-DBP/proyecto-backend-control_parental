@@ -1,15 +1,12 @@
 package org.control_parental.hijo.application;
 
 import jakarta.validation.Valid;
-import org.apache.catalina.connector.Response;
 import org.control_parental.csv.CSVHelper;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.hijo.domain.HijoService;
-import org.control_parental.hijo.domain.NewHijoDTO;
+import org.control_parental.hijo.domain.HijoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +22,7 @@ public class HijoController {
     private HijoService hijoService;
 
     @PostMapping
-    public ResponseEntity<Void> createStudent(@Valid @RequestBody NewHijoDTO newHijo) {
+    public ResponseEntity<Void> createStudent(@Valid @RequestBody HijoDTO newHijo) {
         hijoService.newStudent(newHijo);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
