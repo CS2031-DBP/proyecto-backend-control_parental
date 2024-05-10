@@ -19,13 +19,13 @@ public class HijoService {
     @Autowired
     ModelMapper modelMapper;
 
-    public void newStudent(NewHijoDTO newHijoDTO) {
-        Hijo hijo = modelMapper.map(newHijoDTO, Hijo.class);
+    public void newStudent(HijoDTO hijoDTO) {
+        Hijo hijo = modelMapper.map(hijoDTO, Hijo.class);
         hijoRepository.save(hijo);
     }
 
     public void saveCSVStudents(MultipartFile file) throws IOException {
-        List<NewHijoDTO> hijos = CSVHelper.csvToHijos(file.getInputStream());
+        List<HijoDTO> hijos = CSVHelper.csvToHijos(file.getInputStream());
         List<Hijo> newHijos = new ArrayList<Hijo>();
         hijos.forEach(hijo -> newHijos.add(modelMapper.map(hijo, Hijo.class)));
         hijoRepository.saveAll(newHijos);
