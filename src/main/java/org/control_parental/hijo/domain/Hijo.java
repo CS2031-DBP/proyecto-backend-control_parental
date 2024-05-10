@@ -26,12 +26,12 @@ public class Hijo {
     @Column(name = "apellido")
     String apellido;
 
-    @ManyToMany
-    List<Padre> padres;
+    @ManyToOne
+    Padre padre;
 
     @ManyToMany
     List<Publicacion> publicaciones;
 
-    @OneToOne
+    @ManyToOne
     Salon salon;
 }

@@ -1,5 +1,6 @@
 package org.control_parental.salon.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.control_parental.hijo.domain.Hijo;
@@ -23,7 +24,8 @@ public class Salon {
     @OneToMany
     List<Publicacion> publicaciones;
 
-    @ManyToMany
+    @JsonIgnore
+    @OneToMany(mappedBy = "salon")
     List<Hijo> hijos;
 
     void addStudent(Hijo hijo) {
