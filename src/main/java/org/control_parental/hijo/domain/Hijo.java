@@ -29,12 +29,12 @@ public class Hijo {
     @Size(min = 2, max = 50)
     String apellido;
 
-    @ManyToMany
-    List<Padre> padres;
+    @ManyToOne
+    Padre padre;
 
     @ManyToMany
     List<Publicacion> publicaciones;
 
-    @ManyToMany
-    List<Salon> salones;
+    @ManyToOne
+    Salon salon;
 }
