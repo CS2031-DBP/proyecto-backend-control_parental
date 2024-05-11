@@ -1,6 +1,7 @@
 package org.control_parental.hijo.domain;
 
 import org.control_parental.csv.CSVHelper;
+import org.control_parental.hijo.Dto.NewHijoDto;
 import org.control_parental.hijo.infrastructure.HijoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,13 @@ public class HijoService {
     @Autowired
     ModelMapper modelMapper;
 
-    public void newStudent(HijoDTO hijoDTO) {
+    public void newStudent(NewHijoDto hijoDTO) {
         Hijo hijo = modelMapper.map(hijoDTO, Hijo.class);
         hijoRepository.save(hijo);
     }
 
     public void saveCSVStudents(MultipartFile file) throws IOException {
-        List<HijoDTO> hijos = CSVHelper.csvToHijos(file.getInputStream());
+        List<NewHijoDto> hijos = CSVHelper.csvToHijos(file.getInputStream());
         List<Hijo> newHijos = new ArrayList<Hijo>();
         hijos.forEach(hijo -> newHijos.add(modelMapper.map(hijo, Hijo.class)));
         hijoRepository.saveAll(newHijos);

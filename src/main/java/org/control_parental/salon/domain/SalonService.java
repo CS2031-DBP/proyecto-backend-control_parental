@@ -1,7 +1,8 @@
 package org.control_parental.salon.domain;
 
 import org.control_parental.hijo.domain.Hijo;
-import org.control_parental.hijo.domain.HijoDTO;
+import org.control_parental.hijo.Dto.NewHijoDto;
+import org.control_parental.hijo.Dto.ResponseHijoDto;
 import org.control_parental.hijo.infrastructure.HijoRepository;
 import org.control_parental.salon.infrastructure.SalonRepository;
 import org.modelmapper.ModelMapper;
@@ -33,7 +34,7 @@ public class SalonService {
         return salonRepository.findById(id).orElseThrow();
     }
 
-    public void addStudentToSalon(Long id, HijoDTO hijoDTO) {
+    public void addStudentToSalon(Long id, NewHijoDto hijoDTO) {
         Hijo hijo = hijoRepository.findByNombreAndApellido(hijoDTO.getNombre(), hijoDTO.getApellido()).orElseThrow();
         Salon salon = salonRepository.findById(id).orElseThrow();
         hijo.setSalon(salon);
@@ -41,12 +42,12 @@ public class SalonService {
         salonRepository.save(salon);
     }
 
-    public List<HijoDTO> getAllStudents(Long id) {
+    public List<ResponseHijoDto> getAllStudents(Long id) {
         Salon salon = salonRepository.findById(id).orElseThrow();
         List<Hijo> hijos = salon.getAllStudents();
-        List<HijoDTO> hijosDto = new ArrayList<HijoDTO>();
+        List<ResponseHijoDto> hijosDto = new ArrayList<ResponseHijoDto>();
         hijos.forEach(hijo -> {
-            hijosDto.add(modelMapper.map(hijo, HijoDTO.class));
+            hijosDto.add(modelMapper.map(hijo, ResponseHijoDto.class));
         });
 
 
