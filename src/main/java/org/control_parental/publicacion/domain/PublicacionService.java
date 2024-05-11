@@ -1,5 +1,7 @@
 package org.control_parental.publicacion.domain;
 
+import org.control_parental.publicacion.dto.NewPublicacionDTO;
+import org.control_parental.publicacion.dto.PostRequestDTO;
 import org.control_parental.publicacion.infrastructure.PublicacionRepository;
 import org.control_parental.salon.domain.Salon;
 import org.control_parental.salon.infrastructure.SalonRepository;
