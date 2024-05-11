@@ -1,4 +1,4 @@
-package org.control_parental.publicacion.domain;
+package org.control_parental.publicacion.dto;
 
 import org.control_parental.comentario.domain.Comentario;
 import org.control_parental.hijo.domain.Hijo;

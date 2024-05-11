@@ -1,4 +1,4 @@
-package org.control_parental.publicacion.domain;
+package org.control_parental.publicacion.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

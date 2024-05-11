@@ -1,7 +1,7 @@
 package org.control_parental.publicacion.application;
 
-import org.control_parental.publicacion.domain.NewPublicacionDTO;
-import org.control_parental.publicacion.domain.PostRequestDTO;
+import org.control_parental.publicacion.dto.NewPublicacionDTO;
+import org.control_parental.publicacion.dto.PostRequestDTO;
 import org.control_parental.publicacion.domain.PublicacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
