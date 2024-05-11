@@ -1,5 +1,6 @@
 package org.control_parental.hijo.domain;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,10 +11,10 @@ import lombok.NonNull;
 @Data
 public class HijoDTO {
 
-    @NonNull
+    @NotNull
     String nombre;
 
-    @NonNull
+    @NotNull
     String apellido;
 
 }
