@@ -1,8 +1,7 @@
 package org.control_parental.salon.application;
 
-import jakarta.validation.Valid;
-import org.control_parental.hijo.domain.Hijo;
-import org.control_parental.hijo.domain.HijoDTO;
+import org.control_parental.hijo.Dto.NewHijoDto;
+import org.control_parental.hijo.Dto.ResponseHijoDto;
 import org.control_parental.salon.domain.NewSalonDTO;
 import org.control_parental.salon.domain.Salon;
 import org.control_parental.salon.domain.SalonService;
@@ -32,14 +31,14 @@ public class SalonController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Salon> addStudent(@PathVariable Long id, @RequestBody HijoDTO hijoDTO) {
+    public ResponseEntity<Salon> addStudent(@PathVariable Long id, @RequestBody NewHijoDto hijoDTO) {
         salonService.addStudentToSalon(id, hijoDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{id}/hijos")
-    public ResponseEntity<List<HijoDTO>> getStudents(@PathVariable Long id) {
-        List<HijoDTO> hijos = salonService.getAllStudents(id);
+    public ResponseEntity<List<ResponseHijoDto>> getStudents(@PathVariable Long id) {
+        List<ResponseHijoDto> hijos = salonService.getAllStudents(id);
         return ResponseEntity.ok(hijos);
     }
 

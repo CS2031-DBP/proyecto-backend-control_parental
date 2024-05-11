@@ -3,7 +3,7 @@ package org.control_parental.csv;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.control_parental.hijo.domain.HijoDTO;
+import org.control_parental.hijo.Dto.NewHijoDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -22,17 +22,17 @@ public class CSVHelper {
 
         return true;
     }
-    public static List<HijoDTO> csvToHijos(InputStream is) throws IOException {
+    public static List<NewHijoDto> csvToHijos(InputStream is) throws IOException {
         BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
         CSVFormat csvFormat = CSVFormat.DEFAULT.withFirstRecordAsHeader();
         CSVParser csvParser = new CSVParser(fileReader, csvFormat);
         System.out.println("CSV Headers: " + csvParser.getHeaderNames());
-            List<HijoDTO> hijos = new ArrayList<HijoDTO>();
+            List<NewHijoDto> hijos = new ArrayList<NewHijoDto>();
 
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
             for(CSVRecord csvRecord:csvRecords) {
-                HijoDTO hijo = new HijoDTO(
+                NewHijoDto hijo = new NewHijoDto(
                         csvRecord.get("Nombre"),
                         csvRecord.get("Apellido")
                 );

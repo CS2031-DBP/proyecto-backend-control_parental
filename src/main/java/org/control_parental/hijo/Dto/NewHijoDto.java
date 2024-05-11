@@ -1,15 +1,14 @@
-package org.control_parental.hijo.domain;
+package org.control_parental.hijo.Dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class HijoDTO {
+public class NewHijoDto {
 
     @NotNull
     String nombre;

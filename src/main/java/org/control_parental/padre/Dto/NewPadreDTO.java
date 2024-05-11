@@ -1,4 +1,4 @@
-package org.control_parental.padre.domain;
+package org.control_parental.padre.Dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
