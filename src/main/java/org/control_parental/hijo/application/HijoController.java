@@ -47,4 +47,10 @@ public class HijoController {
         List<Hijo> hijos = hijoService.getHijos();
         return ResponseEntity.ok(hijos);
     }
+
+
+
+
+
+
 }
