@@ -21,30 +21,26 @@ public class ProfesorController {
     @Autowired
     ProfesorService profesorService;
 
-    @PostMapping
-    public ResponseEntity<Void> createProfesor(@Valid @RequestBody NewProfesorDto newProfesorDTO) {
-        profesorService.newProfesor(newProfesorDTO);
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<ProfesorResponseDto> getSmallDetailProfesor(@PathVariable Long id) {
-        ProfesorResponseDto response = profesorService.getProfesorRepsonseDto(id);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(profesorService.getProfesorRepsonseDto(id));
     }
 
     @GetMapping("/me")
     public ResponseEntity<ProfesorSelfResponseDto> getProfesor() {
-        ProfesorSelfResponseDto profesorSelfResponseDto = profesorService.getOwnProfesorInfo();
-        return ResponseEntity.ok(profesorSelfResponseDto);
+        return ResponseEntity.ok(profesorService.getOwnProfesorInfo());
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProfesor(@PathVariable Long id) {
         profesorService.deleteProfesor(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateProfesor(@PathVariable Long id,@RequestBody @Valid NewProfesorDto newProfesorDto) {
+        profesorService.updateProfesor(id, newProfesorDto);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("{id}/publicaciones")
@@ -53,11 +49,17 @@ public class ProfesorController {
         return ResponseEntity.ok(publicaciones);
     }
 
+    @PostMapping
+    public ResponseEntity<Void> createProfesor(@Valid @RequestBody NewProfesorDto newProfesorDTO) {
+        profesorService.newProfesor(newProfesorDTO);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
     @PatchMapping("/password")
     public ResponseEntity<Void> newPassword(@Valid @RequestBody NewPasswordDto newPasswordDto) {
         profesorService.patchPassword(newPasswordDto);
         return ResponseEntity.ok().build();
     }
-
 }
 

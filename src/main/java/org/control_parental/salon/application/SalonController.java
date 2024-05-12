@@ -2,9 +2,12 @@ package org.control_parental.salon.application;
 
 import org.control_parental.hijo.dto.NewHijoDto;
 import org.control_parental.hijo.dto.HijoResponseDto;
+import org.control_parental.publicacion.domain.Publicacion;
+import org.control_parental.publicacion.dto.PublicacionResponseDto;
 import org.control_parental.salon.dto.NewSalonDTO;
 import org.control_parental.salon.domain.Salon;
 import org.control_parental.salon.domain.SalonService;
+import org.control_parental.salon.dto.SalonResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,20 +21,20 @@ public class SalonController {
     @Autowired
     private SalonService salonService;
 
-    @PostMapping
-    public ResponseEntity<Salon> createSalon( @RequestBody NewSalonDTO newSalonDTO) {
-        Salon salon = salonService.createSalon(newSalonDTO);
-        return new ResponseEntity<>(salon, HttpStatus.CREATED);
-    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Salon> getSalon(@PathVariable Long id) {
-        Salon salon = salonService.getSalonById(id);
-        return ResponseEntity.ok(salon);
+    public ResponseEntity<SalonResponseDto> getSalon(@PathVariable Long id) {
+        return ResponseEntity.ok(salonService.getSalonById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> createSalon( @RequestBody NewSalonDTO newSalonDTO) {
+        salonService.createSalon(newSalonDTO);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Salon> addStudent(@PathVariable Long id, @RequestBody NewHijoDto hijoDTO) {
+    public ResponseEntity<Void> addStudent(@PathVariable Long id, @RequestBody NewHijoDto hijoDTO) {
         salonService.addStudentToSalon(id, hijoDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -40,6 +43,12 @@ public class SalonController {
     public ResponseEntity<List<HijoResponseDto>> getStudents(@PathVariable Long id) {
         List<HijoResponseDto> hijos = salonService.getAllStudents(id);
         return ResponseEntity.ok(hijos);
+    }
+
+    @GetMapping("{id}/publicaciones")
+    public ResponseEntity<List<PublicacionResponseDto>> getPublicaciones(@PathVariable Long id) {
+        List<PublicacionResponseDto> publicaciones = salonService.getAllPublicaciones(id);
+        return ResponseEntity.ok(publicaciones);
     }
 
 }

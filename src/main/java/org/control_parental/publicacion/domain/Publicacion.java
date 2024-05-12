@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.Value;
 import org.control_parental.comentario.domain.Comentario;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.padre.domain.Padre;

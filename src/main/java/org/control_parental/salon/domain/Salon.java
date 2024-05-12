@@ -35,7 +35,4 @@ public class Salon {
         hijos.add(hijo);
     }
 
-    List<Hijo> getAllStudents() {
-        return hijos;
-    }
 }
