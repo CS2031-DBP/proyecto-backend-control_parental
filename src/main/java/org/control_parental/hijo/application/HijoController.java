@@ -24,7 +24,7 @@ public class HijoController {
     @Autowired
     private HijoService hijoService;
 
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<HijoResponseDto> getStudentById(@PathVariable Long id) {
         return ResponseEntity.ok(hijoService.getStudentById(id));
     }

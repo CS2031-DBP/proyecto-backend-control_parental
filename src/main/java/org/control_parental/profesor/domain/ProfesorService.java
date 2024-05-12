@@ -55,4 +55,13 @@ public class ProfesorService {
 
     }
 
+    public void updateProfesor(Long id, NewProfesorDto newProfesorDto) {
+        Profesor profesor = new Profesor();
+        profesor.setEmail(newProfesorDto.getEmail());
+        profesor.setNombre(newProfesorDto.getNombre());
+        profesor.setApellido(newProfesorDto.getApellido());
+        //profesor.setPassword(newProfesorDto.getPassword());
+        //En teoria esto no se hace
+        profesorRepository.save(profesor);
+    }
 }
