@@ -21,17 +21,11 @@ public class ProfesorController {
     @Autowired
     ProfesorService profesorService;
 
-    @PostMapping
-    public ResponseEntity<Void> createProfesor(@Valid @RequestBody NewProfesorDto newProfesorDTO) {
-        profesorService.newProfesor(newProfesorDTO);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProfesorResponseDto> getSmallDetailProfesor(@PathVariable Long id) {
         ProfesorResponseDto response = profesorService.getProfesorRepsonseDto(id);
-
         return ResponseEntity.ok(response);
     }
 
@@ -47,16 +41,23 @@ public class ProfesorController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/password")
+    public ResponseEntity<Void> newPassword(@Valid @RequestBody NewPasswordDto newPasswordDto) {
+        profesorService.patchPassword(newPasswordDto);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("{id}/publicaciones")
     public ResponseEntity<List<Publicacion>> getPublicacionesProfesor(@PathVariable Long id) {
         List<Publicacion> publicaciones = profesorService.getPublicaciones(id);
         return ResponseEntity.ok(publicaciones);
     }
 
-    @PatchMapping("/password")
-    public ResponseEntity<Void> newPassword(@Valid @RequestBody NewPasswordDto newPasswordDto) {
-        profesorService.patchPassword(newPasswordDto);
-        return ResponseEntity.ok().build();
+    @PostMapping
+    public ResponseEntity<Void> createProfesor(@Valid @RequestBody NewProfesorDto newProfesorDTO) {
+        profesorService.newProfesor(newProfesorDTO);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 }

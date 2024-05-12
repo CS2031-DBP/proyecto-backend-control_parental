@@ -4,7 +4,9 @@ import jakarta.validation.Valid;
 import org.control_parental.csv.CSVHelper;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.hijo.domain.HijoService;
+import org.control_parental.hijo.dto.HijoResponseDto;
 import org.control_parental.hijo.dto.NewHijoDto;
+import org.control_parental.publicacion.domain.Publicacion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,16 +23,38 @@ public class HijoController {
     @Autowired
     private HijoService hijoService;
 
+    @GetMapping
+    public ResponseEntity<HijoResponseDto> getStudentById(@PathVariable Long id) {
+        return ResponseEntity.ok(hijoService.getStudentById(id));
+    }
+
     @PostMapping
-    public ResponseEntity<Void> createStudent(@Valid @RequestBody NewHijoDto newHijo) {
-        hijoService.newStudent(newHijo);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<Void> createStudent(@Valid @RequestBody NewHijoDto newHijoDto){
+        hijoService.createStudent(newHijoDto);
+        return ResponseEntity.created(null).build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         hijoService.deleteHijo(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+/*
+    @GetMapping("/{id}/publicaciones")
+    public ResponseEntity<List<Publicacion>> getPublicaciones(@PathVariable Long id) {
+        return ResponseEntity.ok(hijoService.getPublicaciones(id));
+    }*/
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateStudent(@PathVariable Long id, @Valid @RequestBody NewHijoDto newHijo) {
+        hijoService.updateStudent(id, newHijo);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Hijo>> getAllHijos() {
+        List<Hijo> hijos = hijoService.getHijos();
+        return ResponseEntity.ok(hijos);
     }
 
     @PostMapping("/csv")
@@ -42,9 +66,4 @@ public class HijoController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Hijo>> getAllHijos() {
-        List<Hijo> hijos = hijoService.getHijos();
-        return ResponseEntity.ok(hijos);
-    }
 }
