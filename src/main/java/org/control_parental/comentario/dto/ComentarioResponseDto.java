@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.control_parental.padre.dto.PadreResponseDto;
 import org.control_parental.publicacion.dto.PublicacionResponseDto;
+import org.control_parental.usuario.domain.Usuario;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +23,7 @@ public class ComentarioResponseDto {
     String contenido;
 
     @NotNull
-    PadreResponseDto padre;
+    Usuario usuario;
 
     @JsonIgnoreProperties("comentarios")
     PublicacionResponseDto publicacion;
