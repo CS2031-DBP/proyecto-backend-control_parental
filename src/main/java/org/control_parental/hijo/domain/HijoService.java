@@ -6,7 +6,10 @@ import org.control_parental.hijo.dto.NewHijoDto;
 import org.control_parental.hijo.infrastructure.HijoRepository;
 import org.control_parental.padre.domain.Padre;
 import org.control_parental.publicacion.domain.Publicacion;
+import org.control_parental.publicacion.dto.PublicacionResponseDto;
 import org.control_parental.publicacion.infrastructure.PublicacionRepository;
+import org.control_parental.salon.domain.Salon;
+import org.control_parental.salon.infrastructure.SalonRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,9 @@ public class HijoService {
     private HijoRepository hijoRepository;
 
     @Autowired
+    private SalonRepository salonRepository;
+
+    @Autowired
     private PublicacionRepository publicacionRepository;
 
     @Autowired
@@ -34,8 +40,11 @@ public class HijoService {
         hijoRepository.saveAll(newHijos);
     }
 
-    public List<Hijo> getHijos() {
-        return hijoRepository.findAll();
+    public List<HijoResponseDto> getHijos() {
+        List<HijoResponseDto> newHijos = new ArrayList<HijoResponseDto>();
+        List<Hijo> hijos = hijoRepository.findAll();
+        hijos.forEach(hijo -> newHijos.add(modelMapper.map(hijo, HijoResponseDto.class)));
+        return newHijos;
     }
 
     public void updateStudent(Long id, NewHijoDto newHijoDto) {
@@ -58,8 +67,18 @@ public class HijoService {
     public void deleteHijo(Long id) {
         hijoRepository.deleteById(id);
     }
-/*
-    public List<Publicacion> getPublicaciones(Long id){
 
-    }*/
+    //Busqueda de publicaciones de un hijo
+    public List<PublicacionResponseDto> getPublicaciones(Long id){
+        Hijo hijo = hijoRepository.findById(id).orElseThrow();
+        Salon salon = salonRepository.findById(hijo.getSalon().getId()).orElseThrow();
+        List<Publicacion> publicaciones = publicacionRepository.findAllBySalon(salon);
+        List<PublicacionResponseDto> publicacionesHijo = new ArrayList<>();
+        publicaciones.forEach(publicacion -> {
+            publicacion.getHijos().forEach(newHijo -> {
+                if(newHijo.getId().equals(hijo.getId())){ publicacionesHijo.add(modelMapper.map(publicacion, PublicacionResponseDto.class));}
+            });
+        });
+        return publicacionesHijo;
+    }
 }

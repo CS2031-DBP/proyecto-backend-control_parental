@@ -7,6 +7,7 @@ import org.control_parental.hijo.domain.HijoService;
 import org.control_parental.hijo.dto.HijoResponseDto;
 import org.control_parental.hijo.dto.NewHijoDto;
 import org.control_parental.publicacion.domain.Publicacion;
+import org.control_parental.publicacion.dto.PublicacionResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,11 +40,11 @@ public class HijoController {
         hijoService.deleteHijo(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-/*
+
     @GetMapping("/{id}/publicaciones")
-    public ResponseEntity<List<Publicacion>> getPublicaciones(@PathVariable Long id) {
+    public ResponseEntity<List<PublicacionResponseDto>> getPublicaciones(@PathVariable Long id) {
         return ResponseEntity.ok(hijoService.getPublicaciones(id));
-    }*/
+    }
 
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updateStudent(@PathVariable Long id, @Valid @RequestBody NewHijoDto newHijo) {
@@ -52,8 +53,8 @@ public class HijoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Hijo>> getAllHijos() {
-        List<Hijo> hijos = hijoService.getHijos();
+    public ResponseEntity<List<HijoResponseDto>> getAllHijos() {
+        List<HijoResponseDto> hijos = hijoService.getHijos();
         return ResponseEntity.ok(hijos);
     }
 
