@@ -67,4 +67,16 @@ public class HijoController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping
+    public ResponseEntity<List<Hijo>> getAllHijos() {
+        List<Hijo> hijos = hijoService.getHijos();
+        return ResponseEntity.ok(hijos);
+    }
+
+
+
+
+
+
+
 }
