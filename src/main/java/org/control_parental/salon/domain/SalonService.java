@@ -4,7 +4,10 @@ import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.hijo.dto.NewHijoDto;
 import org.control_parental.hijo.dto.HijoResponseDto;
 import org.control_parental.hijo.infrastructure.HijoRepository;
+import org.control_parental.publicacion.domain.Publicacion;
+import org.control_parental.publicacion.dto.PublicacionResponseDto;
 import org.control_parental.salon.dto.NewSalonDTO;
+import org.control_parental.salon.dto.SalonResponseDto;
 import org.control_parental.salon.infrastructure.SalonRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +28,13 @@ public class SalonService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public Salon createSalon(NewSalonDTO newSalonDTO) {
+    public void createSalon(NewSalonDTO newSalonDTO) {
         Salon salon = modelMapper.map(newSalonDTO, Salon.class);
         salonRepository.save(salon);
-        return salon;
     }
 
-    public Salon getSalonById(Long id) {
-        return salonRepository.findById(id).orElseThrow();
+    public SalonResponseDto getSalonById(Long id) {
+        return modelMapper.map(salonRepository.findById(id).orElseThrow(), SalonResponseDto.class);
     }
 
     public void addStudentToSalon(Long id, NewHijoDto hijoDTO) {
@@ -45,14 +47,19 @@ public class SalonService {
 
     public List<HijoResponseDto> getAllStudents(Long id) {
         Salon salon = salonRepository.findById(id).orElseThrow();
-        List<Hijo> hijos = salon.getAllStudents();
+        List<Hijo> hijos = salon.getHijos();
         List<HijoResponseDto> hijosDto = new ArrayList<HijoResponseDto>();
         hijos.forEach(hijo -> {
             hijosDto.add(modelMapper.map(hijo, HijoResponseDto.class));
         });
-
-
         return hijosDto;
+    }
 
+    public List<PublicacionResponseDto> getAllPublicaciones(Long id) {
+        Salon salon = salonRepository.findById(id).orElseThrow();
+        List<Publicacion> publicaciones = salon.getPublicaciones();
+        List<PublicacionResponseDto> publicacionesDto = new ArrayList<>();
+        publicaciones.forEach(publicacion -> {publicacionesDto.add(modelMapper.map(publicacion, PublicacionResponseDto.class));});
+        return publicacionesDto;
     }
 }
