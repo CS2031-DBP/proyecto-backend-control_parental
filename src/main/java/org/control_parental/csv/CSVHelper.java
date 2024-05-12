@@ -3,7 +3,7 @@ package org.control_parental.csv;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.control_parental.hijo.Dto.NewHijoDto;
+import org.control_parental.hijo.dto.NewHijoDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;

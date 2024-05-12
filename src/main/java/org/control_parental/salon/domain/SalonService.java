@@ -1,9 +1,10 @@
 package org.control_parental.salon.domain;
 
 import org.control_parental.hijo.domain.Hijo;
-import org.control_parental.hijo.Dto.NewHijoDto;
-import org.control_parental.hijo.Dto.ResponseHijoDto;
+import org.control_parental.hijo.dto.NewHijoDto;
+import org.control_parental.hijo.dto.HijoResponseDto;
 import org.control_parental.hijo.infrastructure.HijoRepository;
+import org.control_parental.salon.dto.NewSalonDTO;
 import org.control_parental.salon.infrastructure.SalonRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +43,12 @@ public class SalonService {
         salonRepository.save(salon);
     }
 
-    public List<ResponseHijoDto> getAllStudents(Long id) {
+    public List<HijoResponseDto> getAllStudents(Long id) {
         Salon salon = salonRepository.findById(id).orElseThrow();
         List<Hijo> hijos = salon.getAllStudents();
-        List<ResponseHijoDto> hijosDto = new ArrayList<ResponseHijoDto>();
+        List<HijoResponseDto> hijosDto = new ArrayList<HijoResponseDto>();
         hijos.forEach(hijo -> {
-            hijosDto.add(modelMapper.map(hijo, ResponseHijoDto.class));
+            hijosDto.add(modelMapper.map(hijo, HijoResponseDto.class));
         });
 
 

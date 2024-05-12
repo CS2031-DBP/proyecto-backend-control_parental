@@ -1,7 +1,7 @@
 package org.control_parental.publicacion.domain;
 
-import org.control_parental.publicacion.dto.NewPublicacionDTO;
-import org.control_parental.publicacion.dto.PostRequestDTO;
+import org.control_parental.publicacion.dto.NewPublicacionDto;
+import org.control_parental.publicacion.dto.PublicacionResponseDto;
 import org.control_parental.publicacion.infrastructure.PublicacionRepository;
 import org.control_parental.salon.domain.Salon;
 import org.control_parental.salon.infrastructure.SalonRepository;
@@ -25,20 +25,20 @@ public class PublicacionService {
     @Autowired
     ModelMapper modelMapper;
 
-    public List<PostRequestDTO> findPostsBySalonId(Long salon_id) {
+    public List<PublicacionResponseDto> findPostsBySalonId(Long salon_id) {
         Salon salon = salonRepository.findById(salon_id).orElseThrow();
         List<Publicacion> publicaciones = repository.findAllBySalon(salon);
 
-        List<PostRequestDTO> posts_data = new ArrayList<>();
+        List<PublicacionResponseDto> posts_data = new ArrayList<>();
 
         for(Publicacion publicacion : publicaciones) {
-            posts_data.add(modelMapper.map(publicacion, PostRequestDTO.class));
+            posts_data.add(modelMapper.map(publicacion, PublicacionResponseDto.class));
         }
 
         return posts_data;
     }
 
-    public void createPost(NewPublicacionDTO newPostData, Long salon_id, List<Long> hijos_id) {
+    public void createPost(NewPublicacionDto newPostData, Long salon_id, List<Long> hijos_id) {
         Publicacion publicacion = modelMapper.map(newPostData, Publicacion.class);
         Salon salon = salonRepository.findById(salon_id).orElseThrow();
 

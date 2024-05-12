@@ -1,11 +1,8 @@
 package org.control_parental.profesor.application;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
-import jakarta.websocket.server.PathParam;
-import org.control_parental.profesor.domain.Profesor;
 import org.control_parental.profesor.domain.ProfesorService;
-import org.control_parental.profesor.dto.NewProfesorDTO;
+import org.control_parental.profesor.dto.NewProfesorDto;
 import org.control_parental.profesor.dto.ProfesorResponseDto;
 import org.control_parental.profesor.dto.ProfesorSelfResponseDto;
 import org.control_parental.publicacion.domain.Publicacion;
@@ -25,7 +22,7 @@ public class ProfesorController {
     ProfesorService profesorService;
 
     @PostMapping
-    public ResponseEntity<Void> createProfesor(@Valid @RequestBody NewProfesorDTO newProfesorDTO) {
+    public ResponseEntity<Void> createProfesor(@Valid @RequestBody NewProfesorDto newProfesorDTO) {
         profesorService.newProfesor(newProfesorDTO);
 
         return new ResponseEntity<>(HttpStatus.CREATED);

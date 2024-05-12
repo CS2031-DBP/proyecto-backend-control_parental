@@ -1,8 +1,8 @@
 package org.control_parental.salon.application;
 
-import org.control_parental.hijo.Dto.NewHijoDto;
-import org.control_parental.hijo.Dto.ResponseHijoDto;
-import org.control_parental.salon.domain.NewSalonDTO;
+import org.control_parental.hijo.dto.NewHijoDto;
+import org.control_parental.hijo.dto.HijoResponseDto;
+import org.control_parental.salon.dto.NewSalonDTO;
 import org.control_parental.salon.domain.Salon;
 import org.control_parental.salon.domain.SalonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +37,8 @@ public class SalonController {
     }
 
     @GetMapping("/{id}/hijos")
-    public ResponseEntity<List<ResponseHijoDto>> getStudents(@PathVariable Long id) {
-        List<ResponseHijoDto> hijos = salonService.getAllStudents(id);
+    public ResponseEntity<List<HijoResponseDto>> getStudents(@PathVariable Long id) {
+        List<HijoResponseDto> hijos = salonService.getAllStudents(id);
         return ResponseEntity.ok(hijos);
     }
 

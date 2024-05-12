@@ -13,10 +13,6 @@ public class Usuario {
     Long id;
 
     @Column(nullable = false)
-    @Size(min = 9, max = 15)
-    String phoneNumber;
-
-    @Column(nullable = false)
     @Email
     String email;
 
