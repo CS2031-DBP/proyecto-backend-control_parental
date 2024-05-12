@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.control_parental.padre.domain.Padre;
 import org.control_parental.publicacion.domain.Publicacion;
+import org.control_parental.usuario.domain.Usuario;
 
 import java.time.LocalDateTime;
 
@@ -24,7 +25,7 @@ public class Comentario {
     String contenido;
 
     @ManyToOne
-    Padre padre;
+    Usuario usuario;
 
     @ManyToOne
     Publicacion publicacion;
