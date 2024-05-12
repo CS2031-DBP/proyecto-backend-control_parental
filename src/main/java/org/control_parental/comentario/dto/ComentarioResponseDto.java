@@ -1,6 +1,7 @@
 package org.control_parental.comentario.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,10 +15,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ComentarioResponseDto {
 
+
     LocalDateTime fecha;
 
+    @NotNull
     String contenido;
 
+    @NotNull
     PadreResponseDto padre;
 
     @JsonIgnoreProperties("comentarios")

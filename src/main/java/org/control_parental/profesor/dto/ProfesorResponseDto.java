@@ -15,10 +15,10 @@ public class ProfesorResponseDto {
     @NotNull
     String nombre;
 
-    @NonNull
+    @NotNull
     String apellido;
 
-    @NonNull
+    @NotNull
     String email;
 
     @JsonIgnoreProperties("profesores")
