@@ -28,7 +28,7 @@ public class SalonController {
     }
 
     @PostMapping
-    public ResponseEntity<Salon> createSalon( @RequestBody NewSalonDTO newSalonDTO) {
+    public ResponseEntity<Void> createSalon( @RequestBody NewSalonDTO newSalonDTO) {
         salonService.createSalon(newSalonDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

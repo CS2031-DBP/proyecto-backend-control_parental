@@ -26,8 +26,8 @@ public class PublicacionController {
         return ResponseEntity.created(null).build();
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deletePublicacion(@RequestParam Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePublicacion(@PathVariable Long id) {
         publicacionService.deletePublicacion(id);
         return ResponseEntity.noContent().build();
     }
