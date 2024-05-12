@@ -1,6 +1,7 @@
 package org.control_parental.salon.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class SalonResponseDto {
 
+    @NotNull
     String nombre;
 
     @JsonIgnoreProperties("salones")

@@ -1,6 +1,7 @@
 package org.control_parental.profesor.dto;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,17 +14,17 @@ import lombok.NonNull;
 public class NewProfesorDto {
 
     @Size(min = 2, max = 50)
-    @NonNull
+    @NotNull
     String nombre;
 
     @Size(min = 2, max = 50)
-    @NonNull
+    @NotNull
     String apellido;
 
     @Email
     String email;
 
     @Size(min = 6, max = 50)
-    @NonNull
+    @NotNull
     String password;
 }
