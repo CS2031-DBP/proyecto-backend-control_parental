@@ -1,17 +1,26 @@
 package org.control_parental.profesor.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.control_parental.salon.dto.SalonResponseDto;
 
-@AllArgsConstructor
+import java.util.List;
+
+@Data
 @NoArgsConstructor
-@Setter
-@Getter
+@AllArgsConstructor
 public class ProfesorResponseDto {
+
     @NotNull
     String nombre;
+
     @NonNull
     String apellido;
+
     @NonNull
     String email;
+
+    @JsonIgnoreProperties("profesores")
+    List<SalonResponseDto> salones;
 }

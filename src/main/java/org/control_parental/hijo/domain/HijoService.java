@@ -1,7 +1,7 @@
 package org.control_parental.hijo.domain;
 
 import org.control_parental.csv.CSVHelper;
-import org.control_parental.hijo.Dto.NewHijoDto;
+import org.control_parental.hijo.dto.NewHijoDto;
 import org.control_parental.hijo.infrastructure.HijoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

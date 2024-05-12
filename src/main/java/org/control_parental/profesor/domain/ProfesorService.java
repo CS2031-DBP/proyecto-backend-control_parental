@@ -1,6 +1,6 @@
 package org.control_parental.profesor.domain;
 
-import org.control_parental.profesor.dto.NewProfesorDTO;
+import org.control_parental.profesor.dto.NewProfesorDto;
 import org.control_parental.profesor.dto.ProfesorResponseDto;
 import org.control_parental.profesor.dto.ProfesorSelfResponseDto;
 import org.control_parental.profesor.infrastructure.ProfesorRepository;
@@ -20,7 +20,7 @@ public class ProfesorService {
     private ModelMapper modelMapper;
     private ProfesorRepository profesorRepository;
 
-    public void newProfesor(NewProfesorDTO newProfesorDTO) {
+    public void newProfesor(NewProfesorDto newProfesorDTO) {
         Profesor profesor = modelMapper.map(newProfesorDTO, Profesor.class);
         profesor.setRole(Role.PROFESOR);
         profesorRepository.save(profesor);

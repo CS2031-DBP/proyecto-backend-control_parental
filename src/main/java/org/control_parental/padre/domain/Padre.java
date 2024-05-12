@@ -1,10 +1,8 @@
 package org.control_parental.padre.domain;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +19,10 @@ import java.util.List;
 @Entity
 public class Padre extends Usuario {
 
+    @Column(nullable = false)
+    @Size(min = 9, max = 15)
+    String phoneNumber;
+
     @ManyToMany(cascade = CascadeType.ALL) // si eliminamos al padre tambien se eliminaran a los hijos relacionados al padre
     List<Hijo> hijos;
 
@@ -29,7 +31,4 @@ public class Padre extends Usuario {
 
     @ManyToMany
     List<Publicacion> posts_likeados;
-
-
-
 }

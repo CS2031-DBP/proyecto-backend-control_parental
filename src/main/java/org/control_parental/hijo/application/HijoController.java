@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import org.control_parental.csv.CSVHelper;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.hijo.domain.HijoService;
-import org.control_parental.hijo.Dto.NewHijoDto;
+import org.control_parental.hijo.dto.NewHijoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,12 +1,16 @@
-package org.control_parental.profesor.dto;
+package org.control_parental.padre.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Data
-public class NewProfesorDTO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class NewPadreDto {
 
     @Size(min = 2, max = 50)
     @NonNull
@@ -19,11 +23,11 @@ public class NewProfesorDTO {
     @Email
     String email;
 
-    @Size(min = 6, max = 50)
-    @NonNull
-    String password;
-
     @Size(min = 9, max = 15)
     @NonNull
     String phoneNumber;
+
+    @Size(min = 6, max = 50)
+    @NonNull
+    String password;
 }
