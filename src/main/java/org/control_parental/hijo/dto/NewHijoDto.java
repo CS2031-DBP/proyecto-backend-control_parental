@@ -20,4 +20,7 @@ public class NewHijoDto {
     String apellido;
 
     NewPadreDto padre;
+
+    public NewHijoDto(String nombre, String apellido) {
+    }
 }
