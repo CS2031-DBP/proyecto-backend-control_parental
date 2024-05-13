@@ -22,4 +22,5 @@ public class AdminController {
         adminService.createAdmin(newAdminDto);
         return ResponseEntity.created(null).build();
     }
+
 }
