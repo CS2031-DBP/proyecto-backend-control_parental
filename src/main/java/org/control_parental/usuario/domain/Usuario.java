@@ -28,6 +28,6 @@ public class Usuario {
     @Size(min = 2, max = 50)
     String apellido;
 
-    @Column(nullable = false)
+    @Column
     Role role;
 }
