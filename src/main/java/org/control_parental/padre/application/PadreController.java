@@ -10,6 +10,7 @@ import org.control_parental.padre.dto.PadreResponseDto;
 import org.control_parental.padre.dto.PadreSelfResponseDto;
 import org.control_parental.usuario.NewPasswordDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class PadreController {
     @PostMapping
     ResponseEntity<Void> savePadre(@Valid @RequestBody NewPadreDto newPadreDto) {
         padreService.savePadre(newPadreDto);
-        return ResponseEntity.created(null).build();
+        return new ResponseEntity<>(HttpStatusCode.valueOf(201));
     }
 
     @GetMapping("/{id}")

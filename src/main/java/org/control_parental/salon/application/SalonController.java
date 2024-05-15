@@ -21,7 +21,6 @@ public class SalonController {
     @Autowired
     private SalonService salonService;
 
-
     @GetMapping("/{id}")
     public ResponseEntity<SalonResponseDto> getSalon(@PathVariable Long id) {
         return ResponseEntity.ok(salonService.getSalonById(id));
