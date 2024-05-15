@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/posts")
+@RestController
+@RequestMapping("/publicacion")
 public class PublicacionController {
 
     @Autowired
@@ -31,22 +32,25 @@ public class PublicacionController {
         publicacionService.deletePublicacion(id);
         return ResponseEntity.noContent().build();
     }
-
+/*
     @PatchMapping("/{id}")
     public ResponseEntity<Void> patchPublicacion(@PathVariable Long id, @RequestBody NewPublicacionDto newPublicacion) {
         publicacionService.patchPublicacion(id, newPublicacion);
         return ResponseEntity.ok().build();
     }
-
+*/
+    /*
     @GetMapping("/{salon_id}")
     public ResponseEntity<List<PublicacionResponseDto>> findPostsBySalonId(@PathVariable Long salon_id) {
         return ResponseEntity.ok(publicacionService.findPostsBySalonId(salon_id));
     }
+    */
 
+/*
     @PostMapping("/{salon_id}")
     public ResponseEntity<Void> createPost(@PathVariable Long salon_id, @RequestParam List<Long> hijos_id, @RequestBody NewPublicacionDto newPostData) {
         publicacionService.createPost(newPostData, salon_id, hijos_id);
         return ResponseEntity.created(null).build();
     }
-
+*/
 }

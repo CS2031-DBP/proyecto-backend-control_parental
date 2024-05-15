@@ -24,6 +24,7 @@ public class PublicacionResponseDto {
     @NotNull
     String descripcion;
 
+
     @NotNull
     Integer likes;
 
@@ -31,17 +32,17 @@ public class PublicacionResponseDto {
 
     @NotNull
     String titulo;
-
+/*
     ProfesorResponseDto profesor;
 
     @JsonIgnoreProperties("publicaciones")
     List<HijoResponseDto> hijos;
-
+*/
     @JsonIgnoreProperties("publicacion")
     List<ComentarioResponseDto> comentarios;
-
+/*
     List<PadreResponseDto> likers;
-
+*/
     @JsonIgnoreProperties("publicaciones")
     SalonResponseDto salon;
 }
