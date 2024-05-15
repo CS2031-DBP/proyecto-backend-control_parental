@@ -21,8 +21,8 @@ public class ComentarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> postComentario(@Valid @RequestBody NewComentarioDto newComentarioDto) {
-        comentarioService.postComentario(newComentarioDto);
+    public ResponseEntity<Void> postComentario(@Valid @RequestBody NewComentarioDto newComentarioDto, @RequestParam Long PublicacionId) {
+        comentarioService.postComentario(newComentarioDto, PublicacionId);
         return ResponseEntity.created(null).build();
     }
 

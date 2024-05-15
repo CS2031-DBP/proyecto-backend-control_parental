@@ -68,6 +68,7 @@ public class HijoService {
         hijoRepository.deleteById(id);
     }
 
+    /*
     //Busqueda de publicaciones de un hijo
     public List<PublicacionResponseDto> getPublicaciones(Long id){
         Hijo hijo = hijoRepository.findById(id).orElseThrow();
@@ -81,4 +82,5 @@ public class HijoService {
         });
         return publicacionesHijo;
     }
+     */
 }
