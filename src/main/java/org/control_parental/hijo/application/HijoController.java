@@ -10,6 +10,7 @@ import org.control_parental.publicacion.domain.Publicacion;
 import org.control_parental.publicacion.dto.PublicacionResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,8 +31,9 @@ public class HijoController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createStudent(@Valid @RequestBody NewHijoDto newHijoDto){
-        hijoService.createStudent(newHijoDto);
+    public ResponseEntity<Void> createStudent(@Valid @RequestBody NewHijoDto newHijoDto,
+                                              @RequestParam Long idPadre){
+        hijoService.createStudent(newHijoDto, idPadre);
         return ResponseEntity.created(null).build();
     }
 
@@ -45,12 +47,12 @@ public class HijoController {
     public ResponseEntity<List<PublicacionResponseDto>> getPublicaciones(@PathVariable Long id) {
         return ResponseEntity.ok(hijoService.getPublicaciones(id));
     }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateStudent(@PathVariable Long id, @Valid @RequestBody NewHijoDto newHijo) {
-        hijoService.updateStudent(id, newHijo);
-        return ResponseEntity.ok().build();
-    }
+//
+//    @PatchMapping("/{id}")
+//    public ResponseEntity<Void> updateStudent(@PathVariable Long id, @Valid @RequestBody NewHijoDto newHijo) {
+//        hijoService.updateStudent(id, newHijo);
+//        return ResponseEntity.ok().build();
+//    }
 
     @GetMapping
     public ResponseEntity<List<HijoResponseDto>> getAllHijos() {
@@ -58,7 +60,7 @@ public class HijoController {
         return ResponseEntity.ok(hijos);
     }
 
-    @PostMapping("/csv")
+    @PostMapping(value = "/csv", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Void> csvStudents(@RequestParam("file")MultipartFile file) throws IOException {
         if (CSVHelper.hasCSVFormat(file)) {
             hijoService.saveCSVStudents(file);

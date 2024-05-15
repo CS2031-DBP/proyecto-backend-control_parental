@@ -21,7 +21,8 @@ public class PadreService {
     private ModelMapper modelMapper;
 
     public void savePadre(NewPadreDto newPadreDto) {
-        Padre padre = modelMapper.map(newPadreDto, Padre.class);
+        Padre padre;
+        padre = modelMapper.map(newPadreDto, Padre.class);
         padre.setRole(Role.PADRE);
         padreRepository.save(padre);
 
@@ -61,3 +62,6 @@ public class PadreService {
     }
 
 }
+
+
+
