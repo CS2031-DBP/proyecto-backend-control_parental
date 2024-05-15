@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UsuarioService {
     @Autowired
@@ -22,5 +24,9 @@ public class UsuarioService {
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
             return (UserDetails) user;
         };
+    }
+
+    public List<Usuario> getAll(){
+        return usuarioRepository.findAll();
     }
 }

@@ -12,18 +12,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class NewProfesorDto {
 
-    @Size(min = 2, max = 50)
-    @NotNull
     String nombre;
 
-    @Size(min = 2, max = 50)
-    @NotNull
     String apellido;
 
-    @Email
     String email;
 
-    @Size(min = 6, max = 50)
-    @NotNull
     String password;
 }

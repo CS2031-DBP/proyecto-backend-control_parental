@@ -12,7 +12,7 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @Email
     String email;
 

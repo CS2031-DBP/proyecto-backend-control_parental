@@ -19,7 +19,7 @@ import java.util.List;
 @Entity
 public class Padre extends Usuario {
 
-    @Column(nullable = false)
+    @Column
     @Size(min = 9, max = 15)
     String phoneNumber;
 

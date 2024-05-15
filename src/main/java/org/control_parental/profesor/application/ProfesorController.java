@@ -53,7 +53,7 @@ public class ProfesorController {
     public ResponseEntity<Void> createProfesor(@Valid @RequestBody NewProfesorDto newProfesorDTO) {
         profesorService.newProfesor(newProfesorDTO);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.created(null).build();
     }
 
     @PatchMapping("/password")

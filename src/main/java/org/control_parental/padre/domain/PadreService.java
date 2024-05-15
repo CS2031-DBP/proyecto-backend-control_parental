@@ -16,7 +16,8 @@ import java.util.List;
 @Service
 public class PadreService {
     @Autowired
-    PadreRepository padreRepository;
+    private PadreRepository padreRepository;
+
     @Autowired
     private ModelMapper modelMapper;
 

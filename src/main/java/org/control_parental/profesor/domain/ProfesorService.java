@@ -18,6 +18,8 @@ public class ProfesorService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
     private ProfesorRepository profesorRepository;
 
     public void newProfesor(NewProfesorDto newProfesorDTO) {
