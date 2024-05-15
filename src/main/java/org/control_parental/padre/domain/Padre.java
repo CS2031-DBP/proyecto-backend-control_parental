@@ -26,8 +26,6 @@ public class Padre extends Usuario {
     @ManyToMany(cascade = CascadeType.ALL) // si eliminamos al padre tambien se eliminaran a los hijos relacionados al padre
     List<Hijo> hijos;
 
-    @OneToMany
-    List<Comentario> comentarios;
 
     @ManyToMany
     List<Publicacion> posts_likeados;

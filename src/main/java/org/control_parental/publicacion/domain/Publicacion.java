@@ -38,19 +38,19 @@ public class Publicacion {
     @Column(nullable = false)
     @Size(min = 1, max = 255)
     String titulo;
-
+/*
     @ManyToOne
     Profesor profesor;
 
     @ManyToMany
     List<Hijo> hijos;
-
+*/
     @OneToMany
     List<Comentario> comentarios;
-
+/*
     @ManyToMany
     List<Padre> likers;
-
+*/
     @ManyToOne
     Salon salon;
 
