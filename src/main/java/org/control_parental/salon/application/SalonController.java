@@ -21,7 +21,6 @@ public class SalonController {
     @Autowired
     private SalonService salonService;
 
-
     @GetMapping("/{id}")
     public ResponseEntity<SalonResponseDto> getSalon(@PathVariable Long id) {
         return ResponseEntity.ok(salonService.getSalonById(id));
@@ -33,9 +32,9 @@ public class SalonController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<Void> addStudent(@PathVariable Long id, @RequestBody NewHijoDto hijoDTO) {
-        salonService.addStudentToSalon(id, hijoDTO);
+    @PatchMapping("/{id}/{hijoId}")
+    public ResponseEntity<Void> addStudent(@PathVariable Long id, @PathVariable Long hijoId) {
+        salonService.addStudentToSalon(id, hijoId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

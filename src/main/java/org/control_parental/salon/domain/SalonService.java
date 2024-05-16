@@ -1,5 +1,6 @@
 package org.control_parental.salon.domain;
 
+import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.hijo.dto.NewHijoDto;
 import org.control_parental.hijo.dto.HijoResponseDto;
@@ -37,8 +38,8 @@ public class SalonService {
         return modelMapper.map(salonRepository.findById(id).orElseThrow(), SalonResponseDto.class);
     }
 
-    public void addStudentToSalon(Long id, NewHijoDto hijoDTO) {
-        Hijo hijo = hijoRepository.findByNombreAndApellido(hijoDTO.getNombre(), hijoDTO.getApellido()).orElseThrow();
+    public void addStudentToSalon(Long id, Long hijoId) {
+        Hijo hijo = hijoRepository.findById(hijoId).orElseThrow(() -> new ResourceNotFoundException("El hijo no fue encontrado"));
         Salon salon = salonRepository.findById(id).orElseThrow();
         hijo.setSalon(salon);
         salon.addStudent(hijo);
@@ -56,7 +57,7 @@ public class SalonService {
     }
 
     public List<PublicacionResponseDto> getAllPublicaciones(Long id) {
-        Salon salon = salonRepository.findById(id).orElseThrow();
+        Salon salon = salonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El salon no fue encontrado"));
         List<Publicacion> publicaciones = salon.getPublicaciones();
         List<PublicacionResponseDto> publicacionesDto = new ArrayList<>();
         publicaciones.forEach(publicacion -> {publicacionesDto.add(modelMapper.map(publicacion, PublicacionResponseDto.class));});

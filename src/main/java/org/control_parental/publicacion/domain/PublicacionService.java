@@ -31,7 +31,10 @@ public class PublicacionService {
     private HijoRepository hijoRepository;
 
     public void savePublicacion(NewPublicacionDto newPublicacionDto) {
-        publicacionRepository.save(modelMapper.map(newPublicacionDto, Publicacion.class));
+        Publicacion newPublicacion = modelMapper.map(newPublicacionDto, Publicacion.class);
+        newPublicacion.setFecha(LocalDateTime.now());
+
+        publicacionRepository.save(newPublicacion);
     }
 
     public PublicacionResponseDto getPublicacionById(Long id) {
@@ -42,7 +45,7 @@ public class PublicacionService {
     public void deletePublicacion(Long id) {
         publicacionRepository.deleteById(id);
     }
-
+/*
     public void patchPublicacion(Long id, NewPublicacionDto newPublicacionDto){
         Publicacion publicacion = publicacionRepository.findById(id).orElseThrow();
         publicacion.setFoto(newPublicacionDto.getFoto());
@@ -52,7 +55,7 @@ public class PublicacionService {
         newPublicacionDto.getHijos_id().forEach(hijoId -> {hijos.add(hijoRepository.findById(hijoId).orElseThrow());});
         publicacion.setHijos(hijos);
     }
-
+*/
     public List<PublicacionResponseDto> findPostsBySalonId(Long salon_id) {
         Salon salon = salonRepository.findById(salon_id).orElseThrow();
         List<Publicacion> publicaciones = publicacionRepository.findAllBySalon(salon);

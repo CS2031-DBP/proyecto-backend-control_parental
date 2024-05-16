@@ -24,7 +24,7 @@ public class CSVHelper {
     }
     public static List<NewHijoDto> csvToHijos(InputStream is) throws IOException {
         BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-        CSVFormat csvFormat = CSVFormat.DEFAULT.withFirstRecordAsHeader();
+        CSVFormat csvFormat = CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim();
         CSVParser csvParser = new CSVParser(fileReader, csvFormat);
         System.out.println("CSV Headers: " + csvParser.getHeaderNames());
         List<NewHijoDto> hijos = new ArrayList<NewHijoDto>();
@@ -36,8 +36,11 @@ public class CSVHelper {
                     csvRecord.get("Nombre"),
                     csvRecord.get("Apellido")
             );
+            System.out.println(hijo.getNombre());
+            System.out.println(hijo.getApellido());
             hijos.add(hijo);
         }
+
 
         return hijos;
 

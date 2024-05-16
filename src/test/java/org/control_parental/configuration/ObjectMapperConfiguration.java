@@ -1,0 +1,14 @@
+package org.control_parental.configuration;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+
+@Configuration
+public class ObjectMapperConfiguration {
+
+    @Bean
+    public ObjectMapper ObjectMapper() {
+        return new ObjectMapper();
+    }
+}

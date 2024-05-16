@@ -4,9 +4,13 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.control_parental.comentario.domain.Comentario;
+
+import java.util.List;
 
 @Data
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,4 +34,8 @@ public class Usuario {
 
     @Column
     Role role;
+
+    @OneToMany
+    List<Comentario> comentarios;
+
 }
