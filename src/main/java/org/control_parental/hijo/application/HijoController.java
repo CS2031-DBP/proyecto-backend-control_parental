@@ -42,21 +42,20 @@ public class HijoController {
         hijoService.deleteHijo(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-//    @GetMapping("/{id}/publicaciones")
-//    public ResponseEntity<List<PublicacionResponseDto>> getPublicaciones(@PathVariable Long id) {
-//        return ResponseEntity.ok(hijoService.getPublicaciones(id));
-//    }
+/*
+    @GetMapping("/{id}/publicaciones")
+    public ResponseEntity<List<PublicacionResponseDto>> getPublicaciones(@PathVariable Long id) {
+        return ResponseEntity.ok(hijoService.getPublicaciones(id));
+    }
+*/
+    /*
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateStudent(@PathVariable Long id, @Valid @RequestBody NewHijoDto newHijo) {
+        hijoService.updateStudent(id, newHijo);
+        return ResponseEntity.ok().build();
+    }
+*/
 
-//    @PatchMapping("/{id}")
-//    public ResponseEntity<Void> updateStudent(@PathVariable Long id, @Valid @RequestBody NewHijoDto newHijo) {
-//        hijoService.updateStudent(id, newHijo);
-//        return ResponseEntity.ok().build();
-//    }
-//    @PostMapping
-//    public void postComentario(NewComentarioDto newComentarioDto, Long IdPublicacion) {
-//        //conseguir el id del usuario actual
-//        Long usuarioId = 1L;
-//        Comentario newComentario = modelMapper.map(newComentarioDto, Come
     @GetMapping
     public ResponseEntity<List<HijoResponseDto>> getAllHijos() {
         List<HijoResponseDto> hijos = hijoService.getHijos();
@@ -71,5 +70,7 @@ public class HijoController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+
 
 }
