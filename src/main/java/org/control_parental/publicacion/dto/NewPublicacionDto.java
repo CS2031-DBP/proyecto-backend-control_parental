@@ -21,5 +21,9 @@ public class NewPublicacionDto {
     @NotNull
     String foto;
 
-    //List<Long> hijos_id;
+    List<Long> hijos_id;
+
+    private Long salonId;
+
+
 }
