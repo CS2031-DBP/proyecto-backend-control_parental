@@ -1,6 +1,7 @@
 package org.control_parental.publicacion.domain;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.control_parental.comentario.dto.ComentarioPublicacionDto;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.hijo.dto.HijoPublicacionDto;
 import org.control_parental.hijo.infrastructure.HijoRepository;
@@ -42,7 +43,7 @@ public class PublicacionService {
         Long ProfesorId = 1L;
         Profesor profesor = profesorRepository.findById(ProfesorId).orElseThrow(EntityNotFoundException::new);
         Publicacion newPublicacion = new Publicacion();
-        //Salon salon = new Salon();
+        Salon salon = salonRepository.findById(newPublicacionDto.getSalonId()).orElseThrow(EntityNotFoundException::new);
         List<Hijo> hijos = new ArrayList<Hijo>();
 
         newPublicacion.setTitulo(newPublicacionDto.getTitulo());
@@ -50,7 +51,7 @@ public class PublicacionService {
         newPublicacion.setFecha(LocalDateTime.now());
         newPublicacion.setFoto(newPublicacionDto.getFoto());
         newPublicacion.setProfesor(profesor);
-        //newPublicacion.setSalon(salon);
+        newPublicacion.setSalon(salon);
         newPublicacion.setFecha(LocalDateTime.now());
         newPublicacion.setLikes(0);
 
@@ -60,7 +61,7 @@ public class PublicacionService {
         newPublicacion.setHijos(hijos);
 
         profesor.getPublicaciones().add(newPublicacion);
-        //salon.getPublicaciones().add(newPublicacion);
+        salon.getPublicaciones().add(newPublicacion);
         publicacionRepository.save(newPublicacion);
     }
 
@@ -73,7 +74,14 @@ public class PublicacionService {
         publicacion.getHijos().forEach((hijo) -> {
             hijoPublicacionDtos.add(modelMapper.map(hijo, HijoPublicacionDto.class));
         });
+
+        List<ComentarioPublicacionDto> comentarioPublicacionDtos = new ArrayList<>();
+        publicacion.getComentarios().forEach((comentario) -> {
+            comentarioPublicacionDtos.add(modelMapper.map(comentario, ComentarioPublicacionDto.class));
+        });
+
         publicacionResponseDto.setHijos(hijoPublicacionDtos);
+        publicacionResponseDto.setComentarios(comentarioPublicacionDtos);
         return publicacionResponseDto;
     }
 
@@ -103,17 +111,4 @@ public class PublicacionService {
 
         return posts_data;
     }
-/*
-    public void createPost(NewPublicacionDto newPostData, Long salon_id, List<Long> hijos_id) {
-        Publicacion publicacion = modelMapper.map(newPostData, Publicacion.class);
-        Salon salon = salonRepository.findById(salon_id).orElseThrow();
-
-        publicacion.setFecha(LocalDateTime.now());
-        publicacion.setSalon(salon);
-
-
-        publicacionRepository.save(publicacion);
-    }
-
- */
 }

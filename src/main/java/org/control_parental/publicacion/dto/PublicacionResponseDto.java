@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.control_parental.comentario.dto.ComentarioPublicacionDto;
 import org.control_parental.comentario.dto.ComentarioResponseDto;
 import org.control_parental.hijo.dto.HijoPublicacionDto;
 import org.control_parental.hijo.dto.HijoResponseDto;
@@ -39,10 +40,9 @@ public class PublicacionResponseDto {
     List<HijoPublicacionDto> hijos;
 
 //    @JsonIgnoreProperties("publicacion")
-//    List<ComentarioResponseDto> comentarios;
+    List<ComentarioPublicacionDto> comentarios;
 /*
     List<PadreResponseDto> likers;
 */
-//    @JsonIgnoreProperties("publicaciones")
     Long salonId;
 }
