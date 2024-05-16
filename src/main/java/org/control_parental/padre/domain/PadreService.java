@@ -1,5 +1,6 @@
 package org.control_parental.padre.domain;
 
+import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.padre.dto.NewPadreDto;
 import org.control_parental.padre.dto.PadreResponseDto;
@@ -29,7 +30,7 @@ public class PadreService {
     }
 
     public PadreResponseDto getPadreById(Long id) {
-        Padre padre  = padreRepository.findById(id).orElseThrow();
+        Padre padre  = padreRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El padre no fue encontrado"));
 
         return modelMapper.map(padre, PadreResponseDto.class);
     }

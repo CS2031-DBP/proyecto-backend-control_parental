@@ -59,7 +59,10 @@ public class HijoService {
         Padre padre = padreRepository.findById(idPadre).orElseThrow(() -> new ResourceNotFoundException("El padre no fue encontrado"));
         Hijo hijo = modelMapper.map(newHijoDto, Hijo.class);
         hijo.setPadre(padre);
+        padre.addHijo(hijo);
+
         hijoRepository.save(hijo);
+        padreRepository.save(padre);
     }
 
     public HijoResponseDto getStudentById(Long id){

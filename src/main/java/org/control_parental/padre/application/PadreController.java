@@ -23,6 +23,7 @@ public class PadreController {
     @Autowired
     PadreService padreService;
 
+
     @PostMapping
     ResponseEntity<Void> savePadre(@Valid @RequestBody NewPadreDto newPadreDto) {
         padreService.savePadre(newPadreDto);
@@ -35,7 +36,7 @@ public class PadreController {
         return ResponseEntity.ok(padreResponseDto);
     }
 
-    @GetMapping()
+    @GetMapping("/me")
     ResponseEntity<PadreSelfResponseDto> getPadre() {
         PadreSelfResponseDto response = padreService.getOwnInfo();
         return ResponseEntity.ok(response);
