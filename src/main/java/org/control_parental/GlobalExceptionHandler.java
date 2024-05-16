@@ -1,7 +1,7 @@
 package org.control_parental;
 
 
-import org.control_parental.exceptions.ResourceAlreadyExistsExpeption;
+import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,9 +16,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleResourceNotFoundException(ResourceNotFoundException e) {return e.getMessage();}
 
-    @ExceptionHandler(ResourceAlreadyExistsExpeption.class)
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public String handleResourseAlreadyExistsException(ResourceAlreadyExistsExpeption e) {return e.getMessage();}
+    public String handleResourseAlreadyExistsException(ResourceAlreadyExistsException e) {return e.getMessage();}
 
 
 }
