@@ -1,6 +1,7 @@
 package org.control_parental;
 
 
+import org.control_parental.exceptions.IllegalArgumentException;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -20,5 +21,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public String handleResourseAlreadyExistsException(ResourceAlreadyExistsException e) {return e.getMessage();}
 
-
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public String handleIllegalArgumentException(IllegalArgumentException e) {return e.getMessage();}
 }
