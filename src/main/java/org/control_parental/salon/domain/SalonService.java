@@ -1,6 +1,6 @@
 package org.control_parental.salon.domain;
 
-import org.control_parental.exceptions.ResourceAlreadyExistsExpeption;
+import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.hijo.domain.Hijo;
 
@@ -38,7 +38,7 @@ public class SalonService {
 
     public void createSalon(NewSalonDTO newSalonDTO) {
         Optional<Salon> salon = salonRepository.findByNombre(newSalonDTO.getNombre());
-        if (salon.isPresent()) throw new ResourceAlreadyExistsExpeption("El salon ya existe");
+        if (salon.isPresent()) throw new ResourceAlreadyExistsException("El salon ya existe");
         Salon salon1 = modelMapper.map(newSalonDTO, Salon.class);
         salonRepository.save(salon1);
     }

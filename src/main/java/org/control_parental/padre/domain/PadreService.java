@@ -1,5 +1,7 @@
 package org.control_parental.padre.domain;
 
+import org.control_parental.exceptions.IllegalArgumentException;
+import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.padre.dto.NewPadreDto;
@@ -8,8 +10,11 @@ import org.control_parental.padre.dto.PadreSelfResponseDto;
 import org.control_parental.padre.infrastructure.PadreRepository;
 import org.control_parental.usuario.NewPasswordDto;
 import org.control_parental.usuario.domain.Role;
+import org.control_parental.usuario.domain.Usuario;
+import org.control_parental.usuario.infrastructure.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,9 +26,18 @@ public class PadreService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UsuarioRepository<Usuario> usuarioRepository;
+
     public void savePadre(NewPadreDto newPadreDto) {
-        Padre padre;
-        padre = modelMapper.map(newPadreDto, Padre.class);
+        Padre padre = modelMapper.map(newPadreDto, Padre.class);
+        if(usuarioRepository.findByEmail(newPadreDto.getEmail()).isPresent()) {
+            throw new ResourceAlreadyExistsException("el usuario ya existe");
+        }
+        padre.setPassword(passwordEncoder.encode(newPadreDto.getPassword()));
         padre.setRole(Role.PADRE);
         padreRepository.save(padre);
 

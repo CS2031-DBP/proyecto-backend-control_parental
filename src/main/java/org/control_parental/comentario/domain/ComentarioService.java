@@ -39,6 +39,7 @@ public class ComentarioService {
             throw new RuntimeException();
         }
     }
+
     public void postComentario(NewComentarioDto newComentarioDto, Long IdPublicacion) {
         //conseguir el id del usuario actual
         Long usuarioId = 1L;
