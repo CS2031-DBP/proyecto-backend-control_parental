@@ -1,7 +1,9 @@
 package org.control_parental.salon.application;
 
+import org.apache.catalina.connector.Response;
 import org.control_parental.hijo.dto.NewHijoDto;
 import org.control_parental.hijo.dto.HijoResponseDto;
+import org.control_parental.hijo.dto.ReducedHijoDto;
 import org.control_parental.publicacion.domain.Publicacion;
 import org.control_parental.publicacion.dto.PublicacionResponseDto;
 import org.control_parental.salon.dto.NewSalonDTO;
@@ -32,15 +34,9 @@ public class SalonController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{id}/{hijoId}")
-    public ResponseEntity<Void> addStudent(@PathVariable Long id, @PathVariable Long hijoId) {
-        salonService.addStudentToSalon(id, hijoId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @GetMapping("/{id}/hijos")
-    public ResponseEntity<List<HijoResponseDto>> getStudents(@PathVariable Long id) {
-        List<HijoResponseDto> hijos = salonService.getAllStudents(id);
+    public ResponseEntity<List<ReducedHijoDto>> getStudents(@PathVariable Long id) {
+        List<ReducedHijoDto> hijos = salonService.getAllStudents(id);
         return ResponseEntity.ok(hijos);
     }
 
@@ -50,4 +46,31 @@ public class SalonController {
         return ResponseEntity.ok(publicaciones);
     }
 
+
+    // funcion en conjunto porque cuando cree addStudent y addProfesor el controller crasheaba porque ambos recibian dos
+    // Longs creo, no entendi bien.
+    @PatchMapping("/{id}/{spId}")
+    public ResponseEntity<Void> addStudentOrProfesor(@PathVariable Long id, @PathVariable Long spId) {
+        salonService.addStudentOrProfesorToSalon(id, spId);
+        return ResponseEntity.ok().build();
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
