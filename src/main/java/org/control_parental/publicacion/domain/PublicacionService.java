@@ -1,13 +1,13 @@
 package org.control_parental.publicacion.domain;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.comentario.dto.ComentarioPublicacionDto;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.hijo.dto.HijoPublicacionDto;
 import org.control_parental.hijo.infrastructure.HijoRepository;
 import org.control_parental.profesor.domain.Profesor;
 import org.control_parental.profesor.dto.ProfesorPublicacionDto;
-import org.control_parental.profesor.dto.ProfesorResponseDto;
 import org.control_parental.profesor.infrastructure.ProfesorRepository;
 import org.control_parental.publicacion.dto.NewPublicacionDto;
 import org.control_parental.publicacion.dto.PublicacionResponseDto;
@@ -17,7 +17,6 @@ import org.control_parental.salon.infrastructure.SalonRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,19 +32,31 @@ public class PublicacionService {
 
     @Autowired
     ModelMapper modelMapper;
+
     @Autowired
-    private HijoRepository hijoRepository;
+    HijoRepository hijoRepository;
+
     @Autowired
     private ProfesorRepository profesorRepository;
+
+//    public void savePublicacion(NewPublicacionDto newPublicacionDto) {
+//        Publicacion newPublicacion = modelMapper.map(newPublicacionDto, Publicacion.class);
+//        List<Long> hijosid = newPublicacionDto.getHijos_id();
+//        hijosid.forEach(id -> {
+//            Hijo hijo = hijoRepository.findById(id).orElseThrow(
+//                    () -> new ResourceNotFoundException("El niño no existe"));
+//            newPublicacion.addStudent(hijo);
+//        });
+//        newPublicacion.setFecha(LocalDateTime.now());
+//        newPublicacion.setLikes(0);
 
     public void savePublicacion(NewPublicacionDto newPublicacionDto) {
         //obtener quien lo esta publicando con Sprnig Scurity
         Long ProfesorId = 1L;
-        Profesor profesor = profesorRepository.findById(ProfesorId).orElseThrow(EntityNotFoundException::new);
+        Profesor profesor = profesorRepository.findById(ProfesorId).orElseThrow(() -> new ResourceNotFoundException("El profesor no existe"));
         Publicacion newPublicacion = new Publicacion();
         Salon salon = salonRepository.findById(newPublicacionDto.getSalonId()).orElseThrow(EntityNotFoundException::new);
         List<Hijo> hijos = new ArrayList<Hijo>();
-
         newPublicacion.setTitulo(newPublicacionDto.getTitulo());
         newPublicacion.setDescripcion(newPublicacionDto.getDescripcion());
         newPublicacion.setFecha(LocalDateTime.now());
@@ -56,7 +67,7 @@ public class PublicacionService {
         newPublicacion.setLikes(0);
 
         newPublicacionDto.getHijos_id().forEach((hijo_id) -> {
-            hijos.add(hijoRepository.findById(hijo_id).orElseThrow(EntityNotFoundException::new));
+            hijos.add(hijoRepository.findById(hijo_id).orElseThrow(() -> new ResourceNotFoundException("Este hijo no existe")));
         });
         newPublicacion.setHijos(hijos);
 

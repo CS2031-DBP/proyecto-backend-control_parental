@@ -33,4 +33,6 @@ public class Salon {
         hijos.add(hijo);
     }
 
+    void addProfesor(Profesor profesor) {profesores.add(profesor);}
+
 }
