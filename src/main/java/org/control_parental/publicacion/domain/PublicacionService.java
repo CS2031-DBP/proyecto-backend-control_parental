@@ -1,6 +1,7 @@
 package org.control_parental.publicacion.domain;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.hijo.infrastructure.HijoRepository;
 import org.control_parental.publicacion.dto.NewPublicacionDto;
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PublicacionService {
@@ -27,12 +29,20 @@ public class PublicacionService {
 
     @Autowired
     ModelMapper modelMapper;
+
     @Autowired
-    private HijoRepository hijoRepository;
+    HijoRepository hijoRepository;
 
     public void savePublicacion(NewPublicacionDto newPublicacionDto) {
         Publicacion newPublicacion = modelMapper.map(newPublicacionDto, Publicacion.class);
+        List<Long> hijosid = newPublicacionDto.getHijos_id();
+        hijosid.forEach(id -> {
+            Hijo hijo = hijoRepository.findById(id).orElseThrow(
+                    () -> new ResourceNotFoundException("El niño no existe"));
+            newPublicacion.addStudent(hijo);
+        });
         newPublicacion.setFecha(LocalDateTime.now());
+        newPublicacion.setLikes(0);
 
         publicacionRepository.save(newPublicacion);
     }
