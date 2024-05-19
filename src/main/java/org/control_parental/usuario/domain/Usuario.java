@@ -5,13 +5,18 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.control_parental.comentario.domain.Comentario;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Usuario {
+public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
@@ -38,4 +43,25 @@ public class Usuario {
     @OneToMany
     List<Comentario> comentarios;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));//Esto viene de enum
+    }
+
+    @Override
+    public String getUsername(){
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired(){return true;};
+
+    @Override
+    public boolean isAccountNonLocked(){return true;};
+
+    @Override
+    public boolean isCredentialsNonExpired(){return true;};
+
+    @Override
+    public boolean isEnabled(){return true;};
 }
