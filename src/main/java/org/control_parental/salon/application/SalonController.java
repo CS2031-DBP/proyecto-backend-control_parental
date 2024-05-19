@@ -47,14 +47,17 @@ public class SalonController {
     }
 
 
-    // funcion en conjunto porque cuando cree addStudent y addProfesor el controller crasheaba porque ambos recibian dos
-    // Longs creo, no entendi bien.
-    @PatchMapping("/{id}/{spId}")
-    public ResponseEntity<Void> addStudentOrProfesor(@PathVariable Long id, @PathVariable Long spId) {
-        salonService.addStudentOrProfesorToSalon(id, spId);
+    @PatchMapping("/{idSalon}/hijo/{idHijo}")
+    public ResponseEntity<Void> addHijo(@PathVariable Long idSalon, @PathVariable Long idHijo) {
+        salonService.addHijo(idSalon, idHijo);
         return ResponseEntity.ok().build();
     }
 
+    @PatchMapping("/{idSalon}/profesor/{idProfesor}")
+    public ResponseEntity<Void> addProfesor(@PathVariable Long idSalon, @PathVariable Long idProfesor) {
+        salonService.addProfesor(idSalon, idProfesor);
+        return ResponseEntity.ok().build();
+    }
 
 }
 

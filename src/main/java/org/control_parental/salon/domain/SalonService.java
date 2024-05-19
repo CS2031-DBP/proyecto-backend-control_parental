@@ -17,7 +17,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -48,26 +47,22 @@ public class SalonService {
         return modelMapper.map(salonRepository.findById(id).orElseThrow(), SalonResponseDto.class);
     }
 
-    public void addStudentOrProfesorToSalon(Long id, Long spId) {
-        Optional<Hijo> hijo = hijoRepository.findById(spId);
-        Optional<Profesor> profesor = profesorRepository.findById(spId);
-        Salon salon = salonRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("El salon no fue encontrado"));
-        if (profesor.isEmpty() && hijo.isEmpty()) throw new ResourceNotFoundException("Esta entidad no existe");
-        if (profesor.isPresent()) {
-            salon.addProfesor(profesor.get());
-            profesor.get().addSalon(salon);
-            salonRepository.save(salon);
-            profesorRepository.save(profesor);
-        }
-        if (hijo.isPresent()) {
-            salon.addStudent(hijo.get());
-            hijo.get().setSalon(salon);
-            salonRepository.save(salon);
-            hijoRepository.save(hijo);
+    public void addHijo(Long idSalon, Long idHijo) {
+        Hijo hijo = hijoRepository.findById(idHijo).orElseThrow(() -> new ResourceNotFoundException("Hijo no encontrado"));
+        Salon salon = salonRepository.findById(idSalon).orElseThrow(() -> new ResourceNotFoundException("El salon no fue encontrado"));
+        salon.addStudent(hijo);
+        hijo.setSalon(salon);
+        salonRepository.save(salon);
+        hijoRepository.save(hijo);
+    }
 
-        }
-
+    public void addProfesor(Long idSalon, Long idProfesor) {
+        Profesor profesor = profesorRepository.findById(idProfesor).orElseThrow(() -> new ResourceNotFoundException("Profesor no encontrado"));
+        Salon salon = salonRepository.findById(idSalon).orElseThrow(() -> new ResourceNotFoundException("El salon no fue encontrado"));
+        salon.addProfesor(profesor);
+        profesor.addSalon(salon);
+        salonRepository.save(salon);
+        profesorRepository.save(profesor);
     }
 
 
