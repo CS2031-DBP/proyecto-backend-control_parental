@@ -52,7 +52,7 @@ public class PublicacionService {
 
     public void savePublicacion(NewPublicacionDto newPublicacionDto) {
         //obtener quien lo esta publicando con Sprnig Scurity
-        Long ProfesorId = 1L;
+        Long ProfesorId = 2L;
         Profesor profesor = profesorRepository.findById(ProfesorId).orElseThrow(() -> new ResourceNotFoundException("El profesor no existe"));
         Publicacion newPublicacion = new Publicacion();
         Salon salon = salonRepository.findById(newPublicacionDto.getSalonId()).orElseThrow(EntityNotFoundException::new);
@@ -77,7 +77,8 @@ public class PublicacionService {
     }
 
     public PublicacionResponseDto getPublicacionById(Long id) {
-        Publicacion publicacion = publicacionRepository.findById(id).orElseThrow();
+        Publicacion publicacion = publicacionRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Esta publicacion no existe"));
         PublicacionResponseDto publicacionResponseDto = modelMapper.map(publicacion, PublicacionResponseDto.class);
         publicacionResponseDto.setProfesor(modelMapper.map(publicacion.getProfesor(), ProfesorPublicacionDto.class));
 

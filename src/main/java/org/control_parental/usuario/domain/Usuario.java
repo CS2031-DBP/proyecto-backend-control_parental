@@ -26,15 +26,15 @@ public class Usuario implements UserDetails {
     String email;
 
     @Column(nullable = false)
-    @Size(min = 6, max = 50)
+//    @Size(min = 6, max = 50)
     String password;
 
     @Column(nullable = false)
-    @Size(min = 2, max = 50)
+    @Size(min = 2, max = 100)
     String nombre;
 
     @Column(nullable = false)
-    @Size(min = 2, max = 50)
+    @Size(min = 2, max = 100)
     String apellido;
 
     @Column

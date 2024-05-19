@@ -20,7 +20,7 @@ public class Salon {
     @Size(min = 2, max = 50)
     String nombre;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "salones")
     List<Profesor> profesores;
 
     @OneToMany
