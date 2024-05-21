@@ -1,6 +1,6 @@
 package org.control_parental.publicacion.domain;
 
-import jakarta.persistence.EntityNotFoundException;
+import org.control_parental.email.nuevaPublicacion.PublicacionEmailEvent;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.comentario.dto.ComentarioPublicacionDto;
 import org.control_parental.hijo.domain.Hijo;
@@ -16,11 +16,13 @@ import org.control_parental.salon.domain.Salon;
 import org.control_parental.salon.infrastructure.SalonRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PublicacionService {
@@ -39,6 +41,9 @@ public class PublicacionService {
     @Autowired
     private ProfesorRepository profesorRepository;
 
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
 //    public void savePublicacion(NewPublicacionDto newPublicacionDto) {
 //        Publicacion newPublicacion = modelMapper.map(newPublicacionDto, Publicacion.class);
 //        List<Long> hijosid = newPublicacionDto.getHijos_id();
@@ -52,10 +57,14 @@ public class PublicacionService {
 
     public void savePublicacion(NewPublicacionDto newPublicacionDto) {
         //obtener quien lo esta publicando con Sprnig Scurity
+
         Long ProfesorId = 2L;
-        Profesor profesor = profesorRepository.findById(ProfesorId).orElseThrow(() -> new ResourceNotFoundException("El profesor no existe"));
+        Profesor profesor = profesorRepository.findById(ProfesorId).orElseThrow(
+                () -> new ResourceNotFoundException("El profesor no existe"));
         Publicacion newPublicacion = new Publicacion();
-        Salon salon = salonRepository.findById(newPublicacionDto.getSalonId()).orElseThrow(EntityNotFoundException::new);
+        Salon salon = salonRepository.findById(newPublicacionDto.getSalonId()).orElseThrow(
+                ()-> new ResourceNotFoundException("El salon no existe"));
+
         List<Hijo> hijos = new ArrayList<Hijo>();
         newPublicacion.setTitulo(newPublicacionDto.getTitulo());
         newPublicacion.setDescripcion(newPublicacionDto.getDescripcion());
@@ -66,8 +75,14 @@ public class PublicacionService {
         newPublicacion.setFecha(LocalDateTime.now());
         newPublicacion.setLikes(0);
 
-        newPublicacionDto.getHijos_id().forEach((hijo_id) -> {
-            hijos.add(hijoRepository.findById(hijo_id).orElseThrow(() -> new ResourceNotFoundException("Este hijo no existe")));
+        newPublicacionDto.getHijos_id().forEach(hijo_id -> {
+            Optional<Hijo> hijo = hijoRepository.findById(hijo_id);
+            if (hijo.isPresent()) {
+                hijos.add(hijo.get());
+                applicationEventPublisher.publishEvent(
+                        new PublicacionEmailEvent(this, hijo.get().getNombre(), hijo.get().getPadre().getEmail(), newPublicacion.getTitulo())
+                );
+            }
         });
         newPublicacion.setHijos(hijos);
 

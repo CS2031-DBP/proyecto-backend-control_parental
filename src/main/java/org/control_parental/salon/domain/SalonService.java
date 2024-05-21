@@ -1,5 +1,6 @@
 package org.control_parental.salon.domain;
 
+import org.control_parental.email.nuevoSalon.AgregacionHijoSalonEmailEvent;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.hijo.domain.Hijo;
@@ -15,6 +16,7 @@ import org.control_parental.salon.dto.SalonResponseDto;
 import org.control_parental.salon.infrastructure.SalonRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,6 +38,9 @@ public class SalonService {
     @Autowired
     private ProfesorRepository profesorRepository;
 
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
     public void createSalon(NewSalonDTO newSalonDTO) {
         Optional<Salon> salon = salonRepository.findByNombre(newSalonDTO.getNombre());
         if (salon.isPresent()) throw new ResourceAlreadyExistsException("El salon ya existe");
@@ -52,6 +57,9 @@ public class SalonService {
         Salon salon = salonRepository.findById(idSalon).orElseThrow(() -> new ResourceNotFoundException("El salon no fue encontrado"));
         salon.addStudent(hijo);
         hijo.setSalon(salon);
+        applicationEventPublisher.publishEvent(
+                new AgregacionHijoSalonEmailEvent(this, hijo.getNombre(), hijo.getPadre().getEmail(), salon.getNombre())
+        );
         salonRepository.save(salon);
         hijoRepository.save(hijo);
     }
@@ -64,8 +72,6 @@ public class SalonService {
         salonRepository.save(salon);
         profesorRepository.save(profesor);
     }
-
-
 
     public List<ReducedHijoDto> getAllStudents(Long id) {
         Salon salon = salonRepository.findById(id).orElseThrow();
