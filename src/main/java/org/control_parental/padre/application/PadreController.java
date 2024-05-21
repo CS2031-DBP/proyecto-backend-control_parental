@@ -61,7 +61,7 @@ public class PadreController {
     }
 
     @PatchMapping("/password")
-    ResponseEntity<Void> newPassword(NewPasswordDto newPasswordDto) {
+    ResponseEntity<Void> newPassword(@RequestBody NewPasswordDto newPasswordDto) {
         padreService.newPassword(newPasswordDto);
         return ResponseEntity.ok().build();
     }
