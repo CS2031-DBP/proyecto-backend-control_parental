@@ -55,7 +55,6 @@ public class HijoController {
         hijoService.updateStudent(id, newHijo);
         return ResponseEntity.ok().build();
     }
-*/
 
     @GetMapping
     public ResponseEntity<List<HijoResponseDto>> getAllHijos() {
