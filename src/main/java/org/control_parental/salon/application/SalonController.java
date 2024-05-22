@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -30,8 +31,9 @@ public class SalonController {
 
     @PostMapping
     public ResponseEntity<Void> createSalon( @RequestBody NewSalonDTO newSalonDTO) {
-        salonService.createSalon(newSalonDTO);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        String location = salonService.createSalon(newSalonDTO);
+        URI locationHeader= URI.create(location);
+        return ResponseEntity.created(locationHeader).build();
     }
 
     @GetMapping("/{id}/hijos")

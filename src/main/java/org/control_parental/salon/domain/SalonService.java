@@ -34,18 +34,20 @@ public class SalonService {
 
     @Autowired
     private ModelMapper modelMapper;
-
+  
     @Autowired
     private ProfesorRepository profesorRepository;
 
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 
-    public void createSalon(NewSalonDTO newSalonDTO) {
+    public String createSalon(NewSalonDTO newSalonDTO) {
         Optional<Salon> salon = salonRepository.findByNombre(newSalonDTO.getNombre());
         if (salon.isPresent()) throw new ResourceAlreadyExistsException("El salon ya existe");
         Salon salon1 = modelMapper.map(newSalonDTO, Salon.class);
         salonRepository.save(salon1);
+      
+        return "/" + salon1.getId();
     }
 
     public SalonResponseDto getSalonById(Long id) {
