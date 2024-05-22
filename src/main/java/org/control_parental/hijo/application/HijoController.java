@@ -48,7 +48,7 @@ public class HijoController {
         return ResponseEntity.ok(hijoService.getPublicaciones(id));
     }
 */
-    @PatchMapping("/{id}")
+   /* @PatchMapping("/{id}")
     public ResponseEntity<Void> updateStudent(@PathVariable Long id, @Valid @RequestBody NewHijoDto newHijo) {
         hijoService.updateStudent(id, newHijo);
         return ResponseEntity.ok().build();
@@ -62,7 +62,7 @@ public class HijoController {
     public ResponseEntity<List<HijoResponseDto>> getAllHijos() {
         List<HijoResponseDto> hijos = hijoService.getHijos();
         return ResponseEntity.ok(hijos);
-    }
+    }*/
 
     @PostMapping(value = "/csv", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Void> csvStudents(@RequestParam("file")MultipartFile file) throws IOException {

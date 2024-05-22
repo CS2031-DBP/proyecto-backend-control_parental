@@ -18,10 +18,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.parameters.P;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
@@ -154,13 +156,16 @@ public class SalonControllerIntegrationTest {
         NewSalonDTO salonData = new NewSalonDTO();
         salonData.setNombre("Salon1");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/salon")
+        var test = mockMvc.perform(MockMvcRequestBuilders.post("/salon")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(salonData)))
                 .andExpect(status().isCreated()
-                );
+                ).andReturn();
 
-        Salon newSalon = salonRepository.findById(1L).orElseThrow();
+        String location = test.getResponse().getHeader("Location");
+        Long id = Long.valueOf(location.substring(location.lastIndexOf("/") + 1));
+
+        Salon newSalon = salonRepository.findById(id).orElseThrow();
 
         Assertions.assertEquals(salon.getNombre(), newSalon.getNombre());
     }

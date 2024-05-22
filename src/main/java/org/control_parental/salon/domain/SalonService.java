@@ -29,9 +29,10 @@ public class SalonService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public void createSalon(NewSalonDTO newSalonDTO) {
+    public String createSalon(NewSalonDTO newSalonDTO) {
         Salon salon = modelMapper.map(newSalonDTO, Salon.class);
         salonRepository.save(salon);
+        return "/" + salon.getId();
     }
 
     public SalonResponseDto getSalonById(Long id) {
