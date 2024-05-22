@@ -98,8 +98,33 @@ public class HijoControllerIntegrationTest {
     }
 
     @Test
-    public void testCreateHijo() throws Exception {
-        
+    public void testGetStudentById() throws Exception {
+
+    }
+
+    @Test
+    public void testCreateStudent() throws Exception {
+
+    }
+
+    @Test
+    public void testDeleteStudent() throws Exception {
+
+    }
+
+    @Test
+    public void testGetPublicaciones() throws Exception {
+
+    }
+
+    @Test
+    public void testUpdateStudent() throws Exception {
+
+    }
+
+    @Test
+    public void testGetAllHijos() throws Exception {
+
     }
 
 }
