@@ -26,6 +26,5 @@ public class SalonResponseDto {
     @JsonIgnoreProperties("salon")
     List<PublicacionResponseDto> publicaciones;
 
-    @JsonIgnoreProperties("salon")
     List<ReducedHijoDto> hijos;
 }
