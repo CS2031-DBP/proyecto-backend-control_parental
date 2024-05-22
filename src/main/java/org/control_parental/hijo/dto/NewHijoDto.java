@@ -18,4 +18,6 @@ public class NewHijoDto {
     @NotNull
     String apellido;
 
+    String email;
+
 }

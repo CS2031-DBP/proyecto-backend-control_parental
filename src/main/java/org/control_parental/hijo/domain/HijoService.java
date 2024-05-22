@@ -44,7 +44,14 @@ public class HijoService {
         var inputStream =  file.getInputStream();
         List<NewHijoDto> hijos = CSVHelper.csvToHijos( inputStream);
         List<Hijo> newHijos = new ArrayList<Hijo>();
-        hijos.forEach(hijo -> newHijos.add(modelMapper.map(hijo, Hijo.class)));
+        hijos.forEach(hijo -> {
+                    Hijo nuevoHijo = modelMapper.map(hijo, Hijo.class);
+                    Padre padre = padreRepository.findByEmail(hijo.getEmail()).orElseThrow(
+                            ()-> new ResourceNotFoundException("Este padre no fue encontrado"));
+                    nuevoHijo.setPadre(padre);
+                newHijos.add(nuevoHijo);
+                });
+
         hijoRepository.saveAll(newHijos);
     }
 

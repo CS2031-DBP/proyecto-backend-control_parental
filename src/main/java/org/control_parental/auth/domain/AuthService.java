@@ -32,7 +32,8 @@ public class AuthService {
     private JwtService jwtService;
 
     public AuthJwtResponse login(AuthLoginRequest authLoginRequest) {
-        Usuario usuario = usuarioRepository.findByEmail(authLoginRequest.getEmail()).orElseThrow(() -> new ResourceNotFoundException("username incorrecto"));
+        Usuario usuario = usuarioRepository.findByEmail(authLoginRequest.getEmail()).orElseThrow(
+                () -> new ResourceNotFoundException("El usuario no existe"));
         AuthJwtResponse authJwtResponse = new AuthJwtResponse();
 
         if(!passwordEncoder.matches(authLoginRequest.getPassword(), usuario.getPassword())) {

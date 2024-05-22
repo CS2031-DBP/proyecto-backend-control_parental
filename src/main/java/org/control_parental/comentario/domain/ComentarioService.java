@@ -3,6 +3,7 @@ package org.control_parental.comentario.domain;
 import org.control_parental.comentario.dto.ComentarioResponseDto;
 import org.control_parental.comentario.dto.NewComentarioDto;
 import org.control_parental.comentario.infrastructure.ComentarioRepository;
+import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.publicacion.domain.Publicacion;
 import org.control_parental.publicacion.dto.PublicacionResponseDto;
 import org.control_parental.publicacion.infrastructure.PublicacionRepository;
@@ -44,7 +45,7 @@ public class ComentarioService {
         //conseguir el id del usuario actual
         Long usuarioId = 1L;
         Comentario newComentario = modelMapper.map(newComentarioDto, Comentario.class);
-        Publicacion publicacion = publicacionRepository.findById(IdPublicacion).orElseThrow();
+        Publicacion publicacion = publicacionRepository.findById(IdPublicacion).orElseThrow(()-> new ResourceNotFoundException("No se encontro estas publicacion"));
         Usuario usuario = usuarioRepository.findById(usuarioId).orElseThrow();
         usuario.getComentarios().add(newComentario);
         publicacion.getComentarios().add(newComentario);
