@@ -5,9 +5,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.control_parental.comentario.dto.ComentarioPublicacionDto;
 import org.control_parental.comentario.dto.ComentarioResponseDto;
+import org.control_parental.hijo.dto.HijoPublicacionDto;
 import org.control_parental.hijo.dto.HijoResponseDto;
 import org.control_parental.padre.dto.PadreResponseDto;
+import org.control_parental.profesor.dto.ProfesorPublicacionDto;
 import org.control_parental.profesor.dto.ProfesorResponseDto;
 import org.control_parental.salon.dto.SalonResponseDto;
 
@@ -24,7 +27,6 @@ public class PublicacionResponseDto {
     @NotNull
     String descripcion;
 
-
     @NotNull
     Integer likes;
 
@@ -33,16 +35,14 @@ public class PublicacionResponseDto {
     @NotNull
     String titulo;
 
-    ProfesorResponseDto profesor;
+    ProfesorPublicacionDto profesor;
 
-    @JsonIgnoreProperties("publicaciones")
-    List<HijoResponseDto> hijos;
+    List<HijoPublicacionDto> hijos;
 
-    @JsonIgnoreProperties("publicacion")
-    List<ComentarioResponseDto> comentarios;
-
+//    @JsonIgnoreProperties("publicacion")
+    List<ComentarioPublicacionDto> comentarios;
+/*
     List<PadreResponseDto> likers;
-
-    @JsonIgnoreProperties("publicaciones")
-    SalonResponseDto salon;
+*/
+    Long salonId;
 }

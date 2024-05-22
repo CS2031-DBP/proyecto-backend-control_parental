@@ -1,7 +1,9 @@
 package org.control_parental.salon.application;
 
+import org.apache.catalina.connector.Response;
 import org.control_parental.hijo.dto.NewHijoDto;
 import org.control_parental.hijo.dto.HijoResponseDto;
+import org.control_parental.hijo.dto.ReducedHijoDto;
 import org.control_parental.publicacion.domain.Publicacion;
 import org.control_parental.publicacion.dto.PublicacionResponseDto;
 import org.control_parental.salon.dto.NewSalonDTO;
@@ -34,15 +36,9 @@ public class SalonController {
         return ResponseEntity.created(locationHeader).build();
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<Void> addStudent(@PathVariable Long id, @RequestBody NewHijoDto hijoDTO) {
-        salonService.addStudentToSalon(id, hijoDTO);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @GetMapping("/{id}/hijos")
-    public ResponseEntity<List<HijoResponseDto>> getStudents(@PathVariable Long id) {
-        List<HijoResponseDto> hijos = salonService.getAllStudents(id);
+    public ResponseEntity<List<ReducedHijoDto>> getStudents(@PathVariable Long id) {
+        List<ReducedHijoDto> hijos = salonService.getAllStudents(id);
         return ResponseEntity.ok(hijos);
     }
 
@@ -52,4 +48,34 @@ public class SalonController {
         return ResponseEntity.ok(publicaciones);
     }
 
+
+    @PatchMapping("/{idSalon}/hijo/{idHijo}")
+    public ResponseEntity<Void> addHijo(@PathVariable Long idSalon, @PathVariable Long idHijo) {
+        salonService.addHijo(idSalon, idHijo);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{idSalon}/profesor/{idProfesor}")
+    public ResponseEntity<Void> addProfesor(@PathVariable Long idSalon, @PathVariable Long idProfesor) {
+        salonService.addProfesor(idSalon, idProfesor);
+        return ResponseEntity.ok().build();
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

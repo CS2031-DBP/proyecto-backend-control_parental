@@ -42,7 +42,13 @@ public class Publicacion {
     @ManyToOne
     Profesor profesor;
 
-    @ManyToMany
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
+    )
     List<Hijo> hijos;
 
     @OneToMany
@@ -53,5 +59,8 @@ public class Publicacion {
 
     @ManyToOne
     Salon salon;
+
+    public void addStudent(Hijo hijo) {hijos.add(hijo);}
+
 
 }

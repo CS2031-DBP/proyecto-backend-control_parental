@@ -30,6 +30,7 @@ public class Hijo {
     String apellido;
 
     @ManyToOne
+    @JoinColumn(name = "padre")
     Padre padre;
 
     @ManyToMany

@@ -48,16 +48,15 @@ public class HijoController {
         return ResponseEntity.ok(hijoService.getPublicaciones(id));
     }
 */
-   /* @PatchMapping("/{id}")
+
+    /*
+    @PatchMapping("/{id}")
     public ResponseEntity<Void> updateStudent(@PathVariable Long id, @Valid @RequestBody NewHijoDto newHijo) {
         hijoService.updateStudent(id, newHijo);
         return ResponseEntity.ok().build();
     }
+*/
 
-    public void postComentario(NewComentarioDto newComentarioDto, Long IdPublicacion) {
-        //conseguir el id del usuario actual
-        Long usuarioId = 1L;
-        Comentario newComentario = modelMapper.map(newComentarioDto, Come
     @GetMapping
     public ResponseEntity<List<HijoResponseDto>> getAllHijos() {
         List<HijoResponseDto> hijos = hijoService.getHijos();
