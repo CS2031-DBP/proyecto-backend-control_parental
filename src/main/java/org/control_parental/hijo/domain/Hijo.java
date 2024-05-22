@@ -1,5 +1,8 @@
 package org.control_parental.hijo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -15,6 +18,9 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Hijo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,6 +36,7 @@ public class Hijo {
     String apellido;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "padre")
     Padre padre;
 

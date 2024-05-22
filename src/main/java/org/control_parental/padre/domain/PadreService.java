@@ -85,6 +85,11 @@ public class PadreService {
         padreRepository.save(padre);
     }
 
+    public List<Padre> getAllPadres() {
+        return padreRepository.findAll();
+    }
+
+
 }
 
 

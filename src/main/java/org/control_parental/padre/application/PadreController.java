@@ -65,5 +65,10 @@ public class PadreController {
         padreService.newPassword(newPasswordDto);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping()
+    ResponseEntity<List<Padre>> getAllPadres() {
+        return ResponseEntity.ok(padreService.getAllPadres());
+    }
     
 }
