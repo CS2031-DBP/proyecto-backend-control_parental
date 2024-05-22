@@ -8,6 +8,7 @@ import org.control_parental.hijo.dto.HijoPublicacionDto;
 import org.control_parental.hijo.infrastructure.HijoRepository;
 import org.control_parental.profesor.domain.Profesor;
 import org.control_parental.profesor.dto.ProfesorPublicacionDto;
+import org.control_parental.profesor.dto.ProfesorResponseDto;
 import org.control_parental.profesor.infrastructure.ProfesorRepository;
 import org.control_parental.publicacion.dto.NewPublicacionDto;
 import org.control_parental.publicacion.dto.PublicacionResponseDto;
@@ -95,7 +96,7 @@ public class PublicacionService {
         Publicacion publicacion = publicacionRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Esta publicacion no existe"));
         PublicacionResponseDto publicacionResponseDto = modelMapper.map(publicacion, PublicacionResponseDto.class);
-        publicacionResponseDto.setProfesor(modelMapper.map(publicacion.getProfesor(), ProfesorPublicacionDto.class));
+        publicacionResponseDto.setProfesor(modelMapper.map(publicacion.getProfesor(), ProfesorResponseDto.class));
 
         List<HijoPublicacionDto> hijoPublicacionDtos = new ArrayList<>();
         publicacion.getHijos().forEach((hijo) -> {

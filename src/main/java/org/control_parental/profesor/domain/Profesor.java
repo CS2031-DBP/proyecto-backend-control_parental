@@ -8,6 +8,7 @@ import org.control_parental.publicacion.domain.Publicacion;
 import org.control_parental.salon.domain.Salon;
 import org.control_parental.usuario.domain.Usuario;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,10 +19,10 @@ import java.util.List;
 public class Profesor extends Usuario {
 
     @OneToMany
-    List<Publicacion> publicaciones;
+    List<Publicacion> publicaciones = new ArrayList<>();
 
     @ManyToMany
-    List<Salon> salones;
+    List<Salon> salones = new ArrayList<>();
 
     public void addSalon(Salon salon) {salones.add(salon);}
 

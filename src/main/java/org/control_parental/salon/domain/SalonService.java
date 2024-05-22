@@ -51,7 +51,7 @@ public class SalonService {
     }
 
     public SalonResponseDto getSalonById(Long id) {
-        return modelMapper.map(salonRepository.findById(id).orElseThrow(), SalonResponseDto.class);
+        return modelMapper.map(salonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El salon no fue encontrado")), SalonResponseDto.class);
     }
 
     public void addHijo(Long idSalon, Long idHijo) {

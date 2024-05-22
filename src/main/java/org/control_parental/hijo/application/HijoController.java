@@ -61,7 +61,7 @@ public class HijoController {
     public ResponseEntity<List<HijoResponseDto>> getAllHijos() {
         List<HijoResponseDto> hijos = hijoService.getHijos();
         return ResponseEntity.ok(hijos);
-    }*/
+    }
 
     @PostMapping(value = "/csv", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Void> csvStudents(@RequestParam("file")MultipartFile file) throws IOException {

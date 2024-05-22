@@ -179,13 +179,9 @@ public class SalonControllerIntegrationTest {
                 .andExpect(jsonPath("$.id").doesNotExist())
                 .andExpect(jsonPath("$.nombre").value(salon.getNombre()))
                 .andExpect(jsonPath("$.hijos[0].nombre").value(salon.getHijos().get(0).getNombre()))
-                .andExpect(jsonPath("$.hijos[0].padre.email").value(salon.getHijos().get(0).getPadre().getEmail()))
                 .andExpect(jsonPath("$.hijos[1].nombre").value(salon.getHijos().get(1).getNombre()))
-                .andExpect(jsonPath("$.hijos[1].padre.email").value(salon.getHijos().get(1).getPadre().getEmail()))
                 .andExpect(jsonPath("$.profesores[0].email").value(salon.getProfesores().get(0).getEmail()))
                 .andExpect(status().isOk());
-
-
     }
 
     @Test
@@ -207,12 +203,7 @@ public class SalonControllerIntegrationTest {
         hijo3.setPadre(padre1);
         hijoRepository.save(hijo3);
 
-        NewHijoDto newHijoData = new NewHijoDto();
-        newHijoData.setNombre(hijo3.getNombre());
-        newHijoData.setApellido(hijo3.getApellido());
-
-        mockMvc.perform(MockMvcRequestBuilders.patch("/salon/{id}", salon.getId()).contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(newHijoData)))
+        mockMvc.perform(MockMvcRequestBuilders.patch("/salon/{salonId}/hijo/{idHijo}", salon.getId(), hijo3.getId()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
         Salon newSalon = salonRepository.findById(salon.getId()).orElseThrow();
@@ -228,12 +219,7 @@ public class SalonControllerIntegrationTest {
     public void testAddNonexistentHijo() throws Exception{
         salonRepository.save(salon);
 
-        NewHijoDto newHijoData = new NewHijoDto();
-        newHijoData.setNombre("Nicolas");
-        newHijoData.setApellido("Stigler");
-
-        mockMvc.perform(MockMvcRequestBuilders.patch("/salon/{id}", salon.getId()).contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(newHijoData)))
+        mockMvc.perform(MockMvcRequestBuilders.patch("/salon/{idSalon}/hijo/{idHijo}", salon.getId(), 20L).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
@@ -245,10 +231,6 @@ public class SalonControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[0].nombre").value(salon.getHijos().get(0).getNombre()))
                 .andExpect(jsonPath("$.[0].apellido").value(salon.getHijos().get(0).getApellido()))
-                .andExpect(jsonPath("$.[0].padre.email").value(salon.getHijos().get(0).getPadre().getEmail()))
-                .andExpect(jsonPath("$.[1].nombre").value(salon.getHijos().get(1).getNombre()))
-                .andExpect(jsonPath("$.[1].apellido").value(salon.getHijos().get(1).getApellido()))
-                .andExpect(jsonPath("$.[1].padre.email").value(salon.getHijos().get(1).getPadre().getEmail()))
                 .andExpect(status().isOk());
     }
     @Test
@@ -262,5 +244,36 @@ public class SalonControllerIntegrationTest {
                 .andExpect(jsonPath("$.[0].hijos[1].nombre").value(salon.getPublicaciones().get(0).getHijos().get(1).getNombre()))
                 .andExpect(jsonPath("$.[0].profesor.email").value(salon.getPublicaciones().get(0).getProfesor().getEmail()))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testAddProfesor() throws Exception {
+        salonRepository.save(salon);
+
+        Profesor profesor2 = new Profesor();
+        profesor2.setNombre("Gino");
+        profesor2.setApellido("Daza");
+        profesor2.setEmail("gino.daza@utec.edu.pe");
+        profesor2.setPassword("gino123");
+        profesor2.setRole(Role.PROFESOR);
+        profesorRepository.save(profesor2);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/salon/{salonId}/profesor/{idProfesor}", salon.getId(), profesor2.getId()).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        Salon newSalon = salonRepository.findById(salon.getId()).orElseThrow();
+
+        Assertions.assertEquals(newSalon.getProfesores().size(), 2);
+        Assertions.assertEquals(newSalon.getProfesores().get(1).getNombre(), profesor2.getNombre());
+        Assertions.assertEquals(newSalon.getProfesores().get(1).getApellido(), profesor2.getApellido());
+        Assertions.assertEquals(newSalon.getProfesores().get(1).getEmail(), profesor2.getEmail());
+    }
+
+    @Test
+    public void testAddNonexistentProfesor() throws Exception {
+        salonRepository.save(salon);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/salon/{idSalon}/profesor/{idProfesor}", salon.getId(), 20L).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }

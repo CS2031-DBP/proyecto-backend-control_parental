@@ -35,7 +35,8 @@ public class PublicacionResponseDto {
     @NotNull
     String titulo;
 
-    ProfesorPublicacionDto profesor;
+    @JsonIgnoreProperties("salones")
+    ProfesorResponseDto profesor;
 
     List<HijoPublicacionDto> hijos;
 
