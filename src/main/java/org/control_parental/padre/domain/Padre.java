@@ -3,6 +3,7 @@ package org.control_parental.padre.domain;
 import jakarta.persistence.*;
 
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,9 +13,7 @@ import org.control_parental.usuario.domain.Usuario;
 
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @Entity
 public class Padre extends Usuario {
 
@@ -22,7 +21,7 @@ public class Padre extends Usuario {
     @Size(min = 9, max = 15)
     String phoneNumber;
 
-    @OneToMany(mappedBy = "padre", cascade = CascadeType.REMOVE) // si eliminamos al padre tambien se eliminaran a los hijos relacionados al padre
+    @OneToMany(mappedBy = "padre") // si eliminamos al padre tambien se eliminaran a los hijos relacionados al padre
     List<Hijo> hijos;
 
     @ManyToMany

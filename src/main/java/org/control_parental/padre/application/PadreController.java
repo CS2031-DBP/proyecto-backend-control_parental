@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -26,8 +27,9 @@ public class PadreController {
 
     @PostMapping
     ResponseEntity<Void> savePadre(@Valid @RequestBody NewPadreDto newPadreDto) {
-        padreService.savePadre(newPadreDto);
-        return new ResponseEntity<>(HttpStatusCode.valueOf(201));
+        String location = padreService.savePadre(newPadreDto);
+        URI locationHeader = URI.create(location);
+        return ResponseEntity.created(locationHeader).build();
     }
 
     @GetMapping("/{id}")
@@ -45,7 +47,7 @@ public class PadreController {
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deletePadre(@PathVariable Long id) {
         padreService.deletePadre(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.created(null).build();
     }
 
     @GetMapping("/{id}/hijos")
@@ -54,8 +56,8 @@ public class PadreController {
         return ResponseEntity.ok(hijos);
     }
 
-    @GetMapping("/{me}/hijos")
-    ResponseEntity<List<Hijo>> getHijos() {
+    @GetMapping("/myhijos")
+    ResponseEntity<List<Hijo>> getMyHijos() {
         List<Hijo> hijos = padreService.getOwnHijos();
         return ResponseEntity.ok(hijos);
     }

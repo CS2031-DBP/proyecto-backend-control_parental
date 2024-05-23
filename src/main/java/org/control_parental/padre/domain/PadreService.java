@@ -35,9 +35,10 @@ public class PadreService {
     @Autowired
     private UsuarioRepository<Usuario> usuarioRepository;
 
+
     @Autowired
     ApplicationEventPublisher applicationEventPublisher;
-    public void savePadre(NewPadreDto newPadreDto) {
+    public String savePadre(NewPadreDto newPadreDto) {
         Padre padre = modelMapper.map(newPadreDto, Padre.class);
         if(usuarioRepository.findByEmail(newPadreDto.getEmail()).isPresent()) {
             throw new ResourceAlreadyExistsException("el usuario ya existe");
@@ -45,7 +46,7 @@ public class PadreService {
         padre.setPassword(passwordEncoder.encode(newPadreDto.getPassword()));
         padre.setRole(Role.PADRE);
         padreRepository.save(padre);
-
+        return "/"+padre.getId();
     }
 
     public PadreResponseDto getPadreById(Long id) {
@@ -77,7 +78,7 @@ public class PadreService {
 
     public void newPassword(NewPasswordDto newPasswordDto){
         Padre padre = padreRepository.findByEmail(newPasswordDto.getEmail()).orElseThrow();
-        padre.setPassword(newPasswordDto.getPassword());
+        padre.setPassword(passwordEncoder.encode(newPasswordDto.getPassword()));
         Date date = new Date();
         applicationEventPublisher.publishEvent(
                 new NuevaContaseñaEmailEvent(padre.getNombre(), padre.getEmail(), date)

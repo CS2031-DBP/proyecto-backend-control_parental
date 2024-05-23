@@ -1,5 +1,6 @@
 package org.control_parental.hijo.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,7 @@ public class Hijo {
     String apellido;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "padre")
     Padre padre;
 

@@ -12,16 +12,12 @@ import java.util.List;
 @AllArgsConstructor
 public class PadreResponseDto {
 
-    @NotNull
     String phoneNumber;
 
-    @NotNull
     String email;
 
-    @NotNull
     String nombre;
 
-    @NotNull
     String apellido;
 
     @JsonIgnoreProperties("padre")
