@@ -1,3 +1,4 @@
+/*
 package org.control_parental.padre.application;
 
 import jakarta.validation.Valid;
@@ -74,3 +75,4 @@ public class PadreController {
     }
     
 }
+*/

@@ -1,4 +1,4 @@
-package org.control_parental.padre.domain;
+/*package org.control_parental.padre.domain;
 
 import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.email.nuevaContraseña.NuevaContaseñaEmailEvent;
@@ -112,3 +112,4 @@ public class PadreService {
 
 
 
+*/
