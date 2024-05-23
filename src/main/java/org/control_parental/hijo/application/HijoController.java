@@ -42,6 +42,7 @@ public class HijoController {
         hijoService.deleteHijo(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 /*
     @GetMapping("/{id}/publicaciones")
     public ResponseEntity<List<PublicacionResponseDto>> getPublicaciones(@PathVariable Long id) {
@@ -49,12 +50,12 @@ public class HijoController {
     }
 */
 
-    /*
-    @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateStudent(@PathVariable Long id, @Valid @RequestBody NewHijoDto newHijo) {
-        hijoService.updateStudent(id, newHijo);
-        return ResponseEntity.ok().build();
-    }
+//
+//    @PatchMapping("/{id}")
+//    public ResponseEntity<Void> updateStudent(@PathVariable Long id, @Valid @RequestBody NewHijoDto newHijo) {
+//        hijoService.updateStudent(id, newHijo);
+//        return ResponseEntity.ok().build();
+//    }
 
     @GetMapping
     public ResponseEntity<List<HijoResponseDto>> getAllHijos() {

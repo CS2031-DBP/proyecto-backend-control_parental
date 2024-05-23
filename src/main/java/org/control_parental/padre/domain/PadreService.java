@@ -1,6 +1,7 @@
 package org.control_parental.padre.domain;
 
 import org.control_parental.email.nuevaContraseña.NuevaContaseñaEmailEvent;
+import org.control_parental.email.nuevoUsuario.NuevoUsuarioEmailEvent;
 import org.control_parental.exceptions.IllegalArgumentException;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
@@ -44,6 +45,9 @@ public class PadreService {
         }
         padre.setPassword(passwordEncoder.encode(newPadreDto.getPassword()));
         padre.setRole(Role.PADRE);
+        applicationEventPublisher.publishEvent(
+                new NuevoUsuarioEmailEvent(padre.getEmail(), padre.getPassword(), padre.getNombre(), padre.getRole().toString())
+        );
         padreRepository.save(padre);
 
     }
