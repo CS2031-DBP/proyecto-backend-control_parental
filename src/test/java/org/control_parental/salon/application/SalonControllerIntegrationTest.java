@@ -171,11 +171,11 @@ public class SalonControllerIntegrationTest {
     }
 
     @Test
-    public void testGetSalon() throws Exception {
+        public void testGetSalon() throws Exception {
 
         salonRepository.save(salon);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}", salon.getId()).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}", salon.getId()))
                 .andExpect(jsonPath("$.id").doesNotExist())
                 .andExpect(jsonPath("$.nombre").value(salon.getNombre()))
                 .andExpect(jsonPath("$.hijos[0].nombre").value(salon.getHijos().get(0).getNombre()))
