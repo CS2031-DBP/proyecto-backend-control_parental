@@ -16,7 +16,9 @@ public class PublicacionEmailListener {
     @Async
     public void sendPublicacionEventMail(PublicacionEmailEvent event) {
         emailService.sendEmail(event.getEmail(), "Nueva Publicacion!",
-                event.getName() + " ha sido etiquetad@ en una nueva publicacion con el titulo: " + event.getTitulo());
+                event.getPadreNombre() + ",\n" + event.getNombre() + "ha sido etiquetad@ en una nueva publicacion con el titulo: "
+                        + event.getTitulo() + ".\nPara mayor informacion, entre a la aplicación\n\nUn saludo,\nequipo de Control Parental");
+
     }
 
 }

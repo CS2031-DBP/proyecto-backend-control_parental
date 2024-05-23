@@ -19,12 +19,12 @@ public class NuevoUsuarioEmailListener {
                 event.getEmail(),
                 "Nuevo Usuario en Control Parental!",
                 event.getNombre() + ",\nUsted ha sido agregado como "
-                + event.role + " en Control Parental \n sus credenciales son: \n" +
+                + event.role + " en Control Parental. \n\nSus credenciales son:\n\n" +
                         "Usuario: " + event.email
-                + "Contraseña" + event.password + ".\n Recuerde que puede cambiar su " +
-                        "contraseña en cualquier momento dentro de la aplicacion! \n \n" +
+                + "\nContraseña: " + event.password + ".\n\nRecuerde que puede cambiar su " +
+                        "contraseña en cualquier momento dentro de la aplicacion!\n\n" +
                         "Un saludo, \n" +
-                        "El equipo de Control Parental"
+                        "equipo de Control Parental"
         );
     }
 

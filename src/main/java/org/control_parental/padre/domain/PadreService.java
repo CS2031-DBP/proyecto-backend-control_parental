@@ -1,5 +1,6 @@
 package org.control_parental.padre.domain;
 
+import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.email.nuevaContraseña.NuevaContaseñaEmailEvent;
 import org.control_parental.email.nuevoUsuario.NuevoUsuarioEmailEvent;
 import org.control_parental.exceptions.IllegalArgumentException;
@@ -20,6 +21,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.Date;
 import java.util.List;
 
@@ -38,7 +40,12 @@ public class PadreService {
 
     @Autowired
     ApplicationEventPublisher applicationEventPublisher;
+
+    @Autowired
+    AuthorizationUtils authorizationUtils;
+
     public void savePadre(NewPadreDto newPadreDto) {
+        String enail = authorizationUtils.authenticateUser();
         Padre padre = modelMapper.map(newPadreDto, Padre.class);
         if(usuarioRepository.findByEmail(newPadreDto.getEmail()).isPresent()) {
             throw new ResourceAlreadyExistsException("el usuario ya existe");
@@ -46,25 +53,33 @@ public class PadreService {
         padre.setPassword(passwordEncoder.encode(newPadreDto.getPassword()));
         padre.setRole(Role.PADRE);
         applicationEventPublisher.publishEvent(
-                new NuevoUsuarioEmailEvent(padre.getEmail(), padre.getPassword(), padre.getNombre(), padre.getRole().toString())
+                new NuevoUsuarioEmailEvent(this, padre.getEmail(),
+                        newPadreDto.getPassword(),
+                        padre.getNombre(),
+                        padre.getRole().toString())
         );
         padreRepository.save(padre);
 
     }
 
     public PadreResponseDto getPadreById(Long id) {
-        Padre padre  = padreRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El padre no fue encontrado"));
+        Padre padre  = padreRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("El padre no fue encontrado"));
 
         return modelMapper.map(padre, PadreResponseDto.class);
     }
 
     public PadreSelfResponseDto getOwnInfo() {
-        String email = "email@email.com";
-        Padre padre = padreRepository.findByEmail(email).orElseThrow();
+        String email = authorizationUtils.authenticateUser();
+        Padre padre = padreRepository.findByEmail(email).orElseThrow(
+                ()-> new ResourceNotFoundException("Padre no fue encontrado")
+        );
         return modelMapper.map(padre, PadreSelfResponseDto.class);
     }
 
-    public void deletePadre(Long id) {
+    public void deletePadre(Long id) throws AccessDeniedException {
+        String userEmail = authorizationUtils.authenticateUser();
+        authorizationUtils.verifyUserAuthorization(userEmail, id);
         padreRepository.deleteById(id);
     }
 
@@ -74,13 +89,18 @@ public class PadreService {
     }
 
     public List<Hijo> getOwnHijos() {
-        String email = "email@email.com";
-        Padre padre = padreRepository.findByEmail(email).orElseThrow();
+        String email = authorizationUtils.authenticateUser();
+        Padre padre = padreRepository.findByEmail(email).orElseThrow(
+                ()-> new ResourceNotFoundException("Padre no fue encontrado")
+        );
         return padre.getHijos();
     }
 
     public void newPassword(NewPasswordDto newPasswordDto){
-        Padre padre = padreRepository.findByEmail(newPasswordDto.getEmail()).orElseThrow();
+        String userEmail = authorizationUtils.authenticateUser();
+        Padre padre = padreRepository.findByEmail(userEmail).orElseThrow(
+                ()-> new ResourceNotFoundException("User not found")
+        );
         padre.setPassword(newPasswordDto.getPassword());
         Date date = new Date();
         applicationEventPublisher.publishEvent(

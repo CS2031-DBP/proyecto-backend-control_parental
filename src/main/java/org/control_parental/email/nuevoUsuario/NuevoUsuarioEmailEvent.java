@@ -10,7 +10,8 @@ public class NuevoUsuarioEmailEvent {
 
     String role;
 
-    public NuevoUsuarioEmailEvent(String email, String password, String nombre, String role) {
+    public NuevoUsuarioEmailEvent(Object object,String  email, String password, String nombre, String role) {
+        super();
         this.email = email;
         this.password = password;
         this.nombre = nombre;

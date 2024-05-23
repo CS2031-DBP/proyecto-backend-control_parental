@@ -1,7 +1,9 @@
 package org.control_parental.profesor.domain;
 
+import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.email.nuevaContraseña.NuevaContaseñaEmailEvent;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
+import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.profesor.dto.NewProfesorDto;
 import org.control_parental.profesor.dto.ProfesorResponseDto;
 import org.control_parental.profesor.dto.ProfesorSelfResponseDto;
@@ -18,6 +20,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
@@ -38,8 +41,12 @@ public class ProfesorService {
     @Autowired
     ApplicationEventPublisher applicationEventPublisher;
 
+    @Autowired
+    AuthorizationUtils authorizationUtils;
+
 
     public void newProfesor(NewProfesorDto newProfesorDTO) {
+        String email = authorizationUtils.authenticateUser();
         Profesor profesor = modelMapper.map(newProfesorDTO, Profesor.class);
         if(usuarioRepository.findByEmail(newProfesorDTO.getEmail()).isPresent()) {
             throw new ResourceAlreadyExistsException("El usuario ya existe");
@@ -56,12 +63,14 @@ public class ProfesorService {
     }
 
     public ProfesorSelfResponseDto getOwnProfesorInfo() {
-        String email = "email@email.com";
+        String email = authorizationUtils.authenticateUser();
         Profesor profesor = profesorRepository.findByEmail(email).orElseThrow();
         return modelMapper.map(profesor, ProfesorSelfResponseDto.class);
     }
 
-    public void deleteProfesor(Long id) {
+    public void deleteProfesor(Long id) throws AccessDeniedException {
+        String email = authorizationUtils.authenticateUser();
+        authorizationUtils.verifyUserAuthorization(email, id);
         profesorRepository.deleteById(id);
     }
 
@@ -72,7 +81,8 @@ public class ProfesorService {
     }
 
     public void patchPassword(NewPasswordDto newPasswordDto) {
-         Profesor profesor = profesorRepository.findByEmail(newPasswordDto.getEmail()).orElseThrow();
+        String email = authorizationUtils.authenticateUser();
+         Profesor profesor = profesorRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("El profesor no fue encontrado"));
          Date hora = new Date();
          applicationEventPublisher.publishEvent(
                  new NuevaContaseñaEmailEvent(profesor.getNombre(), profesor.getEmail(), hora)
@@ -83,7 +93,9 @@ public class ProfesorService {
     }
 
     public void updateProfesor(Long id, NewProfesorDto newProfesorDto) {
-        Profesor profesor = new Profesor();
+
+        Profesor profesor = profesorRepository.findById(id).orElseThrow(
+                ()-> new ResourceNotFoundException("El profesor no fue encontrado"));
         profesor.setEmail(newProfesorDto.getEmail());
         profesor.setNombre(newProfesorDto.getNombre());
         profesor.setApellido(newProfesorDto.getApellido());

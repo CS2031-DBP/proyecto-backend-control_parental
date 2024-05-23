@@ -1,5 +1,6 @@
 package org.control_parental.configuration;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,10 +12,10 @@ import org.springframework.stereotype.Component;
 @Configuration
 public class Util {
 
-    //@Bean
-    /*public ModelMapper modelMapper() {
+    @Bean
+    public ModelMapper modelMapper() {
         return new ModelMapper();
-    }*/
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -22,7 +23,13 @@ public class Util {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
+
+
+
+
 }

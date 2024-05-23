@@ -16,8 +16,9 @@ public class AgregacionHijoSalonEmailListener {
     @Async
     public void sendAgregacionHijoSalonEmail(AgregacionHijoSalonEmailEvent event) {
         emailService.sendEmail(event.getEmail(), "Nuevo Salon!",
-                event.getName() + " ha sido agregado al salon " + event.getSalon()
-        + ". Ingrese a la aplicacion para poder ver más detalles!");
+                event.getPadreNombre() + ",\n" + event.getName() + " ha sido agregad@ al salon " + event.getSalon()
+        + ".\nIngrese a la aplicacion para poder ver más detalles!" +
+                        "\n\nUn saludo,\nequipo de Control Parental");
         }
 
     }
