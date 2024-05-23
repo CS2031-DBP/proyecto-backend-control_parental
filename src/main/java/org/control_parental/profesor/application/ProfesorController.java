@@ -10,8 +10,10 @@ import org.control_parental.usuario.NewPasswordDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
@@ -26,17 +28,18 @@ public class ProfesorController {
         return ResponseEntity.ok(profesorService.getProfesorRepsonseDto(id));
     }
 
+    @PreAuthorize("hasRole('ROLE_PROFESOR') or hasRole('ROLE_ADMIN')")
     @GetMapping("/me")
     public ResponseEntity<ProfesorSelfResponseDto> getProfesor() {
         return ResponseEntity.ok(profesorService.getOwnProfesorInfo());
     }
-
+    @PreAuthorize("hasRole('ROLE_PROFESOR') or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProfesor(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteProfesor(@PathVariable Long id) throws AccessDeniedException {
         profesorService.deleteProfesor(id);
         return ResponseEntity.noContent().build();
     }
-
+    @PreAuthorize("hasRole('ROLE_PROFESOR') or hasRole('ROLE_ADMIN')")
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updateProfesor(@PathVariable Long id,@RequestBody @Valid NewProfesorDto newProfesorDto) {
         profesorService.updateProfesor(id, newProfesorDto);
@@ -48,14 +51,14 @@ public class ProfesorController {
         List<Publicacion> publicaciones = profesorService.getPublicaciones(id);
         return ResponseEntity.ok(publicaciones);
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<Void> createProfesor(@Valid @RequestBody NewProfesorDto newProfesorDTO) {
         profesorService.newProfesor(newProfesorDTO);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
+    @PreAuthorize("hasRole('ROLE_PROFESOR') or hasRole('ROLE_ADMIN')")
     @PatchMapping("/password")
     public ResponseEntity<Void> newPassword(@Valid @RequestBody NewPasswordDto newPasswordDto) {
         profesorService.patchPassword(newPasswordDto);

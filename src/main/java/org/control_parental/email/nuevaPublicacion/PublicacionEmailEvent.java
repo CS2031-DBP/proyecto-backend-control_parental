@@ -12,21 +12,37 @@ public class PublicacionEmailEvent extends ApplicationEvent {
 
     private String titulo;
 
-    public PublicacionEmailEvent(Object source, String nombre, String email, String titulo) {
+    private String padreNombre;
+
+    public PublicacionEmailEvent(Object source, String nombre, String email, String titulo, String padreNombre) {
         super(source);
         this.nombre = nombre;
         this.email = email;
         this.titulo = titulo;
+        this.padreNombre = padreNombre;
     }
+
+    public PublicacionEmailEvent(Object source, Clock clock, String nombre, String email, String titulo, String padreNombre) {
+        super(source, clock);
+        this.nombre = nombre;
+        this.email = email;
+        this.titulo = titulo;
+        this.padreNombre = padreNombre;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
     public String getEmail() {
         return email;
     }
 
-    public String getName() {
-        return nombre;
+    public String getTitulo() {
+        return titulo;
     }
 
-    public String getTitulo() {return titulo;}
-
-
+    public String getPadreNombre() {
+        return padreNombre;
+    }
 }

@@ -1,5 +1,6 @@
 package org.control_parental.salon.domain;
 
+import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.email.nuevoSalon.AgregacionHijoSalonEmailEvent;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
@@ -41,7 +42,11 @@ public class SalonService {
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 
+    @Autowired
+    private AuthorizationUtils authorizationUtils;
+
     public String createSalon(NewSalonDTO newSalonDTO) {
+        String email = authorizationUtils.authenticateUser();
         Optional<Salon> salon = salonRepository.findByNombre(newSalonDTO.getNombre());
         if (salon.isPresent()) throw new ResourceAlreadyExistsException("El salon ya existe");
         Salon salon1 = modelMapper.map(newSalonDTO, Salon.class);
@@ -55,18 +60,23 @@ public class SalonService {
     }
 
     public void addHijo(Long idSalon, Long idHijo) {
+        String email = authorizationUtils.authenticateUser();
         Hijo hijo = hijoRepository.findById(idHijo).orElseThrow(() -> new ResourceNotFoundException("Hijo no encontrado"));
         Salon salon = salonRepository.findById(idSalon).orElseThrow(() -> new ResourceNotFoundException("El salon no fue encontrado"));
         salon.addStudent(hijo);
         hijo.setSalon(salon);
         applicationEventPublisher.publishEvent(
-                new AgregacionHijoSalonEmailEvent(this, hijo.getNombre(), hijo.getPadre().getEmail(), salon.getNombre())
+                new AgregacionHijoSalonEmailEvent(this, hijo.getNombre(),
+                        hijo.getPadre().getEmail(),
+                        salon.getNombre(),
+                        hijo.getPadre().getNombre())
         );
         salonRepository.save(salon);
         hijoRepository.save(hijo);
     }
 
     public void addProfesor(Long idSalon, Long idProfesor) {
+        String email = authorizationUtils.authenticateUser();
         Profesor profesor = profesorRepository.findById(idProfesor).orElseThrow(() -> new ResourceNotFoundException("Profesor no encontrado"));
         Salon salon = salonRepository.findById(idSalon).orElseThrow(() -> new ResourceNotFoundException("El salon no fue encontrado"));
         salon.addProfesor(profesor);

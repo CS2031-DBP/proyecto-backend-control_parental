@@ -1,5 +1,6 @@
 package org.control_parental.publicacion.domain;
 
+import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.email.nuevaPublicacion.PublicacionEmailEvent;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.comentario.dto.ComentarioPublicacionDto;
@@ -45,6 +46,9 @@ public class PublicacionService {
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 
+    @Autowired
+    private AuthorizationUtils authorizationUtils;
+
 //    public void savePublicacion(NewPublicacionDto newPublicacionDto) {
 //        Publicacion newPublicacion = modelMapper.map(newPublicacionDto, Publicacion.class);
 //        List<Long> hijosid = newPublicacionDto.getHijos_id();
@@ -58,9 +62,9 @@ public class PublicacionService {
 
     public void savePublicacion(NewPublicacionDto newPublicacionDto) {
         //obtener quien lo esta publicando con Sprnig Scurity
+        String email = authorizationUtils.authenticateUser();
 
-        Long ProfesorId = 2L;
-        Profesor profesor = profesorRepository.findById(ProfesorId).orElseThrow(
+        Profesor profesor = profesorRepository.findByEmail(email).orElseThrow(
                 () -> new ResourceNotFoundException("El profesor no existe"));
         Publicacion newPublicacion = new Publicacion();
         Salon salon = salonRepository.findById(newPublicacionDto.getSalonId()).orElseThrow(
@@ -81,7 +85,11 @@ public class PublicacionService {
             if (hijo.isPresent()) {
                 hijos.add(hijo.get());
                 applicationEventPublisher.publishEvent(
-                        new PublicacionEmailEvent(this, hijo.get().getNombre(), hijo.get().getPadre().getEmail(), newPublicacion.getTitulo())
+                        new PublicacionEmailEvent(this,
+                                hijo.get().getNombre(),
+                                hijo.get().getPadre().getEmail(),
+                                newPublicacion.getTitulo(),
+                                hijo.get().getPadre().getNombre())
                 );
             }
         });
@@ -113,7 +121,9 @@ public class PublicacionService {
         return publicacionResponseDto;
     }
 
-    public void deletePublicacion(Long id) {
+    public void deletePublicacion(Long id)
+    {
+        String email = authorizationUtils.authenticateUser();
         publicacionRepository.deleteById(id);
     }
 /*

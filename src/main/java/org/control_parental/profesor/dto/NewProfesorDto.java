@@ -23,7 +23,5 @@ public class NewProfesorDto {
     @Email
     String email;
 
-    @Size(min = 6, max = 50)
-    @NotNull
     String password;
 }

@@ -3,6 +3,7 @@ package org.control_parental.csv;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.input.BOMInputStream;
 import org.control_parental.hijo.dto.NewHijoDto;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,43 +23,23 @@ public class CSVHelper {
 
         return true;
     }
-    public static List<NewHijoDto> csvToHijos(InputStream is) throws IOException {
-//        BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-//        CSVFormat csvFormat = CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim();
-//        CSVParser csvParser = new CSVParser(fileReader, csvFormat);
-//        System.out.println("CSV Headers: " + csvParser.getHeaderNames());
-//        List<NewHijoDto> hijos = new ArrayList<>();
-//
-//        Iterable<CSVRecord> csvRecords = csvParser.getRecords();
-//
-//        for(CSVRecord csvRecord:csvRecords) {
-//            NewHijoDto hijo = new NewHijoDto(
-//                    csvRecord.get("Nombre"),
-//                    csvRecord.get("Apellido")
-//            );
-//            System.out.println(hijo.getNombre());
-//            System.out.println(hijo.getApellido());
-//            hijos.add(hijo);
-//        }
-//
-//
-//        return hijos;
 
-        BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+    public static List<NewHijoDto> csvToHijos(InputStream is) throws IOException {
+        BOMInputStream bomIn = BOMInputStream.builder().setInputStream(is).get();
+
+        Reader reader = new InputStreamReader(bomIn, "UTF-8");
+        CSVFormat csvFormat = CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim();
+        CSVParser csvParser = new CSVParser(reader, csvFormat);
+        System.out.println("CSV Headers: " + csvParser.getHeaderNames());
         List<NewHijoDto> hijos = new ArrayList<>();
 
-        String line = fileReader.readLine(); // Reading header, Ignoring
+        Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
-        while ((line = fileReader.readLine()) != null && !line.isEmpty()) {
-            String[] fields = line.split(",");
-            String nombre = fields[0];
-            String apellido = fields[1];
-            String email = fields[2];
-            NewHijoDto newHijoDto = new NewHijoDto(nombre, apellido, email);
-            hijos.add(newHijoDto);
+        for (CSVRecord csvRecord : csvRecords) {
+            NewHijoDto hijo = NewHijoDto.parse(csvRecord);
+            hijos.add(hijo);
         }
-        fileReader.close();
-        return hijos;
-    };
 
-};
+        return hijos;
+    }
+}

@@ -7,7 +7,10 @@ import org.control_parental.comentario.dto.ComentarioResponseDto;
 import org.control_parental.comentario.dto.NewComentarioDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.file.AccessDeniedException;
 
 @RestController
 @RequestMapping("/comentario")
@@ -27,14 +30,16 @@ public class ComentarioController {
         return ResponseEntity.created(null).build();
     }
 
+
+    @PreAuthorize("hasRole('ROLE_PADRE')")
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> patchComentario(@PathVariable Long id,@Valid @RequestBody NewComentarioDto newComentarioDto) {
+    public ResponseEntity<Void> patchComentario(@PathVariable Long id,@Valid @RequestBody NewComentarioDto newComentarioDto) throws AccessDeniedException {
         comentarioService.patchComentario(id, newComentarioDto);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteComentarioById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteComentarioById(@PathVariable Long id) throws AccessDeniedException {
         comentarioService.deleteComentarioById(id);
         return ResponseEntity.noContent().build();
     }

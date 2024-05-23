@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers("/auth/**").permitAll()
-                                        .anyRequest().permitAll() //cambiar luego
+                                        .anyRequest().authenticated() //cambiar luego
                 )
                 .build();
     }
