@@ -1,35 +1,33 @@
 package org.control_parental.padre.domain;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.control_parental.comentario.domain.Comentario;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.publicacion.domain.Publicacion;
 import org.control_parental.usuario.domain.Usuario;
 
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @Entity
 public class Padre extends Usuario {
 
-    @ManyToMany(cascade = CascadeType.ALL) // si eliminamos al padre tambien se eliminaran a los hijos relacionados al padre
-    List<Hijo> hijos;
+    @Column(nullable = false)
+    @Size(min = 9, max = 15)
+    String phoneNumber;
 
-    @OneToMany
-    List<Comentario> comentarios;
+    @OneToMany(mappedBy = "padre") // si eliminamos al padre tambien se eliminaran a los hijos relacionados al padre
+    List<Hijo> hijos;
 
     @ManyToMany
     List<Publicacion> posts_likeados;
 
-
-
+    public void addHijo(Hijo hijo) {
+        hijos.add(hijo);
+    }
 }

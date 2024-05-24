@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.Value;
 import org.control_parental.comentario.domain.Comentario;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.padre.domain.Padre;
@@ -41,7 +42,13 @@ public class Publicacion {
     @ManyToOne
     Profesor profesor;
 
-    @ManyToMany
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
+    )
     List<Hijo> hijos;
 
     @OneToMany
@@ -52,5 +59,8 @@ public class Publicacion {
 
     @ManyToOne
     Salon salon;
+
+    public void addStudent(Hijo hijo) {hijos.add(hijo);}
+
 
 }

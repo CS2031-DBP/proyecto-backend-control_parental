@@ -1,6 +1,6 @@
 package org.control_parental.salon.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -21,13 +21,13 @@ public class Salon {
     @Size(min = 2, max = 50)
     String nombre;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "salones")
     List<Profesor> profesores;
 
     @OneToMany
     List<Publicacion> publicaciones;
 
-    @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy = "salon")
     List<Hijo> hijos;
 
@@ -35,7 +35,6 @@ public class Salon {
         hijos.add(hijo);
     }
 
-    List<Hijo> getAllStudents() {
-        return hijos;
-    }
+    void addProfesor(Profesor profesor) {profesores.add(profesor);}
+
 }
