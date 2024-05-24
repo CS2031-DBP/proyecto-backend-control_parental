@@ -44,7 +44,7 @@ public class PadreService {
     @Autowired
     AuthorizationUtils authorizationUtils;
 
-    public void savePadre(NewPadreDto newPadreDto) {
+    public String savePadre(NewPadreDto newPadreDto) {
         String enail = authorizationUtils.authenticateUser();
 
         Padre padre = modelMapper.map(newPadreDto, Padre.class);
@@ -98,9 +98,8 @@ public class PadreService {
     }
 
     public void newPassword(NewPasswordDto newPasswordDto){
-
+        Padre padre = padreRepository.findByEmail(newPasswordDto.getEmail()).orElseThrow(() -> new ResourceNotFoundException("No existe el usuario"));
         padre.setPassword(newPasswordDto.getPassword());
-        production
         Date date = new Date();
         applicationEventPublisher.publishEvent(
                 new NuevaContaseñaEmailEvent(padre.getNombre(), padre.getEmail(), date)
