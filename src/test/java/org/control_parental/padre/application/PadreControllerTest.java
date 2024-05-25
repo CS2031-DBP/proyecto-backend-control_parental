@@ -141,7 +141,6 @@ class PadreControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "ROLE_ADMIN")
     void TestSavePadre() throws Exception{
         NewPadreDto newPadreDto = new NewPadreDto();
         newPadreDto.setNombre("Jorge");
@@ -240,7 +239,7 @@ class PadreControllerTest {
         newPasswordDto.setPassword("2345678");
         newPasswordDto.setEmail("eduardo.aragon@utec.edu.pe");
 
-        var test = mockMvc.perform(MockMvcRequestBuilders.patch("padre/password")
+        var test = mockMvc.perform(MockMvcRequestBuilders.patch("/padre/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(newPasswordDto)))
                 .andExpect(status().isCreated())

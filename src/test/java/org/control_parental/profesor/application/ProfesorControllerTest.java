@@ -207,7 +207,7 @@ class ProfesorControllerTest {
 
         Profesor profesor1 = profesorRepository.save(profesor);
 
-        mockMvc.perform(MockMvcRequestBuilders.patch("profesor/{id}", profesor1.getId()))
+        mockMvc.perform(MockMvcRequestBuilders.patch("/profesor/{id}", profesor1.getId()))
                 .andExpect(status().isOk());
 
         Profesor profesor2 = profesorRepository.findById(profesor1.getId()).orElseThrow();
@@ -235,7 +235,7 @@ class ProfesorControllerTest {
         newPasswordDto.setPassword("2345678");
         newPasswordDto.setEmail("eduardo.aragon@utec.edu.pe");
 
-        var test = mockMvc.perform(MockMvcRequestBuilders.patch("profesor/password")
+        var test = mockMvc.perform(MockMvcRequestBuilders.patch("/profesor/password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newPasswordDto)))
                 .andExpect(status().isOk())
