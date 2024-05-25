@@ -34,6 +34,7 @@ public class PadreController {
         return ResponseEntity.created(locationHeader).build();
     }
 
+
     @GetMapping("/{id}")
     ResponseEntity<PadreResponseDto> getPadreById(@PathVariable Long id) {
         PadreResponseDto padreResponseDto = padreService.getPadreById(id);
@@ -50,7 +51,7 @@ public class PadreController {
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deletePadre(@PathVariable Long id) throws AccessDeniedException {
         padreService.deletePadre(id);
-        return ResponseEntity.created(null).build();
+        return ResponseEntity.noContent().build();
     }
     @GetMapping("/{id}/hijos")
     ResponseEntity<List<Hijo>> getHijos(@PathVariable Long id) {

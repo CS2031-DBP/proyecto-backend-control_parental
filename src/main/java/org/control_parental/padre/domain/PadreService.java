@@ -45,7 +45,7 @@ public class PadreService {
     AuthorizationUtils authorizationUtils;
 
     public String savePadre(NewPadreDto newPadreDto) {
-        String enail = authorizationUtils.authenticateUser();
+        //String enail = authorizationUtils.authenticateUser();
 
         Padre padre = modelMapper.map(newPadreDto, Padre.class);
         if(usuarioRepository.findByEmail(newPadreDto.getEmail()).isPresent()) {
