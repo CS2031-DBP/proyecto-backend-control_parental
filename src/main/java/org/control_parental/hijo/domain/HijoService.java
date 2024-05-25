@@ -57,10 +57,9 @@ public class HijoService {
         return newHijos;
     }
 
-    public void createStudent(NewHijoDto newHijoDto, Long idPadre){
+    public String createStudent(NewHijoDto newHijoDto, Long idPadre){
 
         String email = authorizationUtils.authenticateUser();
-=======
     
         Padre padre = padreRepository.findById(idPadre).orElseThrow(() -> new ResourceNotFoundException("El padre no fue encontrado"));
         Hijo hijo = modelMapper.map(newHijoDto, Hijo.class);

@@ -14,6 +14,7 @@ import org.control_parental.salon.domain.Salon;
 import org.control_parental.salon.dto.NewSalonDTO;
 import org.control_parental.salon.infrastructure.SalonRepository;
 import org.control_parental.usuario.domain.Role;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -29,6 +31,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -59,6 +62,9 @@ public class SalonControllerIntegrationTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     Profesor profesor;
 
     Hijo hijo1;
@@ -73,8 +79,10 @@ public class SalonControllerIntegrationTest {
 
     Publicacion publicacion;
 
+    String token;
+
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws Exception {
         /*padreRepository.deleteAll();
         hijoRepository.deleteAll();
         profesorRepository.deleteAll();
@@ -84,7 +92,7 @@ public class SalonControllerIntegrationTest {
         profesor.setNombre("Renato");
         profesor.setApellido("García");
         profesor.setEmail("renato.garcia@utec.edu.pe");
-        profesor.setPassword("renato123");
+        profesor.setPassword(passwordEncoder.encode("renato123"));
         profesor.setRole(Role.PROFESOR);
         profesorRepository.save(profesor);
         List<Profesor> profesores = new ArrayList<>();
@@ -143,7 +151,21 @@ public class SalonControllerIntegrationTest {
         salon.setProfesores(profesores);
 
         salon.setPublicaciones(publicaciones);
+    }
 
+    public String logIn() throws Exception{
+        AuthLoginRequest authLoginRequest = new AuthLoginRequest();
+        authLoginRequest.setEmail("renato.garcia@utec.edu.pe");
+        authLoginRequest.setPassword("renato123");
+
+        var test = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(authLoginRequest)))
+                .andExpect(status().isOk()).andReturn();
+
+        JSONObject jsonObject = new JSONObject(Objects.requireNonNull(test.getResponse().getContentAsString()));
+        token = jsonObject.getString("token");
+        return token;
     }
 
     @Test
@@ -172,17 +194,10 @@ public class SalonControllerIntegrationTest {
 
         salonRepository.save(salon);
 
-        AuthLoginRequest authLoginRequest = new AuthLoginRequest();
-        authLoginRequest.setEmail("renato.garcia@utec.edu.pe");
-        authLoginRequest.setPassword("renato123");
+        token = logIn();
 
-        var test = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(authLoginRequest)))
-                        .andExpect(status().isOk()).andReturn();
-
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}", salon.getId()))
+        mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}", salon.getId())
+                        .header("Authorization", "Bearer " + token))
                 .andExpect(jsonPath("$.id").doesNotExist())
                 .andExpect(jsonPath("$.nombre").value("Salón 101"))
                 .andExpect(jsonPath("$.hijos[0].nombre").value("Eduardo"))
@@ -196,7 +211,11 @@ public class SalonControllerIntegrationTest {
 
         salonRepository.save(salon);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}", 20L).contentType(MediaType.APPLICATION_JSON))
+        token = logIn();
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}", 20L)
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
@@ -224,10 +243,15 @@ public class SalonControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(roles={"ADMIN"})
     public void testAddNonexistentHijo() throws Exception{
         salonRepository.save(salon);
 
-        mockMvc.perform(MockMvcRequestBuilders.patch("/salon/{idSalon}/hijo/{idHijo}", salon.getId(), 20L).contentType(MediaType.APPLICATION_JSON))
+        token = logIn();
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/salon/{idSalon}/hijo/{idHijo}", salon.getId(), 20L)
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
@@ -235,7 +259,10 @@ public class SalonControllerIntegrationTest {
     public void testGetHijos() throws Exception {
         salonRepository.save(salon);
 
+        token = logIn();
+
         mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}/hijos", salon.getId())
+                        .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[0].nombre").value("Eduardo"))
                 .andExpect(jsonPath("$.[0].apellido").value("Aragón"))
@@ -245,8 +272,11 @@ public class SalonControllerIntegrationTest {
     public void testGetPublicaciones() throws Exception {
         salonRepository.save(salon);
 
+        token = logIn();
+
         mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}/publicaciones", salon.getId())
-                .contentType(MediaType.APPLICATION_JSON))
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[0].titulo").value("Este es un título"))
                 .andExpect(jsonPath("$.[0].hijos[0].nombre").value("Eduardo"))
                 .andExpect(jsonPath("$.[0].hijos[1].nombre").value("Mikel"))
@@ -279,10 +309,15 @@ public class SalonControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(roles={"ADMIN"})
     public void testAddNonexistentProfesor() throws Exception {
         salonRepository.save(salon);
 
-        mockMvc.perform(MockMvcRequestBuilders.patch("/salon/{idSalon}/profesor/{idProfesor}", salon.getId(), 20L).contentType(MediaType.APPLICATION_JSON))
+        token = logIn();
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/salon/{idSalon}/profesor/{idProfesor}", salon.getId(), 20L)
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 }
