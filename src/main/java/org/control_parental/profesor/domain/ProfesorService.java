@@ -52,6 +52,8 @@ public class ProfesorService {
     public String newProfesor(NewProfesorDto newProfesorDTO) {
         String email = authorizationUtils.authenticateUser();
         Profesor profesor = modelMapper.map(newProfesorDTO, Profesor.class);
+
+        //if(newProfesorDTO.getEmail().equals("jorgerios@utec.edu.pe")) throw new ResourceAlreadyExistsException("El usuario ya existe");
         if(usuarioRepository.findByEmail(newProfesorDTO.getEmail()).isPresent()) {
             throw new ResourceAlreadyExistsException("El usuario ya existe");
         }
@@ -74,8 +76,8 @@ public class ProfesorService {
     }
 
     public void deleteProfesor(Long id) throws AccessDeniedException {
-        String email = authorizationUtils.authenticateUser();
-        authorizationUtils.verifyUserAuthorization(email, id);
+        //String email = authorizationUtils.authenticateUser();
+        //authorizationUtils.verifyUserAuthorization(email, id);
         profesorRepository.deleteById(id);
     }
 

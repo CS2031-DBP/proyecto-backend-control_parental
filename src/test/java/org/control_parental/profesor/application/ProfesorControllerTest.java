@@ -157,12 +157,13 @@ class ProfesorControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = {"ADMIN"})
     public void testSaveProfesor() throws Exception{
         NewProfesorDto newProfesorDto = new NewProfesorDto();
         newProfesorDto.setApellido("Rios");
         newProfesorDto.setNombre("Jorge");
         newProfesorDto.setEmail("jorgerios@utec.edu.pe");
-        newProfesorDto.setPassword(passwordEncoder.encode("654321"));
+        newProfesorDto.setPassword("DBPfiltro");
 
 
         var test = mockMvc.perform(MockMvcRequestBuilders.post("/profesor")
@@ -179,6 +180,7 @@ class ProfesorControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = {"ADMIN", "PROFESOR", "PADRE"})
     public void testGetProfesor() throws Exception{
         profesorRepository.save(profesor);
 
@@ -190,6 +192,7 @@ class ProfesorControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = {"ADMIN"})
     public void testDeleteProfesor() throws Exception{
         Profesor profesor1 = profesorRepository.save(profesor);
 
@@ -198,27 +201,33 @@ class ProfesorControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = {"ADMIN", "PROFESOR"})
     public void testPatchProfesor() throws Exception{
         NewProfesorDto newProfesorDto = new NewProfesorDto();
         newProfesorDto.setApellido("Rios");
         newProfesorDto.setNombre("Jorge");
         newProfesorDto.setEmail("jorgerios@utec.edu.pe");
-        newProfesorDto.setPassword(passwordEncoder.encode("654321"));
+        newProfesorDto.setPassword(passwordEncoder.encode("dBPFILTRo"));
 
         Profesor profesor1 = profesorRepository.save(profesor);
 
-        mockMvc.perform(MockMvcRequestBuilders.patch("/profesor/{id}", profesor1.getId()))
-                .andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.patch("/profesor/{id}", profesor1.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newProfesorDto)))
+                .andExpect(status().isOk())
+                .andReturn();
 
         Profesor profesor2 = profesorRepository.findById(profesor1.getId()).orElseThrow();
         Assertions.assertEquals(profesor2.getApellido(), newProfesorDto.getApellido());
         Assertions.assertEquals(profesor2.getEmail(), newProfesorDto.getEmail());
-        Assertions.assertEquals(profesor2.getApellido(), newProfesorDto.getNombre());
+        Assertions.assertEquals(profesor2.getNombre(), newProfesorDto.getNombre());
 
     }
 
     @Test
+    @WithMockUser(roles = {"ADMIN", "PROFESOR", "PADRE"})
     public void testGetPublicaciones() throws Exception{
+        profesorRepository.save(profesor);
         mockMvc.perform(MockMvcRequestBuilders.get("/profesor/{id}/publicaciones", profesor.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0].descripcion").value(publicacion.getDescripcion()))
@@ -230,18 +239,20 @@ class ProfesorControllerTest {
     }
 
     @Test
+    @WithMockUser(value = "renato.garcia@utec.edu.pe", roles = "PROFESOR")
     void testNewPassword() throws Exception{
         NewPasswordDto newPasswordDto = new NewPasswordDto();
         newPasswordDto.setPassword("2345678");
-        newPasswordDto.setEmail("eduardo.aragon@utec.edu.pe");
+        newPasswordDto.setEmail("renato.garcia@utec.edu.pe");
 
-        var test = mockMvc.perform(MockMvcRequestBuilders.patch("/profesor/password")
+        mockMvc.perform(MockMvcRequestBuilders.patch("/profesor/password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newPasswordDto)))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        //get my email
+        Profesor profesor11 = profesorRepository.findByEmail(newPasswordDto.getEmail()).orElseThrow();
+        Assertions.assertEquals(profesor11.getPassword(), passwordEncoder.encode(newPasswordDto.getPassword()));
 
     }
 }

@@ -1,5 +1,6 @@
 package org.control_parental.publicacion.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
@@ -39,6 +40,7 @@ public class Publicacion {
     @Size(min = 1, max = 255)
     String titulo;
 
+    @JsonIgnoreProperties("publicaciones")
     @ManyToOne
     Profesor profesor;
 

@@ -51,6 +51,7 @@ public class ProfesorController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('ROLE_PROFESOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_PADRE')")
     @GetMapping("{id}/publicaciones")
     public ResponseEntity<List<Publicacion>> getPublicacionesProfesor(@PathVariable Long id) {
         List<Publicacion> publicaciones = profesorService.getPublicaciones(id);
