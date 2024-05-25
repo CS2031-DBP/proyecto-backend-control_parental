@@ -25,7 +25,7 @@ public class CSVHelper {
     }
 
     public static List<NewHijoDto> csvToHijos(InputStream is) throws IOException {
-        BOMInputStream bomIn = BOMInputStream.builder().get();
+        BOMInputStream bomIn = BOMInputStream.builder().setInputStream(is).get();
 
         Reader reader = new InputStreamReader(bomIn, "UTF-8");
         CSVFormat csvFormat = CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim();

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,11 +25,13 @@ public class HijoController {
     @Autowired
     private HijoService hijoService;
 
+
     @GetMapping("/{id}")
     public ResponseEntity<HijoResponseDto> getStudentById(@PathVariable Long id) {
         return ResponseEntity.ok(hijoService.getStudentById(id));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<Void> createStudent(@Valid @RequestBody NewHijoDto newHijoDto,
                                               @RequestParam Long idPadre){
@@ -36,24 +39,26 @@ public class HijoController {
         URI locationHeader = URI.create(location);
         return ResponseEntity.created(locationHeader).build();
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         hijoService.deleteHijo(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    
     @GetMapping("/{id}/publicaciones")
     public ResponseEntity<List<PublicacionResponseDto>> getPublicaciones(@PathVariable Long id) {
         return ResponseEntity.ok(hijoService.getPublicaciones(id));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updateStudent(@PathVariable Long id, @Valid @RequestBody NewHijoDto newHijo) {
         hijoService.updateStudent(id, newHijo);
         return ResponseEntity.ok().build();
     }
-
+    
     @PostMapping(value = "/csv", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Void> csvStudents(@RequestParam("file")MultipartFile file) throws IOException {
         if (CSVHelper.hasCSVFormat(file)) {

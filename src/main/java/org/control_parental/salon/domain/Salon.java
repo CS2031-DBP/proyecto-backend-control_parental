@@ -1,5 +1,6 @@
 package org.control_parental.salon.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -26,6 +27,7 @@ public class Salon {
     @OneToMany
     List<Publicacion> publicaciones;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "salon")
     List<Hijo> hijos;
 

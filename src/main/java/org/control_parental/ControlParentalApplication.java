@@ -1,5 +1,8 @@
 package org.control_parental;
 
+import org.control_parental.admin.domain.Admin;
+import org.control_parental.admin.infrastructure.AdminRepository;
+import org.control_parental.usuario.domain.Role;
 import org.control_parental.usuario.domain.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -14,6 +17,9 @@ public class ControlParentalApplication {
 	@Autowired
 	PasswordEncoder encoder;
 
+	@Autowired
+	AdminRepository adminRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(ControlParentalApplication.class, args);
 	}
@@ -21,10 +27,14 @@ public class ControlParentalApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
-			String password = "password";
 
-			System.out.println(encoder.encode(password));;
-
+			Admin admin = new Admin();
+			admin.setPassword(encoder.encode("password"));
+			admin.setEmail("admin@email.com");
+			admin.setRole(Role.ADMIN);
+			admin.setNombre("Admin");
+			admin.setApellido("Admin");
+			adminRepository.save(admin);
 		};
 	}
 }

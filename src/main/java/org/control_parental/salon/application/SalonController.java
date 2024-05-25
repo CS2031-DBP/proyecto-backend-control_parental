@@ -7,6 +7,7 @@ import org.control_parental.salon.domain.SalonService;
 import org.control_parental.salon.dto.SalonResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -18,17 +19,19 @@ public class SalonController {
     @Autowired
     private SalonService salonService;
 
+
     @GetMapping("/{id}")
     public ResponseEntity<SalonResponseDto> getSalon(@PathVariable Long id) {
         return ResponseEntity.ok(salonService.getSalonById(id));
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<Void> createSalon(@RequestBody NewSalonDTO newSalonDTO) {
         String location = salonService.createSalon(newSalonDTO);
         URI locationHeader = URI.create(location);
         return ResponseEntity.created(locationHeader).build();
     }
+
 
     @GetMapping("/{id}/hijos")
     public ResponseEntity<List<ReducedHijoDto>> getStudents(@PathVariable Long id) {
@@ -42,13 +45,14 @@ public class SalonController {
         return ResponseEntity.ok(publicaciones);
     }
 
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("/{idSalon}/hijo/{idHijo}")
     public ResponseEntity<Void> addHijo(@PathVariable Long idSalon, @PathVariable Long idHijo) {
         salonService.addHijo(idSalon, idHijo);
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("/{idSalon}/profesor/{idProfesor}")
     public ResponseEntity<Void> addProfesor(@PathVariable Long idSalon, @PathVariable Long idProfesor) {
         salonService.addProfesor(idSalon, idProfesor);

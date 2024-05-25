@@ -3,6 +3,7 @@ package org.control_parental.padre.domain;
 import jakarta.persistence.*;
 
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,9 +14,7 @@ import org.control_parental.usuario.domain.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @Entity
 public class Padre extends Usuario {
 
