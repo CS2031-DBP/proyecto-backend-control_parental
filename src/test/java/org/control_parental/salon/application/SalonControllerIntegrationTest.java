@@ -82,7 +82,7 @@ public class SalonControllerIntegrationTest {
     String token;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         /*padreRepository.deleteAll();
         hijoRepository.deleteAll();
         profesorRepository.deleteAll();
@@ -190,7 +190,18 @@ public class SalonControllerIntegrationTest {
     }
 
     @Test
-        public void testGetSalon() throws Exception {
+    public void testUnauthorizedCreateSalon() throws Exception {
+        NewSalonDTO salonData = new NewSalonDTO();
+        salonData.setNombre("Salón 101");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/salon")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(salonData)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void testGetSalon() throws Exception {
 
         salonRepository.save(salon);
 
@@ -220,6 +231,16 @@ public class SalonControllerIntegrationTest {
     }
 
     @Test
+    public void testUnauthorizedGetSalon() throws Exception{
+
+        salonRepository.save(salon);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}", salon.getId()))
+                .andExpect(status().isForbidden());
+
+    }
+
+    @Test
     @WithMockUser(roles={"ADMIN"})
     public void testAddHijo() throws Exception {
         salonRepository.save(salon);
@@ -244,7 +265,7 @@ public class SalonControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles={"ADMIN"})
-    public void testAddNonexistentHijo() throws Exception{
+    public void testAddNonexistentHijo() throws Exception {
         salonRepository.save(salon);
 
         token = logIn();
@@ -253,6 +274,15 @@ public class SalonControllerIntegrationTest {
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testUnauthorizedAddHijo() throws Exception {
+        salonRepository.save(salon);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/salon/{idSalon}/hijo/{idHijo}", salon.getId(), 20L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -268,6 +298,16 @@ public class SalonControllerIntegrationTest {
                 .andExpect(jsonPath("$.[0].apellido").value("Aragón"))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    public void testUnauthorizedGetHijos() throws Exception {
+        salonRepository.save(salon);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}/hijos", salon.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
     @Test
     public void testGetPublicaciones() throws Exception {
         salonRepository.save(salon);
@@ -282,6 +322,15 @@ public class SalonControllerIntegrationTest {
                 .andExpect(jsonPath("$.[0].hijos[1].nombre").value("Mikel"))
                 .andExpect(jsonPath("$.[0].profesor.email").value("renato.garcia@utec.edu.pe"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testUnauthorizedGetPublicaciones() throws Exception {
+        salonRepository.save(salon);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}/publicaciones", salon.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -319,5 +368,14 @@ public class SalonControllerIntegrationTest {
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testUnauthorizedAddProfesor() throws Exception {
+        salonRepository.save(salon);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/salon/{idSalon}/profesor/{idProfesor}", salon.getId(), 20L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
     }
 }

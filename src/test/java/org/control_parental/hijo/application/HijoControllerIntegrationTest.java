@@ -1,6 +1,7 @@
 package org.control_parental.hijo.application;
 
 import jakarta.transaction.Transactional;
+import org.control_parental.auth.dto.AuthLoginRequest;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.hijo.dto.NewHijoDto;
 import org.control_parental.hijo.infrastructure.HijoRepository;
@@ -11,6 +12,7 @@ import org.control_parental.publicacion.infrastructure.PublicacionRepository;
 import org.control_parental.salon.domain.Salon;
 import org.control_parental.salon.infrastructure.SalonRepository;
 import org.control_parental.usuario.domain.Role;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,6 +30,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -56,6 +61,9 @@ public class HijoControllerIntegrationTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     Hijo hijo;
 
     Padre padre;
@@ -66,6 +74,8 @@ public class HijoControllerIntegrationTest {
 
     Publicacion publicacion2;
 
+    String token;
+
     @BeforeEach
     public void setUp() {
         padre = new Padre();
@@ -74,7 +84,7 @@ public class HijoControllerIntegrationTest {
         padre.setRole(Role.PADRE);
         padre.setPhoneNumber("123456789");
         padre.setEmail("michael.hinojosa@utec.edu.pe");
-        padre.setPassword("123456");
+        padre.setPassword(passwordEncoder.encode("123456"));
         padreRepository.save(padre);
 
         salon = new Salon();
@@ -107,11 +117,29 @@ public class HijoControllerIntegrationTest {
         hijo.setPadre(padre);
     }
 
+    public String logIn() throws Exception{
+        AuthLoginRequest authLoginRequest = new AuthLoginRequest();
+        authLoginRequest.setEmail("michael.hinojosa@utec.edu.pe");
+        authLoginRequest.setPassword("123456");
+
+        var test = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(authLoginRequest)))
+                .andExpect(status().isOk()).andReturn();
+
+        JSONObject jsonObject = new JSONObject(Objects.requireNonNull(test.getResponse().getContentAsString()));
+        token = jsonObject.getString("token");
+        return token;
+    }
+
     @Test
     public void testGetStudentById() throws Exception {
         hijoRepository.save(hijo);
 
+        token = logIn();
+
         mockMvc.perform(MockMvcRequestBuilders.get("/hijo/{id}", hijo.getId())
+                        .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.nombre").value("Eduardo"))
                 .andExpect(jsonPath("$.apellido").value("Aragón"))
@@ -124,12 +152,26 @@ public class HijoControllerIntegrationTest {
 
     @Test
     public void testGetNonexistentStudent() throws Exception {
+
+        token = logIn();
+
         mockMvc.perform(MockMvcRequestBuilders.get("/hijo/{id}", 20L)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
     @Test
+    public void testUnauthorizedGetStudentById() throws Exception {
+        hijoRepository.save(hijo);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/hijo/{id}", hijo.getId())
+                    .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles={"ADMIN"})
     public void testCreateStudent() throws Exception {
         NewHijoDto newHijoData = new NewHijoDto(hijo.getNombre(), hijo.getApellido(), hijo.getPadre().getEmail());
 
@@ -150,6 +192,7 @@ public class HijoControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(roles={"ADMIN"})
     public void testCreateStudentWithNonexistentPadre() throws Exception {
         NewHijoDto newHijoData = new NewHijoDto(hijo.getNombre(), hijo.getApellido(), hijo.getPadre().getEmail());
 
@@ -161,6 +204,18 @@ public class HijoControllerIntegrationTest {
     }
 
     @Test
+    public void testUnauthorizedCreateStudent() throws Exception {
+        NewHijoDto newHijoData = new NewHijoDto(hijo.getNombre(), hijo.getApellido(), hijo.getPadre().getEmail());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/hijo")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newHijoData))
+                        .param("idPadre", String.valueOf(padre.getId())))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles={"ADMIN"})
     public void testDeleteStudent() throws Exception {
         hijoRepository.save(hijo);
         Long id = hijo.getId();
@@ -173,6 +228,7 @@ public class HijoControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(roles={"ADMIN"})
     public void testDeleteNonexistentStudent() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/hijo/{id}", 20L)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -180,11 +236,24 @@ public class HijoControllerIntegrationTest {
     }
 
     @Test
+    public void testUnauthorizedDeleteStudent() throws Exception {
+        hijoRepository.save(hijo);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/hijo/{id}", hijo.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     public void testGetPublicaciones() throws Exception {
+
+        token = logIn();
+
         hijoRepository.save(hijo);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/hijo/{id}/publicaciones", hijo.getId())
-                .contentType(MediaType.APPLICATION_JSON))
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[0].titulo").value("Este es un título 1"))
                 .andExpect(jsonPath("$.[0].descripcion").value("Esta es una descripción 1"))
                 .andExpect(jsonPath("$.[1].titulo").value("Este es un título 2"))
@@ -193,6 +262,16 @@ public class HijoControllerIntegrationTest {
     }
 
     @Test
+    public void testUnauthorizedGetPublicaciones() throws Exception {
+        hijoRepository.save(hijo);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/hijo/{id}/publicaciones", hijo.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles={"ADMIN"})
     public void testUpdateStudent() throws Exception {
         hijoRepository.save(hijo);
 
@@ -209,5 +288,19 @@ public class HijoControllerIntegrationTest {
 
         Assertions.assertEquals("Tamy", newHijo.getNombre());
         Assertions.assertEquals("Flores", newHijo.getApellido());
+    }
+
+    @Test
+    public void testUnauthorizedUpdateStudent() throws Exception {
+        hijoRepository.save(hijo);
+
+        NewHijoDto newHijoData = new NewHijoDto();
+        newHijoData.setNombre("Tamy");
+        newHijoData.setApellido("Flores");
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/hijo/{id}", hijo.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newHijoData)))
+                .andExpect(status().isForbidden());
     }
 }
