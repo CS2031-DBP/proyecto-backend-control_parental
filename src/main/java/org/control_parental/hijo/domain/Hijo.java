@@ -9,6 +9,7 @@ import org.control_parental.padre.domain.Padre;
 import org.control_parental.publicacion.domain.Publicacion;
 import org.control_parental.salon.domain.Salon;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -34,7 +35,7 @@ public class Hijo {
     Padre padre;
 
     @ManyToMany
-    List<Publicacion> publicaciones;
+    List<Publicacion> publicaciones = new ArrayList<>();
 
     @ManyToOne
     Salon salon;

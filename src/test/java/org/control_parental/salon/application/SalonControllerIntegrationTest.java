@@ -2,7 +2,6 @@ package org.control_parental.salon.application;
 
 import jakarta.transaction.Transactional;
 import org.control_parental.hijo.domain.Hijo;
-import org.control_parental.hijo.dto.NewHijoDto;
 import org.control_parental.hijo.infrastructure.HijoRepository;
 import org.control_parental.padre.domain.Padre;
 import org.control_parental.padre.infrastructure.PadreRepository;
@@ -18,22 +17,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.parameters.P;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -86,7 +80,7 @@ public class SalonControllerIntegrationTest {
 
         profesor = new Profesor();
         profesor.setNombre("Renato");
-        profesor.setApellido("Garcia");
+        profesor.setApellido("García");
         profesor.setEmail("renato.garcia@utec.edu.pe");
         profesor.setPassword("renato123");
         profesor.setRole(Role.PROFESOR);
@@ -114,7 +108,7 @@ public class SalonControllerIntegrationTest {
 
         hijo1 = new Hijo();
         hijo1.setNombre("Eduardo");
-        hijo1.setApellido("Aragon");
+        hijo1.setApellido("Aragón");
         hijo1.setPadre(padre1);
         hijoRepository.save(hijo1);
 
@@ -128,10 +122,10 @@ public class SalonControllerIntegrationTest {
         hijos.add(hijo2);
 
         publicacion = new Publicacion();
-        publicacion.setDescripcion("Esta es una publicación");
+        publicacion.setDescripcion("Esta es una descripción");
         publicacion.setHijos(hijos);
         publicacion.setFoto("Esta es una foto");
-        publicacion.setTitulo("Este es un titulo");
+        publicacion.setTitulo("Este es un título");
         publicacion.setFecha(LocalDateTime.now());
         publicacion.setLikes(0);
         publicacion.setProfesor(profesor);
@@ -140,7 +134,7 @@ public class SalonControllerIntegrationTest {
         publicaciones.add(publicacion);
 
         salon = new Salon();
-        salon.setNombre("Salon1");
+        salon.setNombre("Salón 101");
 
         salon.setHijos(hijos);
 
@@ -154,7 +148,7 @@ public class SalonControllerIntegrationTest {
     public void testCreateSalon() throws Exception {
 
         NewSalonDTO salonData = new NewSalonDTO();
-        salonData.setNombre("Salon1");
+        salonData.setNombre("Salón 101");
 
         var test = mockMvc.perform(MockMvcRequestBuilders.post("/salon")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -167,7 +161,7 @@ public class SalonControllerIntegrationTest {
 
         Salon newSalon = salonRepository.findById(id).orElseThrow();
 
-        Assertions.assertEquals(salon.getNombre(), newSalon.getNombre());
+        Assertions.assertEquals("Salón 101", newSalon.getNombre());
     }
 
     @Test
@@ -177,10 +171,10 @@ public class SalonControllerIntegrationTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}", salon.getId()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").doesNotExist())
-                .andExpect(jsonPath("$.nombre").value(salon.getNombre()))
-                .andExpect(jsonPath("$.hijos[0].nombre").value(salon.getHijos().get(0).getNombre()))
-                .andExpect(jsonPath("$.hijos[1].nombre").value(salon.getHijos().get(1).getNombre()))
-                .andExpect(jsonPath("$.profesores[0].email").value(salon.getProfesores().get(0).getEmail()))
+                .andExpect(jsonPath("$.nombre").value("Salón 101"))
+                .andExpect(jsonPath("$.hijos[0].nombre").value("Eduardo"))
+                .andExpect(jsonPath("$.hijos[1].nombre").value("Mikel"))
+                .andExpect(jsonPath("$.profesores[0].email").value("renato.garcia@utec.edu.pe"))
                 .andExpect(status().isOk());
     }
 
@@ -208,10 +202,10 @@ public class SalonControllerIntegrationTest {
 
         Salon newSalon = salonRepository.findById(salon.getId()).orElseThrow();
 
-        Assertions.assertEquals(newSalon.getHijos().size(), 3);
-        Assertions.assertEquals(newSalon.getHijos().get(2).getNombre(), hijo3.getNombre());
-        Assertions.assertEquals(newSalon.getHijos().get(2).getApellido(), hijo3.getApellido());
-        Assertions.assertEquals(newSalon.getHijos().get(2).getPadre().getId(), hijo3.getPadre().getId());
+        Assertions.assertEquals(3, newSalon.getHijos().size());
+        Assertions.assertEquals("Nicolas", newSalon.getHijos().get(2).getNombre());
+        Assertions.assertEquals("Stigler", newSalon.getHijos().get(2).getApellido());
+        Assertions.assertEquals("laura.nagamine@utec.edu.pe", newSalon.getHijos().get(2).getPadre().getEmail());
 
     }
 
@@ -229,8 +223,8 @@ public class SalonControllerIntegrationTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}/hijos", salon.getId())
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.[0].nombre").value(salon.getHijos().get(0).getNombre()))
-                .andExpect(jsonPath("$.[0].apellido").value(salon.getHijos().get(0).getApellido()))
+                .andExpect(jsonPath("$.[0].nombre").value("Eduardo"))
+                .andExpect(jsonPath("$.[0].apellido").value("Aragón"))
                 .andExpect(status().isOk());
     }
     @Test
@@ -239,10 +233,10 @@ public class SalonControllerIntegrationTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}/publicaciones", salon.getId())
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.[0].titulo").value(salon.getPublicaciones().get(0).getTitulo()))
-                .andExpect(jsonPath("$.[0].hijos[0].nombre").value(salon.getPublicaciones().get(0).getHijos().get(0).getNombre()))
-                .andExpect(jsonPath("$.[0].hijos[1].nombre").value(salon.getPublicaciones().get(0).getHijos().get(1).getNombre()))
-                .andExpect(jsonPath("$.[0].profesor.email").value(salon.getPublicaciones().get(0).getProfesor().getEmail()))
+                .andExpect(jsonPath("$.[0].titulo").value("Este es un título"))
+                .andExpect(jsonPath("$.[0].hijos[0].nombre").value("Eduardo"))
+                .andExpect(jsonPath("$.[0].hijos[1].nombre").value("Mikel"))
+                .andExpect(jsonPath("$.[0].profesor.email").value("renato.garcia@utec.edu.pe"))
                 .andExpect(status().isOk());
     }
 
@@ -263,10 +257,10 @@ public class SalonControllerIntegrationTest {
 
         Salon newSalon = salonRepository.findById(salon.getId()).orElseThrow();
 
-        Assertions.assertEquals(newSalon.getProfesores().size(), 2);
-        Assertions.assertEquals(newSalon.getProfesores().get(1).getNombre(), profesor2.getNombre());
-        Assertions.assertEquals(newSalon.getProfesores().get(1).getApellido(), profesor2.getApellido());
-        Assertions.assertEquals(newSalon.getProfesores().get(1).getEmail(), profesor2.getEmail());
+        Assertions.assertEquals(2, newSalon.getProfesores().size());
+        Assertions.assertEquals("Gino", newSalon.getProfesores().get(1).getNombre());
+        Assertions.assertEquals("Daza", newSalon.getProfesores().get(1).getApellido());
+        Assertions.assertEquals("gino.daza@utec.edu.pe", newSalon.getProfesores().get(1).getEmail());
     }
 
     @Test

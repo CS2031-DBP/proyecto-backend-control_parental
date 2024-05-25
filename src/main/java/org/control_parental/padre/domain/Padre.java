@@ -10,6 +10,7 @@ import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.publicacion.domain.Publicacion;
 import org.control_parental.usuario.domain.Usuario;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,10 +24,10 @@ public class Padre extends Usuario {
     String phoneNumber;
 
     @OneToMany(mappedBy = "padre", cascade = CascadeType.REMOVE) // si eliminamos al padre tambien se eliminaran a los hijos relacionados al padre
-    List<Hijo> hijos;
+    List<Hijo> hijos = new ArrayList<>();
 
     @ManyToMany
-    List<Publicacion> posts_likeados;
+    List<Publicacion> posts_likeados = new ArrayList<>();
 
     public void addHijo(Hijo hijo) {
         hijos.add(hijo);
