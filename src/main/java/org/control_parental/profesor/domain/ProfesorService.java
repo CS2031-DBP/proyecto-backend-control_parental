@@ -1,6 +1,7 @@
 package org.control_parental.profesor.domain;
 
 import org.control_parental.configuration.AuthorizationUtils;
+import org.control_parental.csv.CSVHelper;
 import org.control_parental.email.nuevaContraseña.NuevaContaseñaEmailEvent;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
@@ -19,9 +20,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -103,4 +107,17 @@ public class ProfesorService {
         //En teoria esto no se hace
         profesorRepository.save(profesor);
     }
+
+    public void saveCsvProfesores(MultipartFile file) throws IOException {
+        List<NewProfesorDto> profesores = CSVHelper.csvToProfesor(file.getInputStream());
+        List<Profesor> newProfesores = new ArrayList<>();
+        profesores.forEach(profesor -> {
+            Profesor nuevoProfesor = modelMapper.map(profesor, Profesor.class);
+            nuevoProfesor.setRole(Role.PROFESOR);
+            nuevoProfesor.setPassword(passwordEncoder.encode(profesor.getPassword()));
+            newProfesores.add(nuevoProfesor);
+        });
+        profesorRepository.saveAll(newProfesores);
+    }
+
 }
