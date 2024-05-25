@@ -1,9 +1,9 @@
 package org.control_parental.padre.domain;
 
 import org.control_parental.configuration.AuthorizationUtils;
+import org.control_parental.csv.CSVHelper;
 import org.control_parental.email.nuevaContraseña.NuevaContaseñaEmailEvent;
 import org.control_parental.email.nuevoUsuario.NuevoUsuarioEmailEvent;
-import org.control_parental.exceptions.IllegalArgumentException;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.hijo.domain.Hijo;
@@ -20,10 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.AccessDeniedException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PadreService {
@@ -63,6 +67,20 @@ public class PadreService {
         return "/" + padre.getId();
     }
 
+    public void savePadresCsv(MultipartFile file) throws IOException {
+        List<NewPadreDto> padres = CSVHelper.csvToPadres(file.getInputStream());
+        List<Padre> newPadres = new ArrayList<>();
+        padres.forEach(padre -> {
+            Padre nuevoPadre = modelMapper.map(padre, Padre.class);
+            nuevoPadre.setRole(Role.PADRE);
+            nuevoPadre.setPassword(passwordEncoder.encode(padre.getPassword()));
+            newPadres.add(nuevoPadre);
+        }
+        );
+
+        padreRepository.saveAll(newPadres);
+    }
+
     public PadreResponseDto getPadreById(Long id) {
         Padre padre  = padreRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("El padre no fue encontrado"));
@@ -97,11 +115,14 @@ public class PadreService {
         return padre.getHijos();
     }
 
-    public void newPassword(NewPasswordDto newPasswordDto){
-        String userEmail = authorizationUtils.authenticateUser();
-        Padre padre = padreRepository.findByEmail(userEmail).orElseThrow(
-                ()-> new ResourceNotFoundException("User not found")
-        );
+
+    public void newPassword(NewPasswordDto newPasswordDto) throws AccessDeniedException {
+        String email = authorizationUtils.authenticateUser();
+        if (!Objects.equals(email, newPasswordDto.getEmail()))
+            throw new AccessDeniedException("Usuario no authorizado para cambiar esta contraseña");
+        Padre padre = padreRepository.findByEmail(email).orElseThrow(
+                ()-> new ResourceNotFoundException("Padre no encontrado"));
+
         padre.setPassword(newPasswordDto.getPassword());
         Date date = new Date();
         applicationEventPublisher.publishEvent(
