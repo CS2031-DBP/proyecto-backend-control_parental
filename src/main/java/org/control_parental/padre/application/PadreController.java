@@ -78,6 +78,8 @@ public class PadreController {
     @PreAuthorize("hasRole('PADRE')")
     @GetMapping("/myhijos")
     public ResponseEntity<List<Hijo>> getMyHijos() {
+
+
         List<Hijo> hijos = padreService.getOwnHijos();
         return ResponseEntity.ok(hijos);
     }

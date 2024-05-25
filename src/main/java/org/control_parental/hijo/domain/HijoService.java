@@ -7,20 +7,15 @@ import org.control_parental.hijo.dto.HijoResponseDto;
 import org.control_parental.hijo.dto.NewHijoDto;
 import org.control_parental.hijo.infrastructure.HijoRepository;
 import org.control_parental.padre.domain.Padre;
-import org.control_parental.padre.dto.PadreResponseDto;
 import org.control_parental.padre.infrastructure.PadreRepository;
 import org.control_parental.publicacion.domain.Publicacion;
 import org.control_parental.publicacion.dto.PublicacionResponseDto;
-import org.control_parental.publicacion.infrastructure.PublicacionRepository;
-import org.control_parental.salon.domain.Salon;
-import org.control_parental.salon.infrastructure.SalonRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,12 +23,6 @@ import java.util.List;
 public class HijoService {
     @Autowired
     private HijoRepository hijoRepository;
-
-    @Autowired
-    private SalonRepository salonRepository;
-
-    @Autowired
-    private PublicacionRepository publicacionRepository;
 
     @Autowired
     private PadreRepository padreRepository;
@@ -62,7 +51,7 @@ public class HijoService {
     }
 
     public List<HijoResponseDto> getHijos() {
-        List<HijoResponseDto> newHijos = new ArrayList<HijoResponseDto>();
+        List<HijoResponseDto> newHijos = new ArrayList<>();
         List<Hijo> hijos = hijoRepository.findAll();
         hijos.forEach(hijo -> newHijos.add(modelMapper.map(hijo, HijoResponseDto.class)));
         return newHijos;
@@ -71,6 +60,8 @@ public class HijoService {
     public void createStudent(NewHijoDto newHijoDto, Long idPadre){
 
         String email = authorizationUtils.authenticateUser();
+=======
+    
         Padre padre = padreRepository.findById(idPadre).orElseThrow(() -> new ResourceNotFoundException("El padre no fue encontrado"));
         Hijo hijo = modelMapper.map(newHijoDto, Hijo.class);
         hijo.setPadre(padre);
@@ -78,32 +69,44 @@ public class HijoService {
 
         hijoRepository.save(hijo);
         padreRepository.save(padre);
+
+        return "/" + hijo.getId();
     }
 
     public HijoResponseDto getStudentById(Long id){
-        Hijo hijo = hijoRepository.findById(id).orElseThrow();
+        Hijo hijo = hijoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El hijo no fue encontrado"));
         return modelMapper.map(hijo, HijoResponseDto.class);
     }
 
     public void deleteHijo(Long id) {
         String email = authorizationUtils.authenticateUser();
 
+        hijoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El hijo no fue encontrado"));
         hijoRepository.deleteById(id);
     }
 
-    /*
-    //Busqueda de publicaciones de un hijo
-    public List<PublicacionResponseDto> getPublicaciones(Long id){
-        Hijo hijo = hijoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El hijo no fue encontrado"));
-        Salon salon = salonRepository.findById(hijo.getSalon().getId()).orElseThrow(() -> new ResourceNotFoundException("El salon no fue encontrado"));
-        List<Publicacion> publicaciones = publicacionRepository.findAllBySalon(salon);
-        List<PublicacionResponseDto> publicacionesHijo = new ArrayList<>();
-        publicaciones.forEach(publicacion -> {
-            publicacion.getHijos().forEach(newHijo -> {
-                if(newHijo.getId().equals(hijo.getId())){ publicacionesHijo.add(modelMapper.map(publicacion, PublicacionResponseDto.class));}
-            });
-        });
-        return publicacionesHijo;
+    public List<PublicacionResponseDto> getPublicaciones(Long id) {
+        List<Publicacion> publicaciones = hijoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El hijo no fue encontrado")).getPublicaciones();
+
+        List<PublicacionResponseDto> publicacionesData = new ArrayList<>();
+
+        for(Publicacion publicacion : publicaciones) {
+            publicacionesData.add(modelMapper.map(publicacion, PublicacionResponseDto.class));
+        }
+
+        return publicacionesData;
     }
-     */
+
+    public void updateStudent(Long id, NewHijoDto newHijo) {
+        Hijo hijo = hijoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El hijo no fue encontrado"));
+
+        if(newHijo.getNombre() != null) {
+            hijo.setNombre(newHijo.getNombre());
+        }
+        if(newHijo.getApellido() != null) {
+            hijo.setApellido(newHijo.getApellido());
+        }
+    }
+
+
 }
