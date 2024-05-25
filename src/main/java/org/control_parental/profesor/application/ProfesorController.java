@@ -1,6 +1,7 @@
 package org.control_parental.profesor.application;
 
 import jakarta.validation.Valid;
+import org.control_parental.csv.CSVHelper;
 import org.control_parental.profesor.domain.ProfesorService;
 import org.control_parental.profesor.dto.NewProfesorDto;
 import org.control_parental.profesor.dto.ProfesorResponseDto;
@@ -9,10 +10,13 @@ import org.control_parental.publicacion.domain.Publicacion;
 import org.control_parental.usuario.NewPasswordDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 
@@ -63,6 +67,16 @@ public class ProfesorController {
     public ResponseEntity<Void> newPassword(@Valid @RequestBody NewPasswordDto newPasswordDto) {
         profesorService.patchPassword(newPasswordDto);
         return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasRole('ROLE_PROFESOR')")
+    @PostMapping(value = "/csv", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Void> saveCscProfesores(@RequestParam("file") MultipartFile file) throws IOException {
+        if (CSVHelper.hasCSVFormat(file)) {
+            profesorService.saveCsvProfesores(file);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
 

@@ -1,5 +1,6 @@
 package org.control_parental.hijo.domain;
 
+import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.csv.CSVHelper;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.hijo.dto.HijoResponseDto;
@@ -29,7 +30,12 @@ public class HijoService {
     @Autowired
     ModelMapper modelMapper;
 
+    @Autowired
+    AuthorizationUtils authorizationUtils;
+
     public void saveCSVStudents(MultipartFile file) throws IOException {
+
+        String email = authorizationUtils.authenticateUser();
         var inputStream =  file.getInputStream();
         List<NewHijoDto> hijos = CSVHelper.csvToHijos( inputStream);
         List<Hijo> newHijos = new ArrayList<Hijo>();
@@ -51,7 +57,11 @@ public class HijoService {
         return newHijos;
     }
 
-    public String createStudent(NewHijoDto newHijoDto, Long idPadre){
+    public void createStudent(NewHijoDto newHijoDto, Long idPadre){
+
+        String email = authorizationUtils.authenticateUser();
+=======
+    
         Padre padre = padreRepository.findById(idPadre).orElseThrow(() -> new ResourceNotFoundException("El padre no fue encontrado"));
         Hijo hijo = modelMapper.map(newHijoDto, Hijo.class);
         hijo.setPadre(padre);
@@ -69,6 +79,8 @@ public class HijoService {
     }
 
     public void deleteHijo(Long id) {
+        String email = authorizationUtils.authenticateUser();
+
         hijoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El hijo no fue encontrado"));
         hijoRepository.deleteById(id);
     }
