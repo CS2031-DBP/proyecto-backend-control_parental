@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -58,9 +59,9 @@ public class ProfesorController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<Void> createProfesor(@Valid @RequestBody NewProfesorDto newProfesorDTO) {
-        profesorService.newProfesor(newProfesorDTO);
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        String url = profesorService.newProfesor(newProfesorDTO);
+        URI locationHeader = URI.create(url);
+        return ResponseEntity.created(locationHeader).build();
     }
     @PreAuthorize("hasRole('ROLE_PROFESOR') or hasRole('ROLE_ADMIN')")
     @PatchMapping("/password")

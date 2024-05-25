@@ -66,7 +66,7 @@ public class PadreController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePadre(@PathVariable Long id) throws AccessDeniedException {
         padreService.deletePadre(id);
-        return ResponseEntity.created(null).build();
+        return ResponseEntity.noContent().build();
     }
     @PreAuthorize("hasAnyRole()")
     @GetMapping("/{id}/hijos")
@@ -78,8 +78,6 @@ public class PadreController {
     @PreAuthorize("hasRole('PADRE')")
     @GetMapping("/myhijos")
     public ResponseEntity<List<Hijo>> getMyHijos() {
-
-
         List<Hijo> hijos = padreService.getOwnHijos();
         return ResponseEntity.ok(hijos);
     }

@@ -115,14 +115,12 @@ public class PadreService {
         return padre.getHijos();
     }
 
-
     public void newPassword(NewPasswordDto newPasswordDto) throws AccessDeniedException {
         String email = authorizationUtils.authenticateUser();
         if (!Objects.equals(email, newPasswordDto.getEmail()))
             throw new AccessDeniedException("Usuario no authorizado para cambiar esta contraseña");
         Padre padre = padreRepository.findByEmail(email).orElseThrow(
                 ()-> new ResourceNotFoundException("Padre no encontrado"));
-
         padre.setPassword(newPasswordDto.getPassword());
         Date date = new Date();
         applicationEventPublisher.publishEvent(

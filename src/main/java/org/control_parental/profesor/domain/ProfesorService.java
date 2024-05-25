@@ -49,7 +49,7 @@ public class ProfesorService {
     AuthorizationUtils authorizationUtils;
 
 
-    public void newProfesor(NewProfesorDto newProfesorDTO) {
+    public String newProfesor(NewProfesorDto newProfesorDTO) {
         String email = authorizationUtils.authenticateUser();
         Profesor profesor = modelMapper.map(newProfesorDTO, Profesor.class);
         if(usuarioRepository.findByEmail(newProfesorDTO.getEmail()).isPresent()) {
@@ -58,6 +58,7 @@ public class ProfesorService {
         profesor.setRole(Role.PROFESOR);
         profesor.setPassword(passwordEncoder.encode(newProfesorDTO.getPassword()));
         profesorRepository.save(profesor);
+        return "/"+profesor.getId();
     }
 
     public ProfesorResponseDto getProfesorRepsonseDto(Long id) {
