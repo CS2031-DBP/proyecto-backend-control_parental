@@ -43,9 +43,12 @@ public class Usuario implements UserDetails {
     @OneToMany
     List<Comentario> comentarios;
 
+    @Transient
+    private String rolePrefix = "ROLE_";
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));//Esto viene de enum
+        return List.of(new SimpleGrantedAuthority(rolePrefix + role.name()));
     }
 
     @Override
