@@ -12,9 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @Entity
 public class Profesor extends Usuario {
 

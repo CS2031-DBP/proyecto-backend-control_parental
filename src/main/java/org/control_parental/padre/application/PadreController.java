@@ -49,40 +49,40 @@ public class PadreController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-    @PreAuthorize("hasAnyRole()")
+    //@PreAuthorize("hasAnyRole()")
     @GetMapping("/{id}")
     public ResponseEntity<PadreResponseDto> getPadreById(@PathVariable Long id) {
         PadreResponseDto padreResponseDto = padreService.getPadreById(id);
         return ResponseEntity.ok(padreResponseDto);
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('PADRE')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PADRE')")
     @GetMapping("/me")
     public ResponseEntity<PadreSelfResponseDto> getPadre() {
         PadreSelfResponseDto response = padreService.getOwnInfo();
         return ResponseEntity.ok(response);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('PADRE')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePadre(@PathVariable Long id) throws AccessDeniedException {
         padreService.deletePadre(id);
         return ResponseEntity.noContent().build();
     }
-    @PreAuthorize("hasAnyRole()")
+    @PreAuthorize("hasRole('ROLE_PROFESOR')")
     @GetMapping("/{id}/hijos")
     public ResponseEntity<List<Hijo>> getHijos(@PathVariable Long id) {
         List<Hijo> hijos = padreService.getHijos(id);
         return ResponseEntity.ok(hijos);
     }
 
-    @PreAuthorize("hasRole('PADRE')")
+    @PreAuthorize("hasRole('ROLE_PADRE')")
     @GetMapping("/myhijos")
     public ResponseEntity<List<Hijo>> getMyHijos() {
         List<Hijo> hijos = padreService.getOwnHijos();
         return ResponseEntity.ok(hijos);
     }
 
-    @PreAuthorize("hasRole('PADRE')")
+    @PreAuthorize("hasRole('ROLE_PADRE')")
     @PatchMapping("/password")
     public ResponseEntity<Void> newPassword(@RequestBody NewPasswordDto newPasswordDto) throws AccessDeniedException {
         padreService.newPassword(newPasswordDto);

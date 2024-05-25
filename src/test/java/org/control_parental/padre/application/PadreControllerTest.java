@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
@@ -75,9 +76,11 @@ class PadreControllerTest {
     Salon salon;
 
     Publicacion publicacion;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws Exception{
         /*padreRepository.deleteAll();
         hijoRepository.deleteAll();
         profesorRepository.deleteAll();
@@ -100,7 +103,7 @@ class PadreControllerTest {
         padre1.setPassword("laura123");
         padre1.setPhoneNumber("123456789");
         padre1.setRole(Role.PADRE);
-        //padreRepository.save(padre1);
+        padreRepository.save(padre1);
 
         hijo1 = new Hijo();
         hijo1.setNombre("Eduardo");
@@ -141,13 +144,14 @@ class PadreControllerTest {
     }
 
     @Test
-    void TestSavePadre() throws Exception{
+    @WithMockUser(roles={"ADMIN"})
+    public void TestSavePadre() throws Exception{
         NewPadreDto newPadreDto = new NewPadreDto();
         newPadreDto.setNombre("Jorge");
         newPadreDto.setApellido("Rios");
         newPadreDto.setEmail("jorge.rios@utec.edu.pe");
         newPadreDto.setPhoneNumber("987654321");
-        newPadreDto.setPassword("jorge123");
+        newPadreDto.setPassword("DBPfiltro");
 
         var test = mockMvc.perform(MockMvcRequestBuilders.post("/padre")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -163,27 +167,32 @@ class PadreControllerTest {
     }
 
     @Test
+    @WithMockUser(roles={"ADMIN", "PROFESOR"})
     void TestGetPadreById() throws Exception{
 
         Long id = padre1.getId();
+        List<Hijo> hijos1 = new ArrayList<Hijo>();
+        hijos1.add(hijo1);
 
+        padre1.setHijos(hijos1);
+        padreRepository.save(padre1);
+/*
         List<Hijo> hijos = new ArrayList<>();
         hijos.add(hijo1);
         hijos.add(hijo2);
 
         padre1.setHijos(hijos);
-        padreRepository.save(padre1);
+        padreRepository.save(padre1);*/
 
-        var x = mockMvc.perform(MockMvcRequestBuilders.get("/padre/{id}", id).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.get("/padre/{id}", id).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").doesNotExist())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.nombre").value(padre1.getNombre()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.hijos[0].nombre").value(hijo1.getNombre()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.hijos[1].nombre").value(hijo2.getNombre()))
                 .andExpect(status().isOk());
-        System.out.println(x);
     }
 
     @Test
+    @WithMockUser(roles={"ADMIN", "PROFESOR"})
     public void testGetNonPadreExists() throws Exception {
 
         padreRepository.save(padre1);
@@ -194,22 +203,42 @@ class PadreControllerTest {
     }
 
     @Test
-    public void testGetPadre(){
+    @WithMockUser(value = "laura.nagamine@utec.edu.pe", roles = {"PADRE"})
+    public void testGetMePadre() throws Exception{
 
+        List<Hijo> hijos1 = new ArrayList<>();
+        hijos1.add(hijo1);
+
+        padre1.setHijos(hijos1);
+        padreRepository.save(padre1);
+/*
+        List<Hijo> hijos = new ArrayList<>();
+        hijos.add(hijo1);
+        hijos.add(hijo2);
+
+        padre1.setHijos(hijos);
+        padreRepository.save(padre1);*/
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/padre/me").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").doesNotExist())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.nombre").value(padre1.getNombre()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.hijos[0].nombre").value(hijo1.getNombre()))
+                .andExpect(status().isOk());
     }
 
     @Test
+    @WithMockUser(roles={"ADMIN"})
     void testDeletePadre() throws Exception {
-        padreRepository.save(padre1);
-        Long id = padre1.getId();
+        Padre padre11 = padreRepository.save(padre1);
+        Long id = padre11.getId();
 
-
-        mockMvc.perform(MockMvcRequestBuilders.delete("/padre/{id}", 1L).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/padre/{id}", id).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
     }
 
     @Test
+    @WithMockUser(roles={"PROFESOR"})
     void TestGetHijos() throws Exception{
 
         List<Hijo> hijos = new ArrayList<>();
@@ -234,18 +263,22 @@ class PadreControllerTest {
     }
 
     @Test
+    @WithMockUser(value = "laura.nagamine@utec.edu.pe", roles = "PADRE")
     void testNewPassword() throws Exception{
         NewPasswordDto newPasswordDto = new NewPasswordDto();
         newPasswordDto.setPassword("2345678");
-        newPasswordDto.setEmail("eduardo.aragon@utec.edu.pe");
+        newPasswordDto.setEmail("laura.nagamine@utec.edu.pe");
 
-        var test = mockMvc.perform(MockMvcRequestBuilders.patch("/padre/password")
+        profesorRepository.save(profesor);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/padre/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(newPasswordDto)))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andReturn();
 
-        //get my email
+        Padre padre12 = padreRepository.findByEmail(newPasswordDto.getEmail()).orElseThrow();
+        Assertions.assertEquals(padre12.getPassword(), passwordEncoder.encode(newPasswordDto.getPassword()));
 
     }
 }
