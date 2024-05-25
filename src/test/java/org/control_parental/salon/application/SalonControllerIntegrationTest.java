@@ -1,6 +1,7 @@
 package org.control_parental.salon.application;
 
 import jakarta.transaction.Transactional;
+import org.control_parental.auth.dto.AuthLoginRequest;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.hijo.infrastructure.HijoRepository;
 import org.control_parental.padre.domain.Padre;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
@@ -145,6 +147,7 @@ public class SalonControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(roles={"ADMIN"})
     public void testCreateSalon() throws Exception {
 
         NewSalonDTO salonData = new NewSalonDTO();
@@ -169,6 +172,16 @@ public class SalonControllerIntegrationTest {
 
         salonRepository.save(salon);
 
+        AuthLoginRequest authLoginRequest = new AuthLoginRequest();
+        authLoginRequest.setEmail("renato.garcia@utec.edu.pe");
+        authLoginRequest.setPassword("renato123");
+
+        var test = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(authLoginRequest)))
+                        .andExpect(status().isOk()).andReturn();
+
+
         mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}", salon.getId()))
                 .andExpect(jsonPath("$.id").doesNotExist())
                 .andExpect(jsonPath("$.nombre").value("Salón 101"))
@@ -188,6 +201,7 @@ public class SalonControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(roles={"ADMIN"})
     public void testAddHijo() throws Exception {
         salonRepository.save(salon);
 
@@ -241,6 +255,7 @@ public class SalonControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(roles={"ADMIN"})
     public void testAddProfesor() throws Exception {
         salonRepository.save(salon);
 
