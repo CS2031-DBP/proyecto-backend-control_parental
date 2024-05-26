@@ -15,6 +15,7 @@ public class ProfesorResponseDto {
     @NotNull
     String nombre;
 
+    Long id;
     @NotNull
     String apellido;
 

@@ -17,6 +17,7 @@ public class PadreSelfResponseDto {
     @NotNull
     String phoneNumber;
 
+    Long id;
     @NotNull
     String email;
 

@@ -20,6 +20,7 @@ public class ProfesorSelfResponseDto {
     @Email
     String email;
 
+    Long id;
     @NotNull
     String nombre;
 
