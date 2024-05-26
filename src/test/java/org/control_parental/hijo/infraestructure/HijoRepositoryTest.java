@@ -6,6 +6,7 @@ import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.hijo.infrastructure.HijoRepository;
 import org.control_parental.padre.domain.Padre;
 import org.control_parental.salon.domain.Salon;
+import org.control_parental.usuario.domain.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,7 @@ public class HijoRepositoryTest extends AbstractContainerBaseTest {
         entityManager.persist(salon);
 
         hijo1 = new Hijo();
+
         hijo1.setNombre("Pepito");
         hijo1.setApellido("Perez");
         hijo1.setSalon(salon);

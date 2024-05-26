@@ -3,6 +3,7 @@ package org.control_parental.profesor.infraestructure;
 import org.control_parental.configuration.TestConfig;
 import org.control_parental.profesor.domain.Profesor;
 import org.control_parental.profesor.infrastructure.ProfesorRepository;
+import org.control_parental.usuario.domain.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ public class ProfesorRepositoryTest {
         profesor.setApellido("Rios");
         profesor.setEmail("jorge.rios@utec.edu.pe");
         profesor.setPassword("el_mejor_profe");
+        profesor.setRole(Role.PROFESOR);
 
         entityManager.persist(profesor);
         entityManager.flush();
@@ -57,6 +59,7 @@ public class ProfesorRepositoryTest {
         profesor.setApellido("Noel");
         profesor.setEmail("mateo.noel@utec.edu.pe");
         profesor.setPassword("contraseña");
+        profesor.setRole(Role.PROFESOR);
 
         Profesor savedProfesor = profesorRepository.save(profesor);
         entityManager.flush();
@@ -76,6 +79,7 @@ public class ProfesorRepositoryTest {
         profesor.setApellido("Bellido");
         profesor.setEmail("jesus.bellido@utec.edu.pe");
         profesor.setPassword("director");
+        profesor.setRole(Role.PROFESOR);
 
         Profesor savedProfesor = entityManager.persistAndFlush(profesor);
         Long profesorId = savedProfesor.getId();
