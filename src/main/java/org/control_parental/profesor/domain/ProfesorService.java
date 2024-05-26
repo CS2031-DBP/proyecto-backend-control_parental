@@ -16,7 +16,6 @@ import org.control_parental.usuario.domain.Usuario;
 import org.control_parental.usuario.infrastructure.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -94,7 +92,7 @@ public class ProfesorService {
          applicationEventPublisher.publishEvent(
                  new NuevaContaseñaEmailEvent(profesor.getNombre(), profesor.getEmail(), hora)
          );
-         profesor.setPassword(newPasswordDto.getPassword());
+         profesor.setPassword(passwordEncoder.encode(newPasswordDto.getPassword()));
          profesorRepository.save(profesor);
 
     }

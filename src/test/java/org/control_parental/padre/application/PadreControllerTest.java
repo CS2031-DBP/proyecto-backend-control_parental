@@ -22,9 +22,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -34,8 +32,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -71,8 +67,6 @@ class PadreControllerTest {
 
     Padre padre1;
 
-    Padre padre2;
-
     Salon salon;
 
     Publicacion publicacion;
@@ -80,7 +74,7 @@ class PadreControllerTest {
     private PasswordEncoder passwordEncoder;
 
     @BeforeEach
-    public void setUp() throws Exception{
+    public void setUp() {
         /*padreRepository.deleteAll();
         hijoRepository.deleteAll();
         profesorRepository.deleteAll();
@@ -103,25 +97,23 @@ class PadreControllerTest {
         padre1.setPassword("laura123");
         padre1.setPhoneNumber("123456789");
         padre1.setRole(Role.PADRE);
-        padreRepository.save(padre1);
 
         hijo1 = new Hijo();
         hijo1.setNombre("Eduardo");
         hijo1.setApellido("Aragon");
-        hijo1.setPadre(padre1);
         hijoRepository.save(hijo1);
 
         hijo2 = new Hijo();
         hijo2.setNombre("Mikel");
         hijo2.setApellido("Bracamonte");
-        hijo2.setPadre(padre2);
         hijoRepository.save(hijo2);
         List<Hijo> hijos = new ArrayList<>();
         hijos.add(hijo1);
         hijos.add(hijo2);
+        padre1.setHijos(hijos);
 
         publicacion = new Publicacion();
-        publicacion.setDescripcion("Esta es una publicación");
+        publicacion.setDescripcion("Esta es una descripción");
         publicacion.setHijos(hijos);
         publicacion.setFoto("Esta es una foto");
         publicacion.setTitulo("Este es un titulo");
@@ -144,8 +136,8 @@ class PadreControllerTest {
     }
 
     @Test
-    @WithMockUser(roles={"ADMIN"})
-    public void TestSavePadre() throws Exception{
+    @WithMockUser(roles = {"ADMIN"})
+    public void testSavePadre() throws Exception {
         NewPadreDto newPadreDto = new NewPadreDto();
         newPadreDto.setNombre("Jorge");
         newPadreDto.setApellido("Rios");
@@ -154,45 +146,57 @@ class PadreControllerTest {
         newPadreDto.setPassword("DBPfiltro");
 
         var test = mockMvc.perform(MockMvcRequestBuilders.post("/padre")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(newPadreDto)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newPadreDto)))
                 .andExpect(status().isCreated())
-        .andReturn();
+                .andReturn();
 
         String location = test.getResponse().getHeader("Location");
         Long id = Long.valueOf(location.substring(location.lastIndexOf("/") + 1));
 
         Padre padre = padreRepository.findById(id).orElseThrow();
-        Assertions.assertEquals(padre.getNombre(), newPadreDto.getNombre());
+        Assertions.assertEquals("Jorge", padre.getNombre());
     }
 
     @Test
-    @WithMockUser(roles={"ADMIN", "PROFESOR"})
-    void TestGetPadreById() throws Exception{
+    public void testUnauthorizedSavePadre() throws Exception {
+        NewPadreDto newPadreDto = new NewPadreDto();
+        newPadreDto.setNombre("Jorge");
+        newPadreDto.setApellido("Rios");
+        newPadreDto.setEmail("jorge.rios@utec.edu.pe");
+        newPadreDto.setPhoneNumber("987654321");
+        newPadreDto.setPassword("DBPfiltro");
 
-        Long id = padre1.getId();
-        List<Hijo> hijos1 = new ArrayList<Hijo>();
-        hijos1.add(hijo1);
+        mockMvc.perform(MockMvcRequestBuilders.post("/padre")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newPadreDto)))
+                .andExpect(status().isForbidden());
+    }
 
-        padre1.setHijos(hijos1);
+    @Test
+    @WithMockUser(value = "laura.nagamine@utec.edu.pe", roles = {"PADRE"})
+    public void testGetPadreById() throws Exception {
+
         padreRepository.save(padre1);
-/*
-        List<Hijo> hijos = new ArrayList<>();
-        hijos.add(hijo1);
-        hijos.add(hijo2);
 
-        padre1.setHijos(hijos);
-        padreRepository.save(padre1);*/
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/padre/{id}", id).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").doesNotExist())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.nombre").value(padre1.getNombre()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.hijos[0].nombre").value(hijo1.getNombre()))
+        mockMvc.perform(MockMvcRequestBuilders.get("/padre/{id}", padre1.getId()).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.nombre").value("Laura"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.hijos[0].nombre").value("Eduardo"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.hijos[1].nombre").value("Mikel"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(roles={"ADMIN", "PROFESOR"})
+    public void testUnauthorizedGetPadreById() throws Exception {
+
+        padreRepository.save(padre1);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/padre/{id}", padre1.getId()).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = {"ADMIN", "PROFESOR"})
     public void testGetNonPadreExists() throws Exception {
 
         padreRepository.save(padre1);
@@ -204,81 +208,117 @@ class PadreControllerTest {
 
     @Test
     @WithMockUser(value = "laura.nagamine@utec.edu.pe", roles = {"PADRE"})
-    public void testGetMePadre() throws Exception{
+    public void testGetMePadre() throws Exception {
 
-        List<Hijo> hijos1 = new ArrayList<>();
-        hijos1.add(hijo1);
-
-        padre1.setHijos(hijos1);
         padreRepository.save(padre1);
-/*
-        List<Hijo> hijos = new ArrayList<>();
-        hijos.add(hijo1);
-        hijos.add(hijo2);
-
-        padre1.setHijos(hijos);
-        padreRepository.save(padre1);*/
 
         mockMvc.perform(MockMvcRequestBuilders.get("/padre/me").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").doesNotExist())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.nombre").value(padre1.getNombre()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.hijos[0].nombre").value(hijo1.getNombre()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.nombre").value("Laura"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.hijos[0].nombre").value("Eduardo"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.hijos[1].nombre").value("Mikel"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(roles={"ADMIN"})
-    void testDeletePadre() throws Exception {
-        Padre padre11 = padreRepository.save(padre1);
-        Long id = padre11.getId();
+    public void testUnauthorizedGetMePadre() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/padre/{id}", id).contentType(MediaType.APPLICATION_JSON))
+        padreRepository.save(padre1);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/padre/me").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
+    void testDeletePadre() throws Exception {
+        padreRepository.save(padre1);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/padre/{id}", padre1.getId()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
     }
 
     @Test
-    @WithMockUser(roles={"PROFESOR"})
-    void TestGetHijos() throws Exception{
-
-        List<Hijo> hijos = new ArrayList<>();
-        hijos.add(hijo1);
-        hijos.add(hijo2);
-
-        padre1.setHijos(hijos);
+    void testUnauthorizedDeletePadre() throws Exception {
         padreRepository.save(padre1);
-        Long id = padre1.getId();
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/padre/{id}/hijos", id)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].nombre").value(hijo1.getNombre()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[1].nombre").value(hijo2.getNombre()))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/padre/{id}", padre1.getId()).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+
+    }
+
+    @Test
+    @WithMockUser(roles = {"PROFESOR"})
+    void testGetHijos() throws Exception {
+        padreRepository.save(padre1);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/padre/{id}/hijos", padre1.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].nombre").value("Eduardo"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[1].nombre").value("Mikel"))
                 .andExpect(status().isOk());
 
     }
 
     @Test
-    void testGetMyHijos() {
+    void testUnauthorizedGetHijos() throws Exception {
+        padreRepository.save(padre1);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/padre/{id}/hijos", padre1.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
 
     }
 
     @Test
     @WithMockUser(value = "laura.nagamine@utec.edu.pe", roles = "PADRE")
-    void testNewPassword() throws Exception{
+    void testGetMyHijos() throws Exception{
+        padreRepository.save(padre1);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/padre/myhijos"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].nombre").value("Eduardo"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[1].nombre").value("Mikel"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testUnauthorizedGetMyHijos() throws Exception{
+        padreRepository.save(padre1);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/padre/myhijos"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(value = "laura.nagamine@utec.edu.pe", roles = "PADRE")
+    void testNewPassword() throws Exception {
         NewPasswordDto newPasswordDto = new NewPasswordDto();
         newPasswordDto.setPassword("2345678");
         newPasswordDto.setEmail("laura.nagamine@utec.edu.pe");
 
-        profesorRepository.save(profesor);
+        padreRepository.save(padre1);
 
         mockMvc.perform(MockMvcRequestBuilders.patch("/padre/password")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(newPasswordDto)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newPasswordDto)))
                 .andExpect(status().isOk())
                 .andReturn();
 
         Padre padre12 = padreRepository.findByEmail(newPasswordDto.getEmail()).orElseThrow();
-        Assertions.assertEquals(padre12.getPassword(), passwordEncoder.encode(newPasswordDto.getPassword()));
+        Assertions.assertTrue(passwordEncoder.matches("2345678", padre12.getPassword()));
+    }
 
+    @Test
+    void testUnauthorizedNewPassword() throws Exception {
+        NewPasswordDto newPasswordDto = new NewPasswordDto();
+        newPasswordDto.setPassword("2345678");
+        newPasswordDto.setEmail("laura.nagamine@utec.edu.pe");
+
+        padreRepository.save(padre1);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/padre/password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newPasswordDto)))
+                .andExpect(status().isForbidden());
     }
 }

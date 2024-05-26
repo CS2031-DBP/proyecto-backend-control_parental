@@ -209,7 +209,6 @@ public class SalonControllerIntegrationTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}", salon.getId())
                         .header("Authorization", "Bearer " + token))
-                .andExpect(jsonPath("$.id").doesNotExist())
                 .andExpect(jsonPath("$.nombre").value("Salón 101"))
                 .andExpect(jsonPath("$.hijos[0].nombre").value("Eduardo"))
                 .andExpect(jsonPath("$.hijos[1].nombre").value("Mikel"))

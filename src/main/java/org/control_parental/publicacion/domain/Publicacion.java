@@ -51,13 +51,18 @@ public class Publicacion {
                     CascadeType.MERGE
             }
     )
-    List<Hijo> hijos;
+    List<Hijo> hijos = new ArrayList<>();
 
     @OneToMany
-    List<Comentario> comentarios;
+    List<Comentario> comentarios = new ArrayList<>();
 
+<<<<<<< HEAD
     @OneToMany(mappedBy = "publicacion", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Padre_Like> likers = new ArrayList<>();
+=======
+    @ManyToMany
+    List<Padre> likers = new ArrayList<>();
+>>>>>>> 48a9e09e27517e906928ecf778d4cedf46df41f8
 
     @ManyToOne
     Salon salon;
