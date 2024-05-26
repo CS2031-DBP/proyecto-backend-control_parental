@@ -6,6 +6,7 @@ import org.control_parental.publicacion.domain.PublicacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,6 +34,19 @@ public class PublicacionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePublicacion(@PathVariable Long id) {
         publicacionService.deletePublicacion(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasRole('ROLE_PADRE')")
+    @PostMapping("/like/{postId}")
+    public ResponseEntity<Void> like(@PathVariable Long postId) {
+        publicacionService.likePost(postId);
+        return ResponseEntity.created(null).build();
+    }
+    @PreAuthorize("hasRole('ROLE_PADRE')")
+    @DeleteMapping("/like/{postId}")
+    public ResponseEntity<Void> quitarLike(@PathVariable Long postId) {
+        publicacionService.deLikePost(postId);
         return ResponseEntity.noContent().build();
     }
 /*

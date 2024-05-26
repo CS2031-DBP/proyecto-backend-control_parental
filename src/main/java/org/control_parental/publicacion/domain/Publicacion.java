@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.Value;
 import org.control_parental.comentario.domain.Comentario;
 import org.control_parental.hijo.domain.Hijo;
+import org.control_parental.like.Domain.Like;
 import org.control_parental.padre.domain.Padre;
 import org.control_parental.profesor.domain.Profesor;
 import org.control_parental.salon.domain.Salon;
@@ -56,13 +57,19 @@ public class Publicacion {
     @OneToMany
     List<Comentario> comentarios;
 
-    @ManyToMany
-    List<Padre> likers;
+    @OneToMany
+    List<Like> likers;
 
     @ManyToOne
     Salon salon;
 
-    public void addStudent(Hijo hijo) {hijos.add(hijo);}
+    public void addLike(Like like) {
+        likers.add(like);
+        likes++;
+    }
 
-
+    public void quitarLike(Like like) {
+        likers.remove(like);
+        likes--;
+    }
 }

@@ -2,11 +2,16 @@ package org.control_parental.publicacion.domain;
 
 import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.email.nuevaPublicacion.PublicacionEmailEvent;
+import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.comentario.dto.ComentarioPublicacionDto;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.hijo.dto.HijoPublicacionDto;
 import org.control_parental.hijo.infrastructure.HijoRepository;
+import org.control_parental.like.Domain.Like;
+import org.control_parental.like.Infrastructure.LikeRepository;
+import org.control_parental.padre.domain.Padre;
+import org.control_parental.padre.infrastructure.PadreRepository;
 import org.control_parental.profesor.domain.Profesor;
 import org.control_parental.profesor.dto.ProfesorPublicacionDto;
 import org.control_parental.profesor.dto.ProfesorResponseDto;
@@ -16,6 +21,7 @@ import org.control_parental.publicacion.dto.PublicacionResponseDto;
 import org.control_parental.publicacion.infrastructure.PublicacionRepository;
 import org.control_parental.salon.domain.Salon;
 import org.control_parental.salon.infrastructure.SalonRepository;
+import org.hibernate.query.sqm.tree.predicate.SqmLikePredicate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -48,6 +54,12 @@ public class PublicacionService {
 
     @Autowired
     private AuthorizationUtils authorizationUtils;
+
+    @Autowired
+    private PadreRepository padreRepository;
+
+    @Autowired
+    private LikeRepository likeRepository;
 
 //    public void savePublicacion(NewPublicacionDto newPublicacionDto) {
 //        Publicacion newPublicacion = modelMapper.map(newPublicacionDto, Publicacion.class);
@@ -151,7 +163,34 @@ public class PublicacionService {
     }
 
     public void likePost(Long postId) {
-        // para cuando haya entidad like
+        String Email = authorizationUtils.authenticateUser();
+        Padre padre = padreRepository.findByEmail(Email).orElseThrow(
+                ()-> new ResourceNotFoundException("Padre no encontrado"));
+        Optional<Like> like = likeRepository.findByUserIdAndPublicacionId(padre.getId(), postId);
+        if (like.isPresent()) throw new ResourceAlreadyExistsException("Usted ya le dio like a este post!");
+        Publicacion publicacion = publicacionRepository.findById(postId).orElseThrow(
+                ()-> new ResourceNotFoundException("Esta publicacion no fue encontrada"));
 
+        Like nuevoLike = new Like();
+        nuevoLike.setPadre(padre);
+        nuevoLike.setPublicacion(publicacion);
+
+        padre.addLike(nuevoLike);
+        publicacion.addLike(nuevoLike);
+
+        padreRepository.save(padre);
+        publicacionRepository.save(publicacion);
+        likeRepository.save(nuevoLike);
+    }
+
+    public void deLikePost(Long postId) {
+        String email = authorizationUtils.authenticateUser();
+        Padre padre = padreRepository.findByEmail(email).orElseThrow(
+                ()-> new ResourceNotFoundException("Padre no encontrado")
+        );
+        Like like = likeRepository.findByUserIdAndPublicacionId(padre.getId(), postId).orElseThrow(
+                ()-> new ResourceNotFoundException("Esta persona no ha dado like a esta publicacion")
+        );
+        likeRepository.delete(like);
     }
 }
