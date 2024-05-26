@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.control_parental.comentario.dto.ComentarioResponseDto;
 import org.control_parental.publicacion.dto.PublicacionResponseDto;
 import org.control_parental.salon.dto.SalonResponseDto;
 
@@ -29,6 +30,9 @@ public class ProfesorSelfResponseDto {
 
     @JsonIgnoreProperties("profesores")
     List<SalonResponseDto> salones;
+
+    @JsonIgnoreProperties("profesor")
+    List<ComentarioResponseDto> comentarios;
 
     @JsonIgnoreProperties("profesor")
     List<PublicacionResponseDto> publicaciones;
