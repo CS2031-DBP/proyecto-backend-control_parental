@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.Value;
 import org.control_parental.comentario.domain.Comentario;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.padre.domain.Padre;
@@ -13,6 +12,7 @@ import org.control_parental.profesor.domain.Profesor;
 import org.control_parental.salon.domain.Salon;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -51,13 +51,13 @@ public class Publicacion {
                     CascadeType.MERGE
             }
     )
-    List<Hijo> hijos;
+    List<Hijo> hijos = new ArrayList<>();
 
     @OneToMany
-    List<Comentario> comentarios;
+    List<Comentario> comentarios = new ArrayList<>();
 
     @ManyToMany
-    List<Padre> likers;
+    List<Padre> likers = new ArrayList<>();
 
     @ManyToOne
     Salon salon;
