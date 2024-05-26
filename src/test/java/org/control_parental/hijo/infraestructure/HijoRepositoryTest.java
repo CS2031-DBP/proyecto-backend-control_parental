@@ -1,6 +1,7 @@
 package org.control_parental.hijo.infraestructure;
 
 import org.control_parental.AbstractContainerBaseTest;
+import org.control_parental.configuration.TestConfig;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.hijo.infrastructure.HijoRepository;
 import org.control_parental.padre.domain.Padre;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.context.annotation.Import;
 
 import java.util.Optional;
 
@@ -19,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import(TestConfig.class)
 public class HijoRepositoryTest extends AbstractContainerBaseTest {
 
     @Autowired
