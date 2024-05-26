@@ -1,4 +1,5 @@
 package org.control_parental.hijo.infraestructure;
+import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.configuration.Util;
 import org.control_parental.AbstractContainerBaseTest;
 import org.control_parental.hijo.domain.Hijo;
@@ -11,9 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.context.annotation.Import;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import({Util.class, AuthorizationUtils.class})
 public class HijoRepositoryTest extends AbstractContainerBaseTest {
 
     @Autowired
