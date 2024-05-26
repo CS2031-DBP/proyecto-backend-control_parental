@@ -23,6 +23,8 @@ import java.util.List;
 public class PublicacionResponseDto {
 
     LocalDateTime fecha;
+    @NotNull
+    Long id;
 
     @NotNull
     String descripcion;

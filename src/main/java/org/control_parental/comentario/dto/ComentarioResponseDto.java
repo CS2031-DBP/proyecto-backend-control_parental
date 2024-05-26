@@ -21,6 +21,9 @@ public class ComentarioResponseDto {
     LocalDateTime fecha;
 
     @NotNull
+    Long id;
+
+    @NotNull
     String contenido;
 
     @NotNull

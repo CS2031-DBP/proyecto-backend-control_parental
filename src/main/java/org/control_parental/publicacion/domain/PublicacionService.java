@@ -149,4 +149,9 @@ public class PublicacionService {
 
         return posts_data;
     }
+
+    public void likePost(Long postId) {
+        // para cuando haya entidad like
+
+    }
 }
