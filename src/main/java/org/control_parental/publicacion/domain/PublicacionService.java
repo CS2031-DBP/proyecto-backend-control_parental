@@ -86,7 +86,7 @@ public class PublicacionService {
         newPublicacion.setFecha(LocalDateTime.now());
         newPublicacion.setFoto(newPublicacionDto.getFoto());
         newPublicacion.setProfesor(profesor);
-        newPublicacion.setSalon(salon);
+        //newPublicacion.setSalon(salon);
         newPublicacion.setFecha(LocalDateTime.now());
         newPublicacion.setLikes(0);
 
@@ -176,7 +176,7 @@ public class PublicacionService {
         nuevoLike.setPadre(padre);
         nuevoLike.setPublicacion(publicacion);
 
-        publicacion.addLike(nuevoLike);
+        //publicacion.addLike(nuevoLike);
 
         publicacionRepository.save(publicacion);
         likeRepository.save(nuevoLike);

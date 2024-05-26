@@ -55,7 +55,7 @@ public class Publicacion {
 
     @OneToMany
     List<Comentario> comentarios = new ArrayList<>();
-
+/*
 <<<<<<< HEAD
     @OneToMany(mappedBy = "publicacion", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Padre_Like> likers = new ArrayList<>();
@@ -76,4 +76,6 @@ public class Publicacion {
         likers.remove(like);
         likes--;
     }
+    */
+
 }
