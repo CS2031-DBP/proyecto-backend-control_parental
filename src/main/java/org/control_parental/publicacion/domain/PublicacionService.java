@@ -2,13 +2,17 @@ package org.control_parental.publicacion.domain;
 
 import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.email.nuevaPublicacion.PublicacionEmailEvent;
+import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.comentario.dto.ComentarioPublicacionDto;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.hijo.dto.HijoPublicacionDto;
 import org.control_parental.hijo.infrastructure.HijoRepository;
+import org.control_parental.like.Domain.Padre_Like;
+import org.control_parental.like.Infrastructure.LikeRepository;
+import org.control_parental.padre.domain.Padre;
+import org.control_parental.padre.infrastructure.PadreRepository;
 import org.control_parental.profesor.domain.Profesor;
-import org.control_parental.profesor.dto.ProfesorPublicacionDto;
 import org.control_parental.profesor.dto.ProfesorResponseDto;
 import org.control_parental.profesor.infrastructure.ProfesorRepository;
 import org.control_parental.publicacion.dto.NewPublicacionDto;
@@ -48,6 +52,12 @@ public class PublicacionService {
 
     @Autowired
     private AuthorizationUtils authorizationUtils;
+
+    @Autowired
+    private PadreRepository padreRepository;
+
+    @Autowired
+    private LikeRepository likeRepository;
 
 //    public void savePublicacion(NewPublicacionDto newPublicacionDto) {
 //        Publicacion newPublicacion = modelMapper.map(newPublicacionDto, Publicacion.class);
@@ -151,7 +161,35 @@ public class PublicacionService {
     }
 
     public void likePost(Long postId) {
-        // para cuando haya entidad like
+        String email = authorizationUtils.authenticateUser();
+        Publicacion publicacion = publicacionRepository.findById(postId).orElseThrow(
+                () -> new ResourceNotFoundException("Esta publicacion no fue encontrada"));
+        Padre padre = padreRepository.findByEmail(email).orElseThrow(
+                () -> new ResourceNotFoundException("Padre no encontrado"));
+        Optional<Padre_Like> like = likeRepository.findByPadre_IdAndPublicacion_Id(padre.getId(), postId);
+        if (like.isPresent()) {
+            throw new ResourceAlreadyExistsException("Usted ya le dio like a este post!");
+        }
 
+
+        Padre_Like nuevoLike = new Padre_Like();
+        nuevoLike.setPadre(padre);
+        nuevoLike.setPublicacion(publicacion);
+
+        publicacion.addLike(nuevoLike);
+
+        publicacionRepository.save(publicacion);
+        likeRepository.save(nuevoLike);
+    }
+
+    public void deLikePost(Long postId) {
+        String email = authorizationUtils.authenticateUser();
+        Padre padre = padreRepository.findByEmail(email).orElseThrow(
+                ()-> new ResourceNotFoundException("Padre no encontrado")
+        );
+        Padre_Like like = likeRepository.findByPadre_IdAndPublicacion_Id(padre.getId(), postId).orElseThrow(
+                ()-> new ResourceNotFoundException("Esta persona no ha dado like a esta publicacion")
+        );
+        likeRepository.delete(like);
     }
 }

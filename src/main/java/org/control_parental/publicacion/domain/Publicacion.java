@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.control_parental.comentario.domain.Comentario;
 import org.control_parental.hijo.domain.Hijo;
-import org.control_parental.padre.domain.Padre;
+import org.control_parental.like.Domain.Padre_Like;
 import org.control_parental.profesor.domain.Profesor;
 import org.control_parental.salon.domain.Salon;
 
@@ -56,13 +56,24 @@ public class Publicacion {
     @OneToMany
     List<Comentario> comentarios = new ArrayList<>();
 
+<<<<<<< HEAD
+    @OneToMany(mappedBy = "publicacion", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Padre_Like> likers = new ArrayList<>();
+=======
     @ManyToMany
     List<Padre> likers = new ArrayList<>();
+>>>>>>> 48a9e09e27517e906928ecf778d4cedf46df41f8
 
     @ManyToOne
     Salon salon;
 
-    public void addStudent(Hijo hijo) {hijos.add(hijo);}
+    public void addLike(Padre_Like like) {
+        likers.add(like);
+        likes++;
+    }
 
-
+    public void quitarLike(Padre_Like like) {
+        likers.remove(like);
+        likes--;
+    }
 }

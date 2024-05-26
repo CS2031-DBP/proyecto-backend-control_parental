@@ -4,11 +4,8 @@ import jakarta.persistence.*;
 
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.control_parental.hijo.domain.Hijo;
-import org.control_parental.publicacion.domain.Publicacion;
+import org.control_parental.like.Domain.Padre_Like;
 import org.control_parental.usuario.domain.Usuario;
 
 import java.util.ArrayList;
@@ -25,10 +22,12 @@ public class Padre extends Usuario {
     @OneToMany(mappedBy = "padre", cascade = CascadeType.REMOVE) // si eliminamos al padre tambien se eliminaran a los hijos relacionados al padre
     List<Hijo> hijos = new ArrayList<>();
 
-    @ManyToMany
-    List<Publicacion> posts_likeados = new ArrayList<>();
+    @OneToMany(mappedBy = "padre", cascade = CascadeType.REMOVE)
+    List<Padre_Like> posts_likeados = new ArrayList<>();
 
     public void addHijo(Hijo hijo) {
         hijos.add(hijo);
     }
+
+    public void addLike(Padre_Like like) {posts_likeados.add(like);}
 }
