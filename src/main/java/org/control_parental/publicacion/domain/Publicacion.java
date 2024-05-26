@@ -5,15 +5,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.Value;
 import org.control_parental.comentario.domain.Comentario;
 import org.control_parental.hijo.domain.Hijo;
-import org.control_parental.like.Domain.Like;
-import org.control_parental.padre.domain.Padre;
+import org.control_parental.like.Domain.Padre_Like;
 import org.control_parental.profesor.domain.Profesor;
 import org.control_parental.salon.domain.Salon;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -57,18 +56,18 @@ public class Publicacion {
     @OneToMany
     List<Comentario> comentarios;
 
-    @OneToMany
-    List<Like> likers;
+    @OneToMany(mappedBy = "publicacion", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Padre_Like> likers = new ArrayList<>();
 
     @ManyToOne
     Salon salon;
 
-    public void addLike(Like like) {
+    public void addLike(Padre_Like like) {
         likers.add(like);
         likes++;
     }
 
-    public void quitarLike(Like like) {
+    public void quitarLike(Padre_Like like) {
         likers.remove(like);
         likes--;
     }

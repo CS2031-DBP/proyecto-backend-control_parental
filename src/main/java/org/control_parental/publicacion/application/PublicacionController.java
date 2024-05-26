@@ -37,13 +37,13 @@ public class PublicacionController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasRole('ROLE_PADRE')")
+//    @PreAuthorize("hasRole('ROLE_PADRE')")
     @PostMapping("/like/{postId}")
     public ResponseEntity<Void> like(@PathVariable Long postId) {
         publicacionService.likePost(postId);
         return ResponseEntity.created(null).build();
     }
-    @PreAuthorize("hasRole('ROLE_PADRE')")
+//    @PreAuthorize("hasRole('ROLE_PADRE')")
     @DeleteMapping("/like/{postId}")
     public ResponseEntity<Void> quitarLike(@PathVariable Long postId) {
         publicacionService.deLikePost(postId);

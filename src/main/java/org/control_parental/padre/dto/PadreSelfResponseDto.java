@@ -14,10 +14,11 @@ import java.util.List;
 @AllArgsConstructor
 public class PadreSelfResponseDto {
 
+    Long id;
+
     @NotNull
     String phoneNumber;
 
-    Long id;
     @NotNull
     String email;
 
