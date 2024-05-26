@@ -1,6 +1,8 @@
 package org.control_parental.profesor.application;
 
 import jakarta.transaction.Transactional;
+import org.control_parental.comentario.domain.Comentario;
+import org.control_parental.comentario.infrastructure.ComentarioRepository;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.hijo.infrastructure.HijoRepository;
 import org.control_parental.padre.domain.Padre;
@@ -58,6 +60,9 @@ class ProfesorControllerTest {
     PublicacionRepository publicacionRepository;
 
     @Autowired
+    ComentarioRepository comentarioRepository;
+
+    @Autowired
     ObjectMapper objectMapper;
 
     Profesor profesor;
@@ -73,6 +78,11 @@ class ProfesorControllerTest {
     Salon salon;
 
     Publicacion publicacion;
+
+    Comentario comentario;
+
+    LocalDateTime localDateTime;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -123,12 +133,14 @@ class ProfesorControllerTest {
         hijos.add(hijo1);
         hijos.add(hijo2);
 
+        localDateTime = LocalDateTime.now();
+
         publicacion = new Publicacion();
         publicacion.setDescripcion("Esta es una descripción");
         publicacion.setHijos(hijos);
         publicacion.setFoto("Esta es una foto");
         publicacion.setTitulo("Este es un título");
-        publicacion.setFecha(LocalDateTime.now());
+        publicacion.setFecha(localDateTime);
         publicacion.setLikes(0);
         publicacionRepository.save(publicacion);
         List<Publicacion> publicaciones = new ArrayList<>();
@@ -149,6 +161,17 @@ class ProfesorControllerTest {
         salones.add(salon);
 
         profesor.setSalones(salones);
+
+        comentario = new Comentario();
+        comentario.setFecha(localDateTime);
+        comentario.setContenido("Este es un comentario");
+        comentario.setPublicacion(publicacion);
+        comentarioRepository.save(comentario);
+
+        List<Comentario> comentarios = new ArrayList<>();
+        comentarios.add(comentario);
+
+        profesor.setComentarios(comentarios);
 
     }
 
@@ -222,6 +245,7 @@ class ProfesorControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.nombre").value("Renato"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.salones.[0].nombre").value("Salon1"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.publicaciones.[0].descripcion").value("Esta es una descripción"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.comentarios[0].contenido").value("Este es un comentario"))
                 .andExpect(status().isOk());
     }
 

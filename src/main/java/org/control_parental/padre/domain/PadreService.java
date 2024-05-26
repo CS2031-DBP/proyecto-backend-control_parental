@@ -1,7 +1,5 @@
 package org.control_parental.padre.domain;
 
-import org.control_parental.comentario.dto.ComentarioPublicacionDto;
-import org.control_parental.comentario.dto.ComentarioResponseDto;
 import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.csv.CSVHelper;
 import org.control_parental.email.nuevaContraseña.NuevaContaseñaEmailEvent;
@@ -9,7 +7,6 @@ import org.control_parental.email.nuevoUsuario.NuevoUsuarioEmailEvent;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.hijo.domain.Hijo;
-import org.control_parental.hijo.dto.HijoResponseDto;
 import org.control_parental.padre.dto.NewPadreDto;
 import org.control_parental.padre.dto.PadreResponseDto;
 import org.control_parental.padre.dto.PadreSelfResponseDto;
@@ -98,26 +95,15 @@ public class PadreService {
                 ()-> new ResourceNotFoundException("Padre no fue encontrado")
         );
 
+        PadreSelfResponseDto response = modelMapper.map(padre, PadreSelfResponseDto.class);
 
-        PadreSelfResponseDto response = new PadreSelfResponseDto();
-        List<HijoResponseDto> hijoResponseDtos = new ArrayList<>();
-        response = modelMapper.map(padre, PadreSelfResponseDto.class);
-        padre.getHijos().forEach(hijo -> {
-            hijoResponseDtos.add(modelMapper.map(hijo, HijoResponseDto.class));
-        });
-        List<ComentarioResponseDto> comentarioResponseDtos = new ArrayList<>();
-        padre.getComentarios().forEach(comentario -> {
-            comentarioResponseDtos.add(modelMapper.map(comentario, ComentarioResponseDto.class));
-        });
         List<PublicacionResponseDto> publicacionResponseDtos = new ArrayList<>();
         padre.getPosts_likeados().forEach(post -> {
-            publicacionResponseDtos.add(modelMapper.map(post, PublicacionResponseDto.class));
+            publicacionResponseDtos.add(modelMapper.map(post.getPublicacion(), PublicacionResponseDto.class));
         });
 
-        response.setHijos(hijoResponseDtos);
-        response.setComentarios(comentarioResponseDtos);
         response.setPublicaciones_likeadas(publicacionResponseDtos);
-        return modelMapper.map(padre, PadreSelfResponseDto.class);
+        return response;
     }
 
     public void deletePadre(Long id) throws AccessDeniedException {
