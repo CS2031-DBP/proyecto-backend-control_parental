@@ -35,9 +35,9 @@ public class PadreRepositoryTest extends AbstractContainerBaseTest {
     @BeforeEach
     public void setUp() {
         padre1 = new Padre();
-        padre1.setNombre("Juan");
-        padre1.setApellido("Perez");
-        padre1.setEmail("juan.perez@example.com");
+        padre1.setNombre("Jorge");
+        padre1.setApellido("Rios");
+        padre1.setEmail("jrios@utec.edu.pe");
         padre1.setPassword("password123");
         padre1.setPhoneNumber("123456789");
         padre1.setRole(Role.PADRE);
@@ -46,9 +46,9 @@ public class PadreRepositoryTest extends AbstractContainerBaseTest {
         entityManager.persist(padre1);
 
         padre2 = new Padre();
-        padre2.setNombre("Carlos");
-        padre2.setApellido("Gomez");
-        padre2.setEmail("carlos.gomez@example.com");
+        padre2.setNombre("Jesus");
+        padre2.setApellido("Bellido");
+        padre2.setEmail("jbellido@utec.edu.pe");
         padre2.setPassword("password123");
         padre2.setPhoneNumber("987654321");
         padre2.setRole(Role.PADRE);
@@ -63,8 +63,8 @@ public class PadreRepositoryTest extends AbstractContainerBaseTest {
     public void createPadre() {
         Padre padre = new Padre();
         padre.setNombre("Maria");
-        padre.setApellido("Lopez");
-        padre.setEmail("maria.lopez@example.com");
+        padre.setApellido("Hilda");
+        padre.setEmail("mhilda@utec.edu.pe");
         padre.setPassword("password123");
         padre.setPhoneNumber("123123123");
         padre.setRole(Role.PADRE);
@@ -73,15 +73,15 @@ public class PadreRepositoryTest extends AbstractContainerBaseTest {
         Optional<Padre> retrievedPadre = padreRepository.findById(savedPadre.getId());
         assertTrue(retrievedPadre.isPresent());
         assertEquals("Maria", retrievedPadre.get().getNombre());
-        assertEquals("Lopez", retrievedPadre.get().getApellido());
+        assertEquals("Hilda", retrievedPadre.get().getApellido());
     }
 
     @Test
     public void testFindByEmail() {
-        Optional<Padre> optionalPadre = padreRepository.findByEmail("juan.perez@example.com");
+        Optional<Padre> optionalPadre = padreRepository.findByEmail("jrios@utec.edu.pe");
         assertTrue(optionalPadre.isPresent());
-        assertEquals("Juan", optionalPadre.get().getNombre());
-        assertEquals("Perez", optionalPadre.get().getApellido());
+        assertEquals("Jorge", optionalPadre.get().getNombre());
+        assertEquals("Rios", optionalPadre.get().getApellido());
     }
 
     @Test
@@ -93,8 +93,8 @@ public class PadreRepositoryTest extends AbstractContainerBaseTest {
     @Test
     public void addHijoToPadre() {
         Hijo hijo = new Hijo();
-        hijo.setNombre("Pepito");
-        hijo.setApellido("Lopez");
+        hijo.setNombre("Chapulin");
+        hijo.setApellido("Colorado");
         hijo.setPadre(padre1);
 
         padre1.getHijos().add(hijo);
@@ -105,7 +105,7 @@ public class PadreRepositoryTest extends AbstractContainerBaseTest {
 
         Padre retrievedPadre = padreRepository.findById(padre1.getId()).orElseThrow();
         assertEquals(1, retrievedPadre.getHijos().size());
-        assertEquals("Pepito", retrievedPadre.getHijos().get(0).getNombre());
-        assertEquals("Lopez", retrievedPadre.getHijos().get(0).getApellido());
+        assertEquals("Chapulin", retrievedPadre.getHijos().get(0).getNombre());
+        assertEquals("Colorado", retrievedPadre.getHijos().get(0).getApellido());
     }
 }
