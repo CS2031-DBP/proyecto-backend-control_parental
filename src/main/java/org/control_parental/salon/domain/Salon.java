@@ -8,6 +8,7 @@ import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.publicacion.domain.Publicacion;
 import org.control_parental.profesor.domain.Profesor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -22,14 +23,14 @@ public class Salon {
     String nombre;
 
     @ManyToMany(mappedBy = "salones")
-    List<Profesor> profesores;
+    List<Profesor> profesores = new ArrayList<>();
 
     @OneToMany
-    List<Publicacion> publicaciones;
+    List<Publicacion> publicaciones = new ArrayList<>();
 
     @JsonManagedReference
     @OneToMany(mappedBy = "salon")
-    List<Hijo> hijos;
+    List<Hijo> hijos = new ArrayList<>();
 
     void addStudent(Hijo hijo) {
         hijos.add(hijo);
