@@ -57,7 +57,15 @@ public class ProfesorService {
         }
         profesor.setRole(Role.PROFESOR);
         profesor.setPassword(passwordEncoder.encode(newProfesorDTO.getPassword()));
+        applicationEventPublisher.publishEvent(
+                new NuevoUsuarioEmailEvent(this, profesor.getEmail(),
+                        newProfesorDTO.getPassword(),
+                        profesor.getNombre(),
+                        profesor.getRole().toString())
+        );
+
         profesorRepository.save(profesor);
+
         return "/"+profesor.getId();
     }
 
