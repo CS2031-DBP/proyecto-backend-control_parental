@@ -1,8 +1,7 @@
-package org.control_parental.profesor.infraestructure;
+package org.control_parental.profesor.infrastructure;
 
 import org.control_parental.configuration.TestConfig;
 import org.control_parental.profesor.domain.Profesor;
-import org.control_parental.profesor.infrastructure.ProfesorRepository;
 import org.control_parental.usuario.domain.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

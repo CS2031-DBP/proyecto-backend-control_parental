@@ -1,12 +1,9 @@
-package org.control_parental.hijo.infraestructure;
+package org.control_parental.hijo.infrastructure;
 
 import org.control_parental.AbstractContainerBaseTest;
 import org.control_parental.configuration.TestConfig;
 import org.control_parental.hijo.domain.Hijo;
-import org.control_parental.hijo.infrastructure.HijoRepository;
-import org.control_parental.padre.domain.Padre;
 import org.control_parental.salon.domain.Salon;
-import org.control_parental.usuario.domain.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,8 +67,10 @@ public class HijoRepositoryTest extends AbstractContainerBaseTest {
         hijo.setNombre("Carlos");
         hijo.setApellido("Lopez");
         hijo.setSalon(salon);
+
         Hijo savedHijo = hijoRepository.save(hijo);
         Optional<Hijo> retrievedHijo = hijoRepository.findById(savedHijo.getId());
+
         assertTrue(retrievedHijo.isPresent());
         assertEquals("Carlos", retrievedHijo.get().getNombre());
         assertEquals("Lopez", retrievedHijo.get().getApellido());
@@ -80,6 +79,7 @@ public class HijoRepositoryTest extends AbstractContainerBaseTest {
     @Test
     public void testFindByNombreAndApellido() {
         Optional<Hijo> optionalHijo = hijoRepository.findByNombreAndApellido("Peppa", "Pig");
+
         assertTrue(optionalHijo.isPresent());
         assertEquals("Peppa", optionalHijo.get().getNombre());
         assertEquals("Pig", optionalHijo.get().getApellido());
@@ -88,6 +88,7 @@ public class HijoRepositoryTest extends AbstractContainerBaseTest {
     @Test
     public void shouldDelete() {
         hijoRepository.deleteById(hijo1.getId());
+
         assertTrue(hijoRepository.findById(hijo1.getId()).isEmpty());
     }
 }

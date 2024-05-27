@@ -1,10 +1,9 @@
-package org.control_parental.padre.infraestructure;
+package org.control_parental.padre.infrastructure;
 
 import org.control_parental.AbstractContainerBaseTest;
 import org.control_parental.configuration.TestConfig;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.padre.domain.Padre;
-import org.control_parental.padre.infrastructure.PadreRepository;
 import org.control_parental.usuario.domain.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
