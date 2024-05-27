@@ -35,14 +35,14 @@ public class SalonRepositoryTest extends AbstractContainerBaseTest {
     @BeforeEach
     public void setUp() {
         salon1 = new Salon();
-        salon1.setNombre("Sala 1");
+        salon1.setNombre("Salon 1");
         salon1.setHijos(new ArrayList<>()); // inicializa con lista de hijos
         salon1.setProfesores(new ArrayList<>()); // inicializa con lista de profesores
         salon1.setPublicaciones(new ArrayList<>()); // inicializa con lista de publicaciones
         entityManager.persist(salon1);
 
         salon2 = new Salon();
-        salon2.setNombre("Sala 2");
+        salon2.setNombre("Salon 2");
         salon2.setHijos(new ArrayList<>());
         salon2.setProfesores(new ArrayList<>());
         salon2.setPublicaciones(new ArrayList<>());
@@ -54,18 +54,18 @@ public class SalonRepositoryTest extends AbstractContainerBaseTest {
     @Test
     public void createSalon() {
         Salon salon = new Salon();
-        salon.setNombre("Sala 3");
+        salon.setNombre("Salon 3");
         Salon savedSalon = salonRepository.save(salon);
         Optional<Salon> retrievedSalon = salonRepository.findById(savedSalon.getId());
         assertTrue(retrievedSalon.isPresent());
-        assertEquals("Sala 3", retrievedSalon.get().getNombre());
+        assertEquals("Salon 3", retrievedSalon.get().getNombre());
     }
 
     @Test
     public void testFindByNombre() {
-        Optional<Salon> optionalSalon = salonRepository.findByNombre("Sala 1");
+        Optional<Salon> optionalSalon = salonRepository.findByNombre("Salon 1");
         assertTrue(optionalSalon.isPresent());
-        assertEquals("Sala 1", optionalSalon.get().getNombre());
+        assertEquals("Salon 1", optionalSalon.get().getNombre());
     }
 
     @Test
@@ -96,9 +96,9 @@ public class SalonRepositoryTest extends AbstractContainerBaseTest {
     @Test
     public void addProfesorToSalon() {
         Profesor profesor = new Profesor();
-        profesor.setNombre("Mr. Smith");
-        profesor.setApellido("Smithson"); // Asignar un valor para apellido
-        profesor.setEmail("mr.smith@example.com"); // Asignar un valor para email
+        profesor.setNombre("Jorge");
+        profesor.setApellido("Rios");
+        profesor.setEmail("jrios@utec.edu.pe");
         profesor.setPassword("password123");
 
         salon1.getProfesores().add(profesor);  // no usar el método addProfesor manrea directa
@@ -110,7 +110,7 @@ public class SalonRepositoryTest extends AbstractContainerBaseTest {
 
         Salon retrievedSalon = salonRepository.findById(salon1.getId()).orElseThrow();
         assertEquals(1, retrievedSalon.getProfesores().size());
-        assertEquals("Mr. Smith", retrievedSalon.getProfesores().get(0).getNombre());
+        assertEquals("Jorge", retrievedSalon.getProfesores().get(0).getNombre());
     }
 
 }
