@@ -1,10 +1,8 @@
-package org.control_parental.publicacion.infraestructure;
+package org.control_parental.publicacion.infrastructure;
 
 import org.control_parental.AbstractContainerBaseTest;
 import org.control_parental.configuration.TestConfig;
 import org.control_parental.publicacion.domain.Publicacion;
-import org.control_parental.publicacion.domain.PublicacionService;
-import org.control_parental.publicacion.infrastructure.PublicacionRepository;
 import org.control_parental.salon.domain.Salon;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
