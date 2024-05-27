@@ -3,6 +3,7 @@ package org.control_parental.profesor.domain;
 import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.csv.CSVHelper;
 import org.control_parental.email.nuevaContraseña.NuevaContaseñaEmailEvent;
+import org.control_parental.email.nuevoUsuario.NuevoUsuarioEmailEvent;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.profesor.dto.NewProfesorDto;
