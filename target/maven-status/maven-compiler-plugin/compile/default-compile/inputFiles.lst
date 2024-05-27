@@ -30,6 +30,7 @@ C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\m
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\usuario\domain\Role.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\admin\infrastructure\AdminRepository.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\comentario\dto\ComentarioPublicacionDto.java
+C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\padre\dto\PadrePublicacionDto.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\email\nuevaContraseña\NuevaContaseñaEmailEvent.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\profesor\application\ProfesorController.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\events\AsyncConfig.java

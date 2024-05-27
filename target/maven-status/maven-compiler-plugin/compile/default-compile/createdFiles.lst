@@ -61,6 +61,7 @@ org\control_parental\hijo\domain\HijoService.class
 org\control_parental\email\EmailService.class
 org\control_parental\hijo\dto\ReducedHijoDto.class
 org\control_parental\email\nuevoUsuario\NuevoUsuarioEmailListener.class
+org\control_parental\padre\dto\PadrePublicacionDto.class
 org\control_parental\admin\infrastructure\AdminRepository.class
 org\control_parental\salon\domain\SalonService.class
 org\control_parental\padre\dto\PadreResponseDto.class
