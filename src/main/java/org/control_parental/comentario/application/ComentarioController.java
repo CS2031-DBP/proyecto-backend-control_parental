@@ -1,7 +1,6 @@
 package org.control_parental.comentario.application;
 
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import org.control_parental.comentario.domain.ComentarioService;
 import org.control_parental.comentario.dto.ComentarioResponseDto;
 import org.control_parental.comentario.dto.NewComentarioDto;
@@ -10,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.nio.file.AccessDeniedException;
 
 @RestController
@@ -26,8 +26,9 @@ public class ComentarioController {
     @PostMapping
     public ResponseEntity<Void> postComentario(@Valid @RequestBody NewComentarioDto newComentarioDto,
                                                @RequestParam Long PublicacionId) {
-        comentarioService.postComentario(newComentarioDto, PublicacionId);
-        return ResponseEntity.created(null).build();
+        String location =  comentarioService.postComentario(newComentarioDto, PublicacionId);
+        URI locationHeader = URI.create(location);
+        return ResponseEntity.created(locationHeader).build();
     }
 
 

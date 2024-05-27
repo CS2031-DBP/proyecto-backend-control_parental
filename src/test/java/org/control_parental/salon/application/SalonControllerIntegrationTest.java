@@ -102,7 +102,7 @@ public class SalonControllerIntegrationTest {
         padre1.setNombre("Laura");
         padre1.setApellido("Nagamine");
         padre1.setEmail("laura.nagamine@utec.edu.pe");
-        padre1.setPassword("laura123");
+        padre1.setPassword(passwordEncoder.encode("laura123"));
         padre1.setPhoneNumber("123456789");
         padre1.setRole(Role.PADRE);
         padreRepository.save(padre1);
@@ -111,7 +111,7 @@ public class SalonControllerIntegrationTest {
         padre2.setNombre("Michael");
         padre2.setApellido("Hinojosa");
         padre2.setEmail("michael.hinojosa@utec.edu.pe");
-        padre2.setPassword("michael123");
+        padre2.setPassword(passwordEncoder.encode("michael123"));
         padre2.setPhoneNumber("223456789");
         padre2.setRole(Role.PADRE);
         padreRepository.save(padre2);
@@ -153,7 +153,7 @@ public class SalonControllerIntegrationTest {
         salon.setPublicaciones(publicaciones);
     }
 
-    public String logIn() throws Exception{
+    public void logIn() throws Exception{
         AuthLoginRequest authLoginRequest = new AuthLoginRequest();
         authLoginRequest.setEmail("renato.garcia@utec.edu.pe");
         authLoginRequest.setPassword("renato123");
@@ -165,7 +165,6 @@ public class SalonControllerIntegrationTest {
 
         JSONObject jsonObject = new JSONObject(Objects.requireNonNull(test.getResponse().getContentAsString()));
         token = jsonObject.getString("token");
-        return token;
     }
 
     @Test
@@ -205,7 +204,7 @@ public class SalonControllerIntegrationTest {
 
         salonRepository.save(salon);
 
-        token = logIn();
+        logIn();
 
         mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}", salon.getId())
                         .header("Authorization", "Bearer " + token))
@@ -221,7 +220,7 @@ public class SalonControllerIntegrationTest {
 
         salonRepository.save(salon);
 
-        token = logIn();
+        logIn();
 
         mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}", 20L)
                         .header("Authorization", "Bearer " + token)
@@ -267,7 +266,7 @@ public class SalonControllerIntegrationTest {
     public void testAddNonexistentHijo() throws Exception {
         salonRepository.save(salon);
 
-        token = logIn();
+        logIn();
 
         mockMvc.perform(MockMvcRequestBuilders.patch("/salon/{idSalon}/hijo/{idHijo}", salon.getId(), 20L)
                         .header("Authorization", "Bearer " + token)
@@ -288,7 +287,7 @@ public class SalonControllerIntegrationTest {
     public void testGetHijos() throws Exception {
         salonRepository.save(salon);
 
-        token = logIn();
+        logIn();
 
         mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}/hijos", salon.getId())
                         .header("Authorization", "Bearer " + token)
@@ -311,7 +310,7 @@ public class SalonControllerIntegrationTest {
     public void testGetPublicaciones() throws Exception {
         salonRepository.save(salon);
 
-        token = logIn();
+        logIn();
 
         mockMvc.perform(MockMvcRequestBuilders.get("/salon/{id}/publicaciones", salon.getId())
                         .header("Authorization", "Bearer " + token)
@@ -361,7 +360,7 @@ public class SalonControllerIntegrationTest {
     public void testAddNonexistentProfesor() throws Exception {
         salonRepository.save(salon);
 
-        token = logIn();
+        logIn();
 
         mockMvc.perform(MockMvcRequestBuilders.patch("/salon/{idSalon}/profesor/{idProfesor}", salon.getId(), 20L)
                         .header("Authorization", "Bearer " + token)
