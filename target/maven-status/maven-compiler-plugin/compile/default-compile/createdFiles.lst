@@ -56,6 +56,7 @@ org\control_parental\salon\dto\SalonResponseDto.class
 org\control_parental\events\AsyncConfig.class
 org\control_parental\exceptions\ResourceAlreadyExistsException.class
 org\control_parental\auth\application\AuthController.class
+org\control_parental\hijo\dto\PadreHijoResponseDto.class
 org\control_parental\hijo\domain\HijoService.class
 org\control_parental\email\EmailService.class
 org\control_parental\hijo\dto\ReducedHijoDto.class
@@ -67,8 +68,10 @@ org\control_parental\auth\dto\AuthLoginRequest.class
 org\control_parental\salon\infrastructure\SalonRepository.class
 org\control_parental\comentario\domain\ComentarioService.class
 org\control_parental\email\nuevaPublicacion\PublicacionEmailListener.class
+org\control_parental\like\Infrastructure\LikeRepository.class
 org\control_parental\usuario\infrastructure\UsuarioRepository.class
 org\control_parental\GlobalExceptionHandler.class
+org\control_parental\like\Domain\Padre_Like.class
 org\control_parental\padre\domain\Padre.class
 org\control_parental\publicacion\application\PublicacionController.class
 org\control_parental\auth\dto\AuthJwtResponse.class

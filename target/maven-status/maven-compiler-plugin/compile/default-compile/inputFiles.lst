@@ -44,6 +44,8 @@ C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\m
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\hijo\domain\Hijo.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\configuration\JwtService.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\email\nuevaPublicacion\PublicacionEmailEvent.java
+C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\like\Domain\Padre_Like.java
+C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\like\Infrastructure\LikeRepository.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\admin\domain\AdminService.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\padre\dto\PadreResponseDto.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\hijo\domain\HijoService.java
@@ -51,6 +53,7 @@ C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\m
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\padre\dto\NewPadreDto.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\admin\domain\Admin.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\profesor\domain\ProfesorService.java
+C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\hijo\dto\PadreHijoResponseDto.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\padre\application\PadreController.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\admin\dto\NewAdminDto.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\salon\infrastructure\SalonRepository.java
