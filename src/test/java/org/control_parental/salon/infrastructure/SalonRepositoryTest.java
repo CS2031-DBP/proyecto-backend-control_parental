@@ -97,8 +97,8 @@ public class SalonRepositoryTest extends AbstractContainerBaseTest {
     public void addProfesorToSalon() {
         Profesor profesor = new Profesor();
         profesor.setNombre("Jorge");
-        profesor.setApellido("Rios"); // Asignar un valor para apellido
-        profesor.setEmail("jrios@utec.edu.pe"); // Asignar un valor para email
+        profesor.setApellido("Rios");
+        profesor.setEmail("jrios@utec.edu.pe");
         profesor.setPassword("password123");
 
         salon1.getProfesores().add(profesor);  // no usar el método addProfesor manrea directa
