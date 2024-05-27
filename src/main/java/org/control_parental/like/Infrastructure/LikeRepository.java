@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<Padre_Like, Long> {
     Optional<Padre_Like> findByPadre_IdAndPublicacion_Id(Long padreId, Long publicacionId);
+
+    Boolean existsByPadre_IdAndPublicacion_Id(Long padreId, Long publicacionId);
 }

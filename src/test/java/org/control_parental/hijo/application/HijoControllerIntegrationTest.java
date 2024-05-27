@@ -117,7 +117,7 @@ public class HijoControllerIntegrationTest {
         hijo.setPadre(padre);
     }
 
-    public String logIn() throws Exception{
+    public void logIn() throws Exception{
         AuthLoginRequest authLoginRequest = new AuthLoginRequest();
         authLoginRequest.setEmail("michael.hinojosa@utec.edu.pe");
         authLoginRequest.setPassword("123456");
@@ -129,14 +129,13 @@ public class HijoControllerIntegrationTest {
 
         JSONObject jsonObject = new JSONObject(Objects.requireNonNull(test.getResponse().getContentAsString()));
         token = jsonObject.getString("token");
-        return token;
     }
 
     @Test
     public void testGetStudentById() throws Exception {
         hijoRepository.save(hijo);
 
-        token = logIn();
+        logIn();
 
         mockMvc.perform(MockMvcRequestBuilders.get("/hijo/{id}", hijo.getId())
                         .header("Authorization", "Bearer " + token)
@@ -153,7 +152,7 @@ public class HijoControllerIntegrationTest {
     @Test
     public void testGetNonexistentStudent() throws Exception {
 
-        token = logIn();
+        logIn();
 
         mockMvc.perform(MockMvcRequestBuilders.get("/hijo/{id}", 20L)
                         .header("Authorization", "Bearer " + token)
@@ -247,7 +246,7 @@ public class HijoControllerIntegrationTest {
     @Test
     public void testGetPublicaciones() throws Exception {
 
-        token = logIn();
+        logIn();
 
         hijoRepository.save(hijo);
 

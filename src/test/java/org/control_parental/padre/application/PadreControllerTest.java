@@ -1,8 +1,12 @@
 package org.control_parental.padre.application;
 
 import jakarta.transaction.Transactional;
+import org.control_parental.comentario.domain.Comentario;
+import org.control_parental.comentario.infrastructure.ComentarioRepository;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.hijo.infrastructure.HijoRepository;
+import org.control_parental.like.Domain.Padre_Like;
+import org.control_parental.like.Infrastructure.LikeRepository;
 import org.control_parental.padre.domain.Padre;
 import org.control_parental.padre.dto.NewPadreDto;
 import org.control_parental.padre.infrastructure.PadreRepository;
@@ -10,7 +14,6 @@ import org.control_parental.profesor.domain.Profesor;
 import org.control_parental.profesor.infrastructure.ProfesorRepository;
 import org.control_parental.publicacion.domain.Publicacion;
 import org.control_parental.publicacion.infrastructure.PublicacionRepository;
-import org.control_parental.salon.domain.Salon;
 import org.control_parental.salon.infrastructure.SalonRepository;
 import org.control_parental.usuario.NewPasswordDto;
 import org.control_parental.usuario.domain.Role;
@@ -57,6 +60,12 @@ class PadreControllerTest {
     PublicacionRepository publicacionRepository;
 
     @Autowired
+    ComentarioRepository comentarioRepository;
+
+    @Autowired
+    LikeRepository likeRepository;
+
+    @Autowired
     ObjectMapper objectMapper;
 
     Profesor profesor;
@@ -67,9 +76,14 @@ class PadreControllerTest {
 
     Padre padre1;
 
-    Salon salon;
+    Comentario comentario;
 
     Publicacion publicacion;
+
+    Padre_Like padreLike;
+
+    LocalDateTime localDateTime;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -112,26 +126,39 @@ class PadreControllerTest {
         hijos.add(hijo2);
         padre1.setHijos(hijos);
 
+        localDateTime = LocalDateTime.now();
+
         publicacion = new Publicacion();
         publicacion.setDescripcion("Esta es una descripción");
         publicacion.setHijos(hijos);
         publicacion.setFoto("Esta es una foto");
         publicacion.setTitulo("Este es un titulo");
-        publicacion.setFecha(LocalDateTime.now());
+        publicacion.setFecha(localDateTime);
         publicacion.setLikes(0);
         publicacion.setProfesor(profesor);
         publicacionRepository.save(publicacion);
         List<Publicacion> publicaciones = new ArrayList<>();
         publicaciones.add(publicacion);
 
-        salon = new Salon();
-        salon.setNombre("Salon1");
+        comentario = new Comentario();
+        comentario.setFecha(localDateTime);
+        comentario.setContenido("Este es un comentario");
+        comentario.setPublicacion(publicacion);
+        comentarioRepository.save(comentario);
 
-        salon.setHijos(hijos);
+        List<Comentario> comentarios = new ArrayList<>();
+        comentarios.add(comentario);
 
-        salon.setProfesores(profesores);
+        padre1.setComentarios(comentarios);
 
-        salon.setPublicaciones(publicaciones);
+        padreLike = new Padre_Like();
+        padreLike.setPublicacion(publicacion);
+        likeRepository.save(padreLike);
+
+        List<Padre_Like> padreLikes = new ArrayList<>();
+        padreLikes.add(padreLike);
+
+        padre1.setPosts_likeados(padreLikes);
 
     }
 
@@ -216,6 +243,8 @@ class PadreControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.nombre").value("Laura"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.hijos[0].nombre").value("Eduardo"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.hijos[1].nombre").value("Mikel"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.comentarios[0].contenido").value("Este es un comentario"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.publicaciones_likeadas[0].descripcion").value("Esta es una descripción"))
                 .andExpect(status().isOk());
     }
 
