@@ -43,14 +43,14 @@ public class PadreService {
     @Autowired
     private UsuarioRepository<Usuario> usuarioRepository;
 
-
     @Autowired
     ApplicationEventPublisher applicationEventPublisher;
+
     @Autowired
     AuthorizationUtils authorizationUtils;
 
     public String savePadre(NewPadreDto newPadreDto) {
-        String enail = authorizationUtils.authenticateUser();
+        String email = authorizationUtils.authenticateUser();
 
         Padre padre = modelMapper.map(newPadreDto, Padre.class);
         if(usuarioRepository.findByEmail(newPadreDto.getEmail()).isPresent()) {
@@ -58,6 +58,7 @@ public class PadreService {
         }
         padre.setPassword(passwordEncoder.encode(newPadreDto.getPassword()));
         padre.setRole(Role.PADRE);
+
         applicationEventPublisher.publishEvent(
                 new NuevoUsuarioEmailEvent(this, padre.getEmail(),
                         newPadreDto.getPassword(),

@@ -24,17 +24,17 @@ public class ControlParentalApplication {
 		SpringApplication.run(ControlParentalApplication.class, args);
 	}
 
-	@Bean
-	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-		return args -> {
-
-			Admin admin = new Admin();
-			admin.setPassword(encoder.encode("password"));
-			admin.setEmail("admin@email.com");
-			admin.setRole(Role.ADMIN);
-			admin.setNombre("Admin");
-			admin.setApellido("Admin");
-			adminRepository.save(admin);
-		};
-	}
+//	@Bean
+//	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+//		return args -> {
+//
+//			Admin admin = new Admin();
+//			admin.setPassword(encoder.encode("password"));
+//			admin.setEmail("admin@email.com");
+//			admin.setRole(Role.ADMIN);
+//			admin.setNombre("Admin");
+//			admin.setApellido("Admin");
+//			adminRepository.save(admin);
+//		};
+//	}
 }
