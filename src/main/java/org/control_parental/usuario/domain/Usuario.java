@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.control_parental.comentario.domain.Comentario;
+import org.control_parental.nido.Domain.Nido;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -43,6 +44,10 @@ public class Usuario implements UserDetails {
 
     @OneToMany
     List<Comentario> comentarios = new ArrayList<>();
+
+    @JoinColumn(nullable = false)
+    @ManyToOne
+    Nido nido;
 
     @Transient
     private String rolePrefix = "ROLE_";

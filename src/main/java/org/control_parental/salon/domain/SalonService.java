@@ -1,5 +1,7 @@
 package org.control_parental.salon.domain;
 
+import org.control_parental.admin.domain.Admin;
+import org.control_parental.admin.infrastructure.AdminRepository;
 import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.email.nuevoSalon.AgregacionHijoSalonEmailEvent;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
@@ -34,6 +36,9 @@ public class SalonService {
     private HijoRepository hijoRepository;
 
     @Autowired
+    private AdminRepository adminRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
   
     @Autowired
@@ -47,9 +52,13 @@ public class SalonService {
 
     public String createSalon(NewSalonDTO newSalonDTO) {
         String email = authorizationUtils.authenticateUser();
+
+        Admin admin = adminRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("No se encontro al admin"));
+
         Optional<Salon> salon = salonRepository.findByNombre(newSalonDTO.getNombre());
         if (salon.isPresent()) throw new ResourceAlreadyExistsException("El salon ya existe");
         Salon salon1 = modelMapper.map(newSalonDTO, Salon.class);
+        salon1.setNido(admin.getNido());
         salonRepository.save(salon1);
       
         return "/" + salon1.getId();

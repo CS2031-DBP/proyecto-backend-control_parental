@@ -1,7 +1,10 @@
 package org.control_parental.hijo.domain;
 
+import org.control_parental.admin.domain.Admin;
+import org.control_parental.admin.infrastructure.AdminRepository;
 import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.csv.CSVHelper;
+import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.hijo.dto.HijoResponseDto;
 import org.control_parental.hijo.dto.NewHijoDto;
@@ -26,6 +29,9 @@ public class HijoService {
 
     @Autowired
     private PadreRepository padreRepository;
+
+    @Autowired
+    private AdminRepository adminRepository;
 
     @Autowired
     ModelMapper modelMapper;
@@ -60,11 +66,12 @@ public class HijoService {
     public String createStudent(NewHijoDto newHijoDto, Long idPadre){
 
         String email = authorizationUtils.authenticateUser();
-    
+
         Padre padre = padreRepository.findById(idPadre).orElseThrow(() -> new ResourceNotFoundException("El padre no fue encontrado"));
         Hijo hijo = modelMapper.map(newHijoDto, Hijo.class);
         hijo.setPadre(padre);
         padre.addHijo(hijo);
+        hijo.setNido(padre.getNido());
 
         hijoRepository.save(hijo);
         padreRepository.save(padre);

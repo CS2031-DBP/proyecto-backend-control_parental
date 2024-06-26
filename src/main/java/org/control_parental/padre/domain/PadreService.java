@@ -1,5 +1,7 @@
 package org.control_parental.padre.domain;
 
+import org.control_parental.admin.domain.Admin;
+import org.control_parental.admin.infrastructure.AdminRepository;
 import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.csv.CSVHelper;
 import org.control_parental.email.nuevaContraseña.NuevaContaseñaEmailEvent;
@@ -34,6 +36,10 @@ import java.util.Objects;
 public class PadreService {
     @Autowired
     PadreRepository padreRepository;
+
+    @Autowired
+    AdminRepository adminRepository;
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -52,12 +58,15 @@ public class PadreService {
     public String savePadre(NewPadreDto newPadreDto) {
         String email = authorizationUtils.authenticateUser();
 
+        Admin admin = adminRepository.findByEmail(email).orElseThrow(()-> new ResourceAlreadyExistsException("No se encontro al administrador"));
+
         Padre padre = modelMapper.map(newPadreDto, Padre.class);
         if(usuarioRepository.findByEmail(newPadreDto.getEmail()).isPresent()) {
             throw new ResourceAlreadyExistsException("el usuario ya existe");
         }
         padre.setPassword(passwordEncoder.encode(newPadreDto.getPassword()));
         padre.setRole(Role.PADRE);
+        padre.setNido(admin.getNido());
 
         applicationEventPublisher.publishEvent(
                 new NuevoUsuarioEmailEvent(this, padre.getEmail(),
