@@ -1,3 +1,4 @@
+C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\nido\Application\NidoController.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\hijo\dto\NewHijoDto.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\admin\application\AdminController.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\configuration\JwtAuthenticationFilter.java
@@ -12,6 +13,7 @@ C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\m
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\padre\dto\PadreSelfResponseDto.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\email\EmailService.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\comentario\application\ComentarioController.java
+C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\nido\Domain\Nido.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\salon\domain\Salon.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\usuario\application\UsuarioController.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\hijo\dto\HijoResponseDto.java
@@ -22,6 +24,7 @@ C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\m
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\email\nuevaContraseña\NuevaContraseñaEmailListener.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\usuario\domain\UsuarioService.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\configuration\Util.java
+C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\nido\Infrastructure\NidoRepository.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\auth\domain\AuthService.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\auth\application\AuthController.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\usuario\domain\Usuario.java
@@ -33,6 +36,7 @@ C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\m
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\padre\dto\PadrePublicacionDto.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\email\nuevaContraseña\NuevaContaseñaEmailEvent.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\profesor\application\ProfesorController.java
+C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\email\codigoVerificacion\CodigoVerificacionEmailListener.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\events\AsyncConfig.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\comentario\infrastructure\ComentarioRepository.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\padre\domain\Padre.java
@@ -52,6 +56,7 @@ C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\m
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\hijo\domain\HijoService.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\salon\application\SalonController.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\padre\dto\NewPadreDto.java
+C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\nido\Domain\NidoService.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\admin\domain\Admin.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\profesor\domain\ProfesorService.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\hijo\dto\PadreHijoResponseDto.java
@@ -73,11 +78,13 @@ C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\m
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\usuario\infrastructure\UsuarioRepository.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\publicacion\dto\NewPublicacionDto.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\salon\domain\SalonService.java
+C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\email\codigoVerificacion\CodigoVerificacionEmailEvent.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\email\nuevaPublicacion\PublicacionEmailListener.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\profesor\dto\ProfesorSelfResponseDto.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\csv\CSVHelper.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\email\nuevoSalon\AgregacionHijoSalonEmailListener.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\auth\dto\AuthJwtResponse.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\comentario\domain\Comentario.java
+C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\configuration\RandomCode.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\usuario\NewPasswordDto.java
 C:\Users\micha\Documents\UTEC\2024-1\DBP\proyecto-backend-control_parental\src\main\java\org\control_parental\comentario\dto\NewComentarioDto.java
