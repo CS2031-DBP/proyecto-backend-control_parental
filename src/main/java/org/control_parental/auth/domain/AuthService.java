@@ -4,6 +4,7 @@ import org.control_parental.admin.infrastructure.AdminRepository;
 import org.control_parental.auth.dto.AuthJwtResponse;
 import org.control_parental.auth.dto.AuthLoginRequest;
 import org.control_parental.configuration.JwtService;
+import org.control_parental.configuration.RandomCode;
 import org.control_parental.exceptions.IllegalArgumentException;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.padre.domain.Padre;
@@ -40,7 +41,14 @@ public class AuthService {
             throw new IllegalArgumentException("Incorrect Password");
         }
 
+        RandomCode randomCode = new RandomCode();
+
+//        String codigo = randomCode.generateRandomCode();
+//
+//        System.out.println(codigo);
+
         authJwtResponse.setToken(jwtService.generateToken(usuario));
+//        authJwtResponse.setCode(codigo);
         return authJwtResponse;
     }
 

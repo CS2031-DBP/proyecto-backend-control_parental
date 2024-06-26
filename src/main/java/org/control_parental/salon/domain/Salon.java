@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.control_parental.hijo.domain.Hijo;
+import org.control_parental.nido.Domain.Nido;
 import org.control_parental.publicacion.domain.Publicacion;
 import org.control_parental.profesor.domain.Profesor;
 
@@ -31,6 +32,9 @@ public class Salon {
     @JsonManagedReference
     @OneToMany(mappedBy = "salon")
     List<Hijo> hijos = new ArrayList<>();
+
+    @ManyToOne
+    Nido nido;
 
     void addStudent(Hijo hijo) {
         hijos.add(hijo);
