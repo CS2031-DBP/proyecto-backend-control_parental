@@ -13,8 +13,14 @@ import org.control_parental.padre.domain.Padre;
 import org.control_parental.padre.infrastructure.PadreRepository;
 import org.control_parental.publicacion.domain.Publicacion;
 import org.control_parental.publicacion.dto.PublicacionResponseDto;
+import org.control_parental.publicacion.infrastructure.PublicacionRepository;
+import org.control_parental.salon.domain.Salon;
+import org.control_parental.salon.infrastructure.SalonRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,6 +38,12 @@ public class HijoService {
 
     @Autowired
     private AdminRepository adminRepository;
+
+    @Autowired
+    private SalonRepository salonRepository;
+
+    @Autowired
+    private PublicacionRepository publicacionRepository;
 
     @Autowired
     ModelMapper modelMapper;
@@ -73,6 +85,7 @@ public class HijoService {
         padre.addHijo(hijo);
         hijo.setNido(padre.getNido());
 
+
         hijoRepository.save(hijo);
         padreRepository.save(padre);
 
@@ -91,16 +104,21 @@ public class HijoService {
         hijoRepository.deleteById(id);
     }
 
-    public List<PublicacionResponseDto> getPublicaciones(Long id) {
-        List<Publicacion> publicaciones = hijoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El hijo no fue encontrado")).getPublicaciones();
+    public List<PublicacionResponseDto> getPublicaciones(Long id, int page, int size) {
+        Hijo hijo = hijoRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("No se encontro al hijo"));
 
-        List<PublicacionResponseDto> publicacionesData = new ArrayList<>();
+        Pageable pageable = PageRequest.of(page, size);
 
-        for(Publicacion publicacion : publicaciones) {
-            publicacionesData.add(modelMapper.map(publicacion, PublicacionResponseDto.class));
-        }
+        Page<Publicacion> publicaciones = publicacionRepository.findAllByHijos(hijo, pageable);
 
-        return publicacionesData;
+        List<PublicacionResponseDto> response = new ArrayList<>();
+
+        publicaciones.forEach(publicacion -> {
+            PublicacionResponseDto res = modelMapper.map(publicacion, PublicacionResponseDto.class);
+            response.add(res);
+        });
+
+        return response;
     }
 
     public void updateStudent(Long id, NewHijoDto newHijo) {
@@ -113,6 +131,7 @@ public class HijoService {
             hijo.setApellido(newHijo.getApellido());
         }
     }
+
 
 
 }

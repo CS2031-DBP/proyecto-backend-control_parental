@@ -46,10 +46,9 @@ public class HijoController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    
     @GetMapping("/{id}/publicaciones")
-    public ResponseEntity<List<PublicacionResponseDto>> getPublicaciones(@PathVariable Long id) {
-        return ResponseEntity.ok(hijoService.getPublicaciones(id));
+    public ResponseEntity<List<PublicacionResponseDto>> getPublicaciones(@PathVariable Long id, @RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(hijoService.getPublicaciones(id, page, size));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

@@ -23,6 +23,9 @@ import org.control_parental.salon.infrastructure.SalonRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
@@ -156,17 +159,29 @@ public class PublicacionService {
         publicacion.setHijos(hijos);
     }*/
 
-    public List<PublicacionResponseDto> findPostsBySalonId(Long salon_id) {
-        Salon salon = salonRepository.findById(salon_id).orElseThrow();
-        List<Publicacion> publicaciones = publicacionRepository.findAllBySalon(salon);
+    public List<PublicacionResponseDto> findPostsForPadre(int page, int size) {
+        String email = authorizationUtils.authenticateUser();
 
-        List<PublicacionResponseDto> posts_data = new ArrayList<>();
+        Padre padre = padreRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("No se encontro al padre"));
 
-        for(Publicacion publicacion : publicaciones) {
-            posts_data.add(modelMapper.map(publicacion, PublicacionResponseDto.class));
-        }
+        List<Hijo> hijos = padre.getHijos();
 
-        return posts_data;
+        List<Salon> salones = new ArrayList<>();
+
+        hijos.forEach(hijo ->
+                salones.add(hijo.getSalon()));
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Publicacion> publicaciones = publicacionRepository.findAllBySalonIn(salones, pageable);
+
+        List<PublicacionResponseDto> response = new ArrayList<>();
+        publicaciones.forEach(publicacion -> {
+            PublicacionResponseDto res = modelMapper.map(publicacion, PublicacionResponseDto.class);
+            response.add(res);
+        });
+
+        return response;
     }
 
     public void likePost(Long postId) {
