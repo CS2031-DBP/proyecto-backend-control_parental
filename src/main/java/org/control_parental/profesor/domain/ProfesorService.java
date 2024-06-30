@@ -1,5 +1,7 @@
 package org.control_parental.profesor.domain;
 
+import org.control_parental.admin.domain.Admin;
+import org.control_parental.admin.infrastructure.AdminRepository;
 import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.csv.CSVHelper;
 import org.control_parental.email.nuevaContraseña.NuevaContaseñaEmailEvent;
@@ -47,15 +49,21 @@ public class ProfesorService {
     @Autowired
     AuthorizationUtils authorizationUtils;
 
+    @Autowired
+    AdminRepository adminRepository;
+
 
     public String newProfesor(NewProfesorDto newProfesorDTO) {
         String email = authorizationUtils.authenticateUser();
+        Admin admin = adminRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("No se encontro al admin"));
+
         Profesor profesor = modelMapper.map(newProfesorDTO, Profesor.class);
 
         //if(newProfesorDTO.getEmail().equals("jorgerios@utec.edu.pe")) throw new ResourceAlreadyExistsException("El usuario ya existe");
         if(usuarioRepository.findByEmail(newProfesorDTO.getEmail()).isPresent()) {
             throw new ResourceAlreadyExistsException("El usuario ya existe");
         }
+        profesor.setNido(admin.getNido());
         profesor.setRole(Role.PROFESOR);
         profesor.setPassword(passwordEncoder.encode(newProfesorDTO.getPassword()));
         applicationEventPublisher.publishEvent(

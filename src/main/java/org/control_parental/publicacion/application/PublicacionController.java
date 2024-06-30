@@ -4,12 +4,14 @@ import org.control_parental.publicacion.dto.NewPublicacionDto;
 import org.control_parental.publicacion.dto.PublicacionResponseDto;
 import org.control_parental.publicacion.domain.PublicacionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/publicacion")
@@ -50,6 +52,11 @@ public class PublicacionController {
     public ResponseEntity<Void> quitarLike(@PathVariable Long postId) {
         publicacionService.deLikePost(postId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PublicacionResponseDto>> getPublicaciones(@RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(publicacionService.findPostsForPadre(page, size));
     }
 
     /*@PatchMapping("/{id}")

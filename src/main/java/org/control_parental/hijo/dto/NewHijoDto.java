@@ -21,6 +21,7 @@ public class NewHijoDto {
 
     String email;
 
+
     public static NewHijoDto parse(CSVRecord record) {
         return new NewHijoDto(record.get("Nombre"), record.get("Apellido"), record.get("Email"));
     }
