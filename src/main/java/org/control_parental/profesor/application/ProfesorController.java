@@ -32,6 +32,14 @@ public class ProfesorController {
     public ResponseEntity<ProfesorResponseDto> getSmallDetailProfesor(@PathVariable Long id) {
         return ResponseEntity.ok(profesorService.getProfesorRepsonseDto(id));
     }
+    @GetMapping("/salon/{salonId}")
+    public ResponseEntity<List<ProfesorResponseDto>> getAllProfesoresBySalon(@PathVariable Long salonId) {
+        return ResponseEntity.ok(profesorService.getProfessorBySalon(salonId));
+    }
+    @GetMapping("/all")
+    public ResponseEntity<List<ProfesorResponseDto>> getAllProfessors(@RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(profesorService.getAllProfesores(page, size));
+    }
 
     @PreAuthorize("hasRole('ROLE_PROFESOR') or hasRole('ROLE_ADMIN')")
     @GetMapping("/me")

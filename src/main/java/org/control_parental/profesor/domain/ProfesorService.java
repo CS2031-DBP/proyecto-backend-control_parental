@@ -13,6 +13,8 @@ import org.control_parental.profesor.dto.ProfesorResponseDto;
 import org.control_parental.profesor.dto.ProfesorSelfResponseDto;
 import org.control_parental.profesor.infrastructure.ProfesorRepository;
 import org.control_parental.publicacion.domain.Publicacion;
+import org.control_parental.salon.domain.Salon;
+import org.control_parental.salon.infrastructure.SalonRepository;
 import org.control_parental.usuario.NewPasswordDto;
 import org.control_parental.usuario.domain.Role;
 import org.control_parental.usuario.domain.Usuario;
@@ -20,6 +22,9 @@ import org.control_parental.usuario.infrastructure.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,6 +56,9 @@ public class ProfesorService {
 
     @Autowired
     AdminRepository adminRepository;
+
+    @Autowired
+    SalonRepository salonRepository;
 
 
     public String newProfesor(NewProfesorDto newProfesorDTO) {
@@ -136,6 +144,34 @@ public class ProfesorService {
             newProfesores.add(nuevoProfesor);
         });
         profesorRepository.saveAll(newProfesores);
+    }
+
+    public List<ProfesorResponseDto> getProfessorBySalon(Long SalonId) {
+        String email = authorizationUtils.authenticateUser();
+        Salon salon = salonRepository.findById(SalonId).orElseThrow(()-> new ResourceNotFoundException("No existe este salon"));
+
+        List<Profesor> profesores = profesorRepository.findAllBySalones(salon);
+        List<ProfesorResponseDto> responseDtos = new ArrayList<>();
+        profesores.forEach(profesor -> {
+            ProfesorResponseDto prof = modelMapper.map(profesor, ProfesorResponseDto.class);
+            responseDtos.add(prof);
+        });
+
+        return responseDtos;
+
+    }
+
+    public List<ProfesorResponseDto> getAllProfesores(int page, int size){
+        String email = authorizationUtils.authenticateUser();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Profesor> profesoresPage = profesorRepository.findAll(pageable);
+
+        List<ProfesorResponseDto> response = new ArrayList<>();
+        profesoresPage.forEach(profesor -> {
+            ProfesorResponseDto res = modelMapper.map(profesor, ProfesorResponseDto.class);
+            response.add(res);
+        });
+        return response;
     }
 
 }

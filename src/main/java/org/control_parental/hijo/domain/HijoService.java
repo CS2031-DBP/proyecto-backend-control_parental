@@ -68,11 +68,28 @@ public class HijoService {
         hijoRepository.saveAll(newHijos);
     }
 
-    public List<HijoResponseDto> getHijos() {
-        List<HijoResponseDto> newHijos = new ArrayList<>();
-        List<Hijo> hijos = hijoRepository.findAll();
-        hijos.forEach(hijo -> newHijos.add(modelMapper.map(hijo, HijoResponseDto.class)));
-        return newHijos;
+    public List<HijoResponseDto> getAllStudents(int page, int size) {
+        String email = authorizationUtils.authenticateUser();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Hijo> hijos = hijoRepository.findAll(pageable);
+
+        List<HijoResponseDto> responseDtos = new ArrayList<>();
+        hijos.forEach(hijo -> responseDtos.add(modelMapper.map(hijo, HijoResponseDto.class)));
+
+        return responseDtos;
+    }
+
+    public List<HijoResponseDto> getStudentsBySalon(Long salonId, int page, int size) {
+        String email = authorizationUtils.authenticateUser();
+        Salon salon = salonRepository.findById(salonId).orElseThrow(()-> new ResourceNotFoundException("El salon no fue encontrado"));
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Hijo> hijos = hijoRepository.findAllBySalon(salon, pageable);
+
+        List<HijoResponseDto> responseDtos = new ArrayList<>();
+        hijos.forEach(hijo -> responseDtos.add(modelMapper.map(hijo, HijoResponseDto.class)));
+
+        return responseDtos;
     }
 
     public String createStudent(NewHijoDto newHijoDto, Long idPadre){

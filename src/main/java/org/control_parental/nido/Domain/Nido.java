@@ -1,5 +1,6 @@
 package org.control_parental.nido.Domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class Nido {
     private String name;
 
     @OneToOne
+    @JsonIgnore
     private Admin admin;
 
     @OneToMany(mappedBy = "nido")

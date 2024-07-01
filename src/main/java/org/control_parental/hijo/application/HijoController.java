@@ -31,6 +31,17 @@ public class HijoController {
         return ResponseEntity.ok(hijoService.getStudentById(id));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<HijoResponseDto>> getAllStudents(@RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(hijoService.getAllStudents(page, size));
+    }
+
+    @GetMapping("/salon/{salonId}")
+    public ResponseEntity<List<HijoResponseDto>> getStudentsBySalon(@PathVariable Long salonId, @RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(hijoService.getStudentsBySalon(salonId, page, size));
+    }
+
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<Void> createStudent(@Valid @RequestBody NewHijoDto newHijoDto,

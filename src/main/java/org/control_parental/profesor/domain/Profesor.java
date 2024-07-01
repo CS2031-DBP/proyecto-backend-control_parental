@@ -24,4 +24,6 @@ public class Profesor extends Usuario {
 
     public void addSalon(Salon salon) {salones.add(salon);}
 
+    public void removeSalon(Salon salon) {salones.remove(salon);}
+
 }
