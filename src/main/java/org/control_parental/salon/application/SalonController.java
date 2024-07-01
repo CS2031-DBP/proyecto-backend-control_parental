@@ -59,6 +59,17 @@ public class SalonController {
         return ResponseEntity.ok().build();
     }
 
+    @PatchMapping("/{salonId}/quitarProfesor/{idProfesor}")
+    public ResponseEntity<Void> removeProfesor(@PathVariable Long salonId, @PathVariable Long idProfesor) {
+        salonService.deleteProfesorFromSalon(salonId, idProfesor);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{salonId}/quitarHijo/{hijoId}")
+    public ResponseEntity<Void> removeStudent(@PathVariable Long salonId, @PathVariable Long hijoId) {
+        salonService.deleteStudentFromSalon(salonId, hijoId);
+        return ResponseEntity.ok().build();
+    }
 }
 
 

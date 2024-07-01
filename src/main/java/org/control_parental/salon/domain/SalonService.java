@@ -112,5 +112,25 @@ public class SalonService {
         return publicacionesDto;
     }
 
+    public void deleteProfesorFromSalon(Long salonId, Long profesorId) {
+        String Email = authorizationUtils.authenticateUser();
+        Profesor profesor = profesorRepository.findById(profesorId).orElseThrow(()-> new ResourceNotFoundException("No se encontro al profesor"));
+        Salon salon = salonRepository.findById(salonId).orElseThrow(()-> new ResourceNotFoundException("No se encontro al salon"));
+        salon.removeProfesor(profesor);
+        profesor.removeSalon(salon);
+        salonRepository.save(salon);
+        profesorRepository.save(profesor);
+    }
+
+    public void deleteStudentFromSalon(Long salonId, Long studentId) {
+        String email = authorizationUtils.authenticateUser();
+        Hijo hijo = hijoRepository.findById(studentId).orElseThrow(()-> new ResourceNotFoundException("No se encontro al hijo"));
+        Salon salon = salonRepository.findById(salonId).orElseThrow(()-> new ResourceNotFoundException("No se encontro al salon"));
+        salon.removeStudent(hijo);
+        hijo.setSalon(null);
+        salonRepository.save(salon);
+        hijoRepository.save(hijo);
+    }
+
 
 }

@@ -42,4 +42,8 @@ public class Salon {
 
     void addProfesor(Profesor profesor) {profesores.add(profesor);}
 
+    void removeStudent(Hijo hijo) {hijos.remove(hijo);}
+
+    void removeProfesor(Profesor profesor) {profesores.remove(profesor);}
+
 }
