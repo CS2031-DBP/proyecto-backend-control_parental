@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PadreResponseDto {
 
+    Long id;
     String phoneNumber;
 
     String email;

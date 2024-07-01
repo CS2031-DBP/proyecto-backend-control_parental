@@ -20,6 +20,7 @@ public class SalonResponseDto {
     @NotNull
     String nombre;
 
+    Long id;
     @JsonIgnoreProperties("salones")
     List<ProfesorResponseDto> profesores;
 

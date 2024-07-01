@@ -4,7 +4,6 @@ import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.usuario.domain.Usuario;
 import org.control_parental.usuario.infrastructure.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,7 +36,7 @@ public class AuthorizationUtils {
                 ()-> new ResourceNotFoundException("Usuario no encontrado"));
         Usuario usuarioId = usuarioRepository.findById(id).orElseThrow(
                 ()-> new ResourceNotFoundException("Usuario no encontrado"));
-        if (!Objects.equals(usuarioEmail.getEmail(), usuarioId.getEmail()) || !Objects.equals(usuarioEmail.getRole().toString(), "ADMIN"))
+        if (!Objects.equals(usuarioEmail.getEmail(), usuarioId.getEmail()) && !Objects.equals(usuarioEmail.getRole().toString(), "ADMIN"))
             throw new AccessDeniedException("No estas autorizado");
     }
 }

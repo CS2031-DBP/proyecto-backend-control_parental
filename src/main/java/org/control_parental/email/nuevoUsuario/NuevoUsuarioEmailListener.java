@@ -21,7 +21,7 @@ public class NuevoUsuarioEmailListener {
                 event.getNombre() + ",\nUsted ha sido agregado como "
                 + event.role + " en Control Parental. \n\nSus credenciales son:\n\n" +
                         "Usuario: " + event.email
-                + "\nContraseña: " + event.password + ".\n\nRecuerde que puede cambiar su " +
+                + "\nContraseña: " + event.password + "\n\nRecuerde que puede cambiar su " +
                         "contraseña en cualquier momento dentro de la aplicacion!\n\n" +
                         "Un saludo, \n" +
                         "equipo de Control Parental"

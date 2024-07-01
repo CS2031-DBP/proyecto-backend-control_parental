@@ -5,9 +5,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class ControlParentalApplicationTests {
-
-	@Test
-	void contextLoads() {
-	}
+	// Elimine void contextLoads() --Michael
 
 }

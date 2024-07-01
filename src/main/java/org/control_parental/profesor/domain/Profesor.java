@@ -12,9 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @Entity
 public class Profesor extends Usuario {
 
@@ -25,5 +23,7 @@ public class Profesor extends Usuario {
     List<Salon> salones = new ArrayList<>();
 
     public void addSalon(Salon salon) {salones.add(salon);}
+
+    public void removeSalon(Salon salon) {salones.remove(salon);}
 
 }
