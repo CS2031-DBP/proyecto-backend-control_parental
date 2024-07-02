@@ -1,5 +1,6 @@
 package org.control_parental.salon.application;
 
+import org.apache.catalina.connector.Response;
 import org.control_parental.hijo.dto.ReducedHijoDto;
 import org.control_parental.publicacion.dto.PublicacionResponseDto;
 import org.control_parental.salon.dto.NewSalonDTO;
@@ -19,7 +20,6 @@ public class SalonController {
     @Autowired
     private SalonService salonService;
 
-
     @GetMapping("/{id}")
     public ResponseEntity<SalonResponseDto> getSalon(@PathVariable Long id) {
         return ResponseEntity.ok(salonService.getSalonById(id));
@@ -32,6 +32,10 @@ public class SalonController {
         return ResponseEntity.created(locationHeader).build();
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<SalonResponseDto>> getAllSalones(@RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(salonService.getAllSalones(page, size));
+    }
 
     @GetMapping("/{id}/hijos")
     public ResponseEntity<List<ReducedHijoDto>> getStudents(@PathVariable Long id) {

@@ -21,6 +21,9 @@ import org.control_parental.usuario.infrastructure.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -149,7 +152,44 @@ public class PadreService {
         padreRepository.save(padre);
     }
 
+    public List<PadreResponseDto> getAllPadres(int page, int size) {
+        String email = authorizationUtils.authenticateUser();
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Padre> padres = padreRepository.findAllBy(pageable);
+        List<PadreResponseDto> responseDtos = new ArrayList<>();
+        padres.forEach(padre -> {responseDtos.add(modelMapper.map(padre, PadreResponseDto.class));});
+
+        return responseDtos;
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
