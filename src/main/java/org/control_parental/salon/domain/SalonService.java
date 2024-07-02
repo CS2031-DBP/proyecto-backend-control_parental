@@ -20,6 +20,9 @@ import org.control_parental.salon.infrastructure.SalonRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -66,6 +69,18 @@ public class SalonService {
 
     public SalonResponseDto getSalonById(Long id) {
         return modelMapper.map(salonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El salon no fue encontrado")), SalonResponseDto.class);
+    }
+
+    public List<SalonResponseDto> getAllSalones(int page, int size) {
+        String email = authorizationUtils.authenticateUser();
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Salon> salones = salonRepository.findAllBy(pageable);
+        List<SalonResponseDto> responseDtos = new ArrayList<>();
+        salones.forEach(salon -> {responseDtos.add(modelMapper.map(salon, SalonResponseDto.class));});
+
+        return responseDtos;
+
     }
 
     public void addHijo(Long idSalon, Long idHijo) {

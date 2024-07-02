@@ -55,6 +55,12 @@ public class PadreController {
         PadreResponseDto padreResponseDto = padreService.getPadreById(id);
         return ResponseEntity.ok(padreResponseDto);
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<PadreResponseDto>> getAllPadres(@RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(padreService.getAllPadres(page, size));
+    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PADRE')")
     @GetMapping("/me")
     public ResponseEntity<PadreSelfResponseDto> getPadre() {
