@@ -3,6 +3,7 @@ package org.control_parental.padre.domain;
 import org.control_parental.admin.domain.Admin;
 import org.control_parental.admin.infrastructure.AdminRepository;
 import org.control_parental.configuration.AuthorizationUtils;
+import org.control_parental.configuration.RandomCode;
 import org.control_parental.csv.CSVHelper;
 import org.control_parental.email.nuevaContraseña.NuevaContaseñaEmailEvent;
 import org.control_parental.email.nuevoUsuario.NuevoUsuarioEmailEvent;
@@ -67,13 +68,16 @@ public class PadreService {
         if(usuarioRepository.findByEmail(newPadreDto.getEmail()).isPresent()) {
             throw new ResourceAlreadyExistsException("el usuario ya existe");
         }
-        padre.setPassword(passwordEncoder.encode(newPadreDto.getPassword()));
+
+        RandomCode rc = new RandomCode();
+        String password = rc.generatePassword();
+        padre.setPassword(passwordEncoder.encode(password));
         padre.setRole(Role.PADRE);
         padre.setNido(admin.getNido());
 
         applicationEventPublisher.publishEvent(
                 new NuevoUsuarioEmailEvent(this, padre.getEmail(),
-                        newPadreDto.getPassword(),
+                        password,
                         padre.getNombre(),
                         padre.getRole().toString())
         );
@@ -87,8 +91,17 @@ public class PadreService {
         padres.forEach(padre -> {
             Padre nuevoPadre = modelMapper.map(padre, Padre.class);
             nuevoPadre.setRole(Role.PADRE);
-            nuevoPadre.setPassword(passwordEncoder.encode(padre.getPassword()));
+            RandomCode rc = new RandomCode();
+            String password = rc.generatePassword();
+            nuevoPadre.setPassword(passwordEncoder.encode(password));
             newPadres.add(nuevoPadre);
+            applicationEventPublisher.publishEvent(
+                    new NuevoUsuarioEmailEvent(this,
+                            nuevoPadre.getEmail(),
+                            password,
+                            nuevoPadre.getNombre(),
+                            nuevoPadre.getRole().toString())
+            );
         }
         );
 

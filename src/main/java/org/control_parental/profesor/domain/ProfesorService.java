@@ -3,6 +3,7 @@ package org.control_parental.profesor.domain;
 import org.control_parental.admin.domain.Admin;
 import org.control_parental.admin.infrastructure.AdminRepository;
 import org.control_parental.configuration.AuthorizationUtils;
+import org.control_parental.configuration.RandomCode;
 import org.control_parental.csv.CSVHelper;
 import org.control_parental.email.nuevaContraseña.NuevaContaseñaEmailEvent;
 import org.control_parental.email.nuevoUsuario.NuevoUsuarioEmailEvent;
@@ -73,10 +74,13 @@ public class ProfesorService {
         }
         profesor.setNido(admin.getNido());
         profesor.setRole(Role.PROFESOR);
-        profesor.setPassword(passwordEncoder.encode(newProfesorDTO.getPassword()));
+
+        RandomCode rc = new RandomCode();
+        String password = rc.generatePassword();
+        profesor.setPassword(passwordEncoder.encode(password));
         applicationEventPublisher.publishEvent(
                 new NuevoUsuarioEmailEvent(this, profesor.getEmail(),
-                        newProfesorDTO.getPassword(),
+                        password,
                         profesor.getNombre(),
                         profesor.getRole().toString())
         );
@@ -140,8 +144,17 @@ public class ProfesorService {
         profesores.forEach(profesor -> {
             Profesor nuevoProfesor = modelMapper.map(profesor, Profesor.class);
             nuevoProfesor.setRole(Role.PROFESOR);
-            nuevoProfesor.setPassword(passwordEncoder.encode(profesor.getPassword()));
+            RandomCode rc = new RandomCode();
+            String password = rc.generatePassword();
+            nuevoProfesor.setPassword(passwordEncoder.encode(password));
             newProfesores.add(nuevoProfesor);
+            applicationEventPublisher.publishEvent(
+                    new NuevoUsuarioEmailEvent(this,
+                            nuevoProfesor.getEmail(),
+                            password,
+                            nuevoProfesor.getNombre(),
+                            nuevoProfesor.getRole().toString())
+            );
         });
         profesorRepository.saveAll(newProfesores);
     }

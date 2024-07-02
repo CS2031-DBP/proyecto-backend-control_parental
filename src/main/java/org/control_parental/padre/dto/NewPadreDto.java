@@ -29,15 +29,11 @@ public class NewPadreDto {
     String phoneNumber;
 
 //    @Size(min = 6, max = 50)
-    @NotNull
-    String password;
 
     public static NewPadreDto parse(CSVRecord record) {
         return new NewPadreDto(record.get("Nombre"),
                 record.get("Apellido"),
                 record.get("Email"),
-                record.get("phoneNumber"),
-                record.get("Password"));
-
+                record.get("phoneNumber"));
     }
 }
