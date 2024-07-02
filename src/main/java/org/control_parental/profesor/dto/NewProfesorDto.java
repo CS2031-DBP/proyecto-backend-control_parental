@@ -24,10 +24,8 @@ public class NewProfesorDto {
     @Email
     String email;
 
-    String password;
-
     public static NewProfesorDto parse(CSVRecord record) {
-        return new NewProfesorDto(record.get("Nombre"), record.get("Apellido"), record.get("Email"), record.get("Password"));
+        return new NewProfesorDto(record.get("Nombre"), record.get("Apellido"), record.get("Email"));
     }
 }
 
