@@ -1,13 +1,16 @@
 package org.control_parental.publicacion.application;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.control_parental.publicacion.dto.NewPublicacionDto;
 import org.control_parental.publicacion.dto.PublicacionResponseDto;
 import org.control_parental.publicacion.domain.PublicacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.nio.file.AccessDeniedException;
@@ -26,9 +29,11 @@ public class PublicacionController {
     }
 
     @PreAuthorize("hasRole('ROLE_PROFESOR') or hasRole('ROLE_ADMIN')")
-    @PostMapping
-    public ResponseEntity<Void> postPublicacion(@RequestBody NewPublicacionDto newPublicacion) {
-        String location = publicacionService.savePublicacion(newPublicacion);
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
+                            MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Void> postPublicacion(@RequestPart("publicacion") NewPublicacionDto publicacion,
+                                                @RequestPart("foto")MultipartFile foto) throws JsonProcessingException {
+        String location = publicacionService.savePublicacion(publicacion, foto);
         URI locationHeader = URI.create(location);
         return ResponseEntity.created(locationHeader).build();
     }

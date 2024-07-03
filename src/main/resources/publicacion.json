@@ -1,0 +1,9 @@
+{
+    "titulo" : "Paseo a Huampani!",
+    "descripcion" : "Llegamos de forma exitosa a Huampani!",
+    "foto" : "foto",
+    "hijos_id" : [
+        1
+    ],
+    "salonId" : 1
+}

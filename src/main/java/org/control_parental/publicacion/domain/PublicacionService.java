@@ -27,6 +27,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
@@ -63,18 +64,7 @@ public class PublicacionService {
     @Autowired
     private LikeRepository likeRepository;
 
-//    public void savePublicacion(NewPublicacionDto newPublicacionDto) {
-//        Publicacion newPublicacion = modelMapper.map(newPublicacionDto, Publicacion.class);
-//        List<Long> hijosid = newPublicacionDto.getHijos_id();
-//        hijosid.forEach(id -> {
-//            Hijo hijo = hijoRepository.findById(id).orElseThrow(
-//                    () -> new ResourceNotFoundException("El niño no existe"));
-//            newPublicacion.addStudent(hijo);
-//        });
-//        newPublicacion.setFecha(LocalDateTime.now());
-//        newPublicacion.setLikes(0);
-
-    public String savePublicacion(NewPublicacionDto newPublicacionDto) {
+    public String savePublicacion(NewPublicacionDto newPublicacionDto, MultipartFile foto) {
         //obtener quien lo esta publicando con Sprnig Scurity
         String email = authorizationUtils.authenticateUser();
 
