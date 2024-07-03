@@ -178,6 +178,7 @@ public class ProfesorService {
         String email = authorizationUtils.authenticateUser();
         Pageable pageable = PageRequest.of(page, size);
         Page<Profesor> profesoresPage = profesorRepository.findAll(pageable);
+        profesorRepository.count();
 
         List<ProfesorResponseDto> response = new ArrayList<>();
         profesoresPage.forEach(profesor -> {

@@ -63,16 +63,6 @@ public class PublicacionService {
     @Autowired
     private LikeRepository likeRepository;
 
-//    public void savePublicacion(NewPublicacionDto newPublicacionDto) {
-//        Publicacion newPublicacion = modelMapper.map(newPublicacionDto, Publicacion.class);
-//        List<Long> hijosid = newPublicacionDto.getHijos_id();
-//        hijosid.forEach(id -> {
-//            Hijo hijo = hijoRepository.findById(id).orElseThrow(
-//                    () -> new ResourceNotFoundException("El niño no existe"));
-//            newPublicacion.addStudent(hijo);
-//        });
-//        newPublicacion.setFecha(LocalDateTime.now());
-//        newPublicacion.setLikes(0);
 
     public String savePublicacion(NewPublicacionDto newPublicacionDto) {
         //obtener quien lo esta publicando con Sprnig Scurity
