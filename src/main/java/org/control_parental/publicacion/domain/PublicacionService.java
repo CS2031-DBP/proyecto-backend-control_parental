@@ -65,6 +65,7 @@ public class PublicacionService {
     private LikeRepository likeRepository;
 
     public String savePublicacion(NewPublicacionDto newPublicacionDto, MultipartFile foto) {
+
         //obtener quien lo esta publicando con Sprnig Scurity
         String email = authorizationUtils.authenticateUser();
 
