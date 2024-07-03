@@ -6,6 +6,7 @@ import org.control_parental.usuario.domain.Usuario;
 
 
 @Entity
+@Data
 public class Admin extends Usuario {
 
 }

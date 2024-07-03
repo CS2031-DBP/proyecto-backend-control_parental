@@ -79,7 +79,7 @@ public class ProfesorController {
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasRole('ROLE_PROFESOR')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(value = "/csv", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Void> saveCscProfesores(@RequestParam("file") MultipartFile file) throws IOException {
         if (CSVHelper.hasCSVFormat(file)) {

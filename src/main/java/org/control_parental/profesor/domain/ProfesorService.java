@@ -139,7 +139,11 @@ public class ProfesorService {
     }
 
     public void saveCsvProfesores(MultipartFile file) throws IOException {
+        String email = authorizationUtils.authenticateUser();
+        Admin admin = adminRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("el admin no fue encontrado"));
+
         List<NewProfesorDto> profesores = CSVHelper.csvToProfesor(file.getInputStream());
+
         List<Profesor> newProfesores = new ArrayList<>();
         profesores.forEach(profesor -> {
             Profesor nuevoProfesor = modelMapper.map(profesor, Profesor.class);
@@ -147,6 +151,7 @@ public class ProfesorService {
             RandomCode rc = new RandomCode();
             String password = rc.generatePassword();
             nuevoProfesor.setPassword(passwordEncoder.encode(password));
+            nuevoProfesor.setNido(admin.getNido());
             newProfesores.add(nuevoProfesor);
             applicationEventPublisher.publishEvent(
                     new NuevoUsuarioEmailEvent(this,
