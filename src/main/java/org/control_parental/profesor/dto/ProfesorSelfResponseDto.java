@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.control_parental.comentario.dto.ComentarioResponseDto;
 import org.control_parental.publicacion.dto.PublicacionResponseDto;
+import org.control_parental.salon.dto.ReducedSalonDto;
 import org.control_parental.salon.dto.SalonResponseDto;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class ProfesorSelfResponseDto {
     String apellido;
 
     @JsonIgnoreProperties("profesores")
-    List<SalonResponseDto> salones;
+    List<ReducedSalonDto> salones;
 
     @JsonIgnoreProperties("profesor")
     List<ComentarioResponseDto> comentarios;
