@@ -27,6 +27,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
@@ -63,8 +64,8 @@ public class PublicacionService {
     @Autowired
     private LikeRepository likeRepository;
 
+    public String savePublicacion(NewPublicacionDto newPublicacionDto, MultipartFile foto) {
 
-    public String savePublicacion(NewPublicacionDto newPublicacionDto) {
         //obtener quien lo esta publicando con Sprnig Scurity
         String email = authorizationUtils.authenticateUser();
 

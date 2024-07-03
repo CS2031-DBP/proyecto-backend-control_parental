@@ -20,4 +20,5 @@ public interface ProfesorRepository extends UsuarioRepository<Profesor> {
     Page<Profesor> findAll(Pageable pageable);
 
 
+
 }
