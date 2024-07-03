@@ -86,6 +86,9 @@ public class PadreService {
     }
 
     public void savePadresCsv(MultipartFile file) throws IOException {
+        String email = authorizationUtils.authenticateUser();
+        Admin admin = adminRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Admin no encontrado"));
+
         List<NewPadreDto> padres = CSVHelper.csvToPadres(file.getInputStream());
         List<Padre> newPadres = new ArrayList<>();
         padres.forEach(padre -> {
@@ -94,6 +97,7 @@ public class PadreService {
             RandomCode rc = new RandomCode();
             String password = rc.generatePassword();
             nuevoPadre.setPassword(passwordEncoder.encode(password));
+            nuevoPadre.setNido(admin.getNido());
             newPadres.add(nuevoPadre);
             applicationEventPublisher.publishEvent(
                     new NuevoUsuarioEmailEvent(this,
