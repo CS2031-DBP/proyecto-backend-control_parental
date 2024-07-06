@@ -2,8 +2,10 @@ package org.control_parental.configuration;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.BasicSessionCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,17 +44,24 @@ public class Util {
 
     @Value("${cloud.aws.region.static}")
     private String region;
+
+    @Value("${cloud.aws.credentials.token}")
+    private String token;
     @Bean
     public AmazonS3 getAmazonS3Cient() {
 
 
-        final BasicAWSCredentials basicAWSCredentials = new BasicAWSCredentials(accesKey, secretKey);
+        final BasicSessionCredentials basicSessionCredentials = new BasicSessionCredentials(accesKey, secretKey, token);
 
-        return AmazonS3ClientBuilder
+
+        AmazonS3 s3 = AmazonS3ClientBuilder
                 .standard()
                 .withRegion(Regions.fromName(region))
-                .withCredentials(new AWSStaticCredentialsProvider(basicAWSCredentials))
+                .withCredentials(new AWSStaticCredentialsProvider(basicSessionCredentials))
                 .build();
+
+        return s3;
+
     }
 
 

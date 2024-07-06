@@ -62,7 +62,8 @@ public class PublicacionService {
 
     @Autowired
     private AuthorizationUtils authorizationUtils;
-
+    @Autowired
+    private S3 cliente;
     @Autowired
     private PadreRepository padreRepository;
 
@@ -77,6 +78,12 @@ public class PublicacionService {
 
     @Transactional
     public String savePublicacion(NewPublicacionDto newPublicacionDto, MultipartFile foto) throws IOException {
+
+        final File file = cliente.convertMultiPartFileToFile(foto);
+        String fileName = cliente.uploadFileToS3Bucket(bucketName, file);
+        file.deleteOnExit();
+
+        String URI = String.format("https://s3.%s.amazonaws.com/%s%s", bucketRegion, bucketName, fileName);
 
         //obtener quien lo esta publicando con Sprnig Scurity
         String email = authorizationUtils.authenticateUser();
@@ -95,6 +102,7 @@ public class PublicacionService {
         newPublicacion.setSalon(salon);
         newPublicacion.setFecha(LocalDateTime.now());
         newPublicacion.setLikes(0);
+        newPublicacion.setFoto(URI);
 
         newPublicacionDto.getHijos_id().forEach(hijo_id -> {
             Optional<Hijo> hijo = hijoRepository.findById(hijo_id);
@@ -112,13 +120,7 @@ public class PublicacionService {
         newPublicacion.setHijos(hijos);
         // ------------------- Foto -------------------------
 
-        S3 cliente = new S3();
-        final File file = cliente.convertMultiPartFileToFile(foto);
-        String fileName = cliente.uploadFileToS3Bucket(bucketName, file);
-        file.deleteOnExit();
 
-        String URI = String.format("https://s3.%s.amazonaws.com/%s%s", bucketRegion, bucketName, fileName);
-        newPublicacion.setFoto(URI);
 
         profesor.getPublicaciones().add(newPublicacion);
         salon.getPublicaciones().add(newPublicacion);
