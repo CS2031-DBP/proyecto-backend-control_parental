@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.URI;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -32,7 +33,7 @@ public class PublicacionController {
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
                             MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Void> postPublicacion(@RequestPart("publicacion") NewPublicacionDto publicacion,
-                                                @RequestPart("foto")MultipartFile foto) throws JsonProcessingException {
+                                                @RequestPart("foto")MultipartFile foto) throws IOException {
         String location = publicacionService.savePublicacion(publicacion, foto);
         URI locationHeader = URI.create(location);
         return ResponseEntity.created(locationHeader).build();

@@ -1,5 +1,6 @@
 package org.control_parental.publicacion.domain;
 
+import jakarta.transaction.Transactional;
 import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.email.nuevaPublicacion.PublicacionEmailEvent;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
@@ -18,10 +19,12 @@ import org.control_parental.profesor.infrastructure.ProfesorRepository;
 import org.control_parental.publicacion.dto.NewPublicacionDto;
 import org.control_parental.publicacion.dto.PublicacionResponseDto;
 import org.control_parental.publicacion.infrastructure.PublicacionRepository;
+import org.control_parental.s3.S3;
 import org.control_parental.salon.domain.Salon;
 import org.control_parental.salon.infrastructure.SalonRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +32,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -64,7 +69,14 @@ public class PublicacionService {
     @Autowired
     private LikeRepository likeRepository;
 
-    public String savePublicacion(NewPublicacionDto newPublicacionDto, MultipartFile foto) {
+    @Value("${application.bucket.name}")
+    private String bucketName;
+
+    @Value("${cloud.aws.region.static}")
+    private String bucketRegion;
+
+    @Transactional
+    public String savePublicacion(NewPublicacionDto newPublicacionDto, MultipartFile foto) throws IOException {
 
         //obtener quien lo esta publicando con Sprnig Scurity
         String email = authorizationUtils.authenticateUser();
@@ -79,7 +91,6 @@ public class PublicacionService {
         newPublicacion.setTitulo(newPublicacionDto.getTitulo());
         newPublicacion.setDescripcion(newPublicacionDto.getDescripcion());
         newPublicacion.setFecha(LocalDateTime.now());
-        newPublicacion.setFoto(newPublicacionDto.getFoto());
         newPublicacion.setProfesor(profesor);
         newPublicacion.setSalon(salon);
         newPublicacion.setFecha(LocalDateTime.now());
@@ -99,6 +110,15 @@ public class PublicacionService {
             }
         });
         newPublicacion.setHijos(hijos);
+        // ------------------- Foto -------------------------
+
+        S3 cliente = new S3();
+        final File file = cliente.convertMultiPartFileToFile(foto);
+        String fileName = cliente.uploadFileToS3Bucket(bucketName, file);
+        file.deleteOnExit();
+
+        String URI = String.format("https://s3.%s.amazonaws.com/%s%s", bucketRegion, bucketName, fileName);
+        newPublicacion.setFoto(URI);
 
         profesor.getPublicaciones().add(newPublicacion);
         salon.getPublicaciones().add(newPublicacion);

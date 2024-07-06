@@ -36,6 +36,9 @@ public class Publicacion {
     @Column
     String foto;
 
+    @Column
+    String ubicacion;
+
     @Column(nullable = false)
     @Size(min = 1, max = 255)
     String titulo;
