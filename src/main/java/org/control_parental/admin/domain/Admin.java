@@ -9,4 +9,5 @@ import org.control_parental.usuario.domain.Usuario;
 @Data
 public class Admin extends Usuario {
 
+
 }

@@ -28,7 +28,7 @@ public class PublicacionResponseDto {
     @NotNull
     Integer likes;
 
-    String foto;
+    List<String> fotos;
 
     @NotNull
     String titulo;

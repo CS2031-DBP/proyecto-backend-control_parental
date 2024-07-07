@@ -22,6 +22,7 @@ public class Profesor extends Usuario {
     @ManyToMany
     List<Salon> salones = new ArrayList<>();
 
+
     public void addSalon(Salon salon) {salones.add(salon);}
 
     public void removeSalon(Salon salon) {salones.remove(salon);}

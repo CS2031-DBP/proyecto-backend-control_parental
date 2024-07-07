@@ -1,6 +1,7 @@
 package org.control_parental.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +28,9 @@ public class S3 {
         return file;
     }
 
-    public String uploadFileToS3Bucket(final String bucketName, final File file) {
-        final PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, file.getName(), file);
+    public void uploadFileToS3Bucket(final String bucketName, final File file, final String fileName) {
+        final PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, fileName, file);
         s3Client.putObject(putObjectRequest);
-
-        return file.getName();
     }
 
 }

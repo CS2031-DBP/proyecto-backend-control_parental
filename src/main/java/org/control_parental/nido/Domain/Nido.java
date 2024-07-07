@@ -1,6 +1,8 @@
 package org.control_parental.nido.Domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +15,10 @@ import org.control_parental.usuario.domain.Usuario;
 
 import java.util.List;
 
+
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 @Entity
 @Data
 @NoArgsConstructor
@@ -28,12 +34,5 @@ public class Nido {
     private Admin admin;
 
     @OneToMany(mappedBy = "nido")
-    List<Padre> padres;
-
-    @OneToMany(mappedBy = "nido")
-    List<Profesor> profesores;
-
-    @OneToMany(mappedBy = "nido")
-    List<Hijo> estudiantes;
-
+    List<Usuario> usuarios;
 }

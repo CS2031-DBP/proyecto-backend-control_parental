@@ -33,8 +33,10 @@ public class Publicacion {
     @Min(0)
     Integer likes;
 
-    @Column
-    String foto;
+    @ElementCollection
+    @CollectionTable(name = "publicacion_fotos", joinColumns = @JoinColumn(name = "publicacion_id"))
+    @Column(name = "foto")
+    List<String> fotos = new ArrayList<>();
 
     @Column
     String ubicacion;
@@ -74,4 +76,6 @@ public class Publicacion {
         likers.remove(like);
         likes--;
     }
+
+    void addFoto(String foto) {fotos.add(foto);}
 }

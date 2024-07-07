@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,13 +78,8 @@ public class PublicacionService {
     private String bucketRegion;
 
     @Transactional
-    public String savePublicacion(NewPublicacionDto newPublicacionDto, MultipartFile foto) throws IOException {
+    public String savePublicacion(NewPublicacionDto newPublicacionDto, List<MultipartFile> fotos) throws IOException {
 
-        final File file = cliente.convertMultiPartFileToFile(foto);
-        String fileName = cliente.uploadFileToS3Bucket(bucketName, file);
-        file.deleteOnExit();
-
-        String URI = String.format("https://s3.%s.amazonaws.com/%s%s", bucketRegion, bucketName, fileName);
 
         //obtener quien lo esta publicando con Sprnig Scurity
         String email = authorizationUtils.authenticateUser();
@@ -102,7 +98,6 @@ public class PublicacionService {
         newPublicacion.setSalon(salon);
         newPublicacion.setFecha(LocalDateTime.now());
         newPublicacion.setLikes(0);
-        newPublicacion.setFoto(URI);
 
         newPublicacionDto.getHijos_id().forEach(hijo_id -> {
             Optional<Hijo> hijo = hijoRepository.findById(hijo_id);
@@ -120,10 +115,25 @@ public class PublicacionService {
         newPublicacion.setHijos(hijos);
         // ------------------- Foto -------------------------
 
-
+        fotos.forEach(foto -> {
+            final File file;
+            try {
+                file = cliente.convertMultiPartFileToFile(foto);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            Date date = new Date();
+            String fileName = newPublicacion.getTitulo().replace(" ", "-") + "-" + newPublicacion.getFecha().toString().replace(":", "-");
+            cliente.uploadFileToS3Bucket(bucketName, file, fileName);
+            file.deleteOnExit();
+            fileName = fileName.replace(" ", "-");
+            String URI = String.format("https://%s.s3.amazonaws.com/%s",bucketName,fileName);
+            newPublicacion.addFoto(URI);
+        });
 
         profesor.getPublicaciones().add(newPublicacion);
         salon.getPublicaciones().add(newPublicacion);
+
         publicacionRepository.save(newPublicacion);
         return "/" + newPublicacion.getId();
     }

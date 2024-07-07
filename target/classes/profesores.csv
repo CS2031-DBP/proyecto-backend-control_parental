@@ -1,7 +1,6 @@
-﻿Nombre,Apellido,Email,Password
-Carlos,Hinojosa,michael.hinojosa@gmail.com,securePassword
-Braulio,Hinojosa,braulio.hinojosa@gmail.com,securePassword
-Erick,Hinojosa,erick.hinojosa@gmail.com,securePassword
-Victor,Hinojosa,victor.hinojosa@gmail.com,securePassword
-Marcelo,Hinojosa,marcelo.hinojosa@gmail.com,securePassword
-Joaquin,Hinojosa,joaquin.hinojosa@gmail.com,securePassword
+Nombre,Apellido,Email
+Braulio,Hinojosa,braulio.hinojosa@gmail.com
+Erick,Hinojosa,erick.hinojosa@gmail.com
+Victor,Hinojosa,victor.hinojosa@gmail.com
+Marcelo,Hinojosa,marcelo.hinojosa@gmail.com
+Joaquin,Hinojosa,joaquin.hinojosa@gmail.com

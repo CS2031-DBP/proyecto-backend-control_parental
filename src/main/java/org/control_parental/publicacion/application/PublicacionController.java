@@ -33,8 +33,8 @@ public class PublicacionController {
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
                             MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Void> postPublicacion(@RequestPart("publicacion") NewPublicacionDto publicacion,
-                                                @RequestPart("foto")MultipartFile foto) throws IOException {
-        String location = publicacionService.savePublicacion(publicacion, foto);
+                                                @RequestPart("foto")List<MultipartFile> fotos) throws IOException {
+        String location = publicacionService.savePublicacion(publicacion, fotos);
         URI locationHeader = URI.create(location);
         return ResponseEntity.created(locationHeader).build();
     }
