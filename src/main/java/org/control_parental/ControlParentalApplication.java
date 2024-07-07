@@ -28,28 +28,28 @@ public class ControlParentalApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ControlParentalApplication.class, args);
 	}
-
-	@Bean
-	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-		return args -> {
-/*
-			Nido nido = new Nido();
-			nido.setName("Manos y Pies");
-			nidoRepository.save(nido);
-
-			Admin admin = new Admin();
-			admin.setPassword(encoder.encode("password"));
-			admin.setNido(nido);
-			admin.setEmail("admin@email.com");
-			admin.setRole(Role.ADMIN);
-			admin.setNombre("Admin");
-			admin.setApellido("Admin");
-			adminRepository.save(admin);
-
-			nido.setAdmin(admin);
-			nidoRepository.save(nido);
-*/
-
-		};
-	}
+//
+//	@Bean
+//	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+//		return args -> {
+//
+//			Nido nido = new Nido();
+//			nido.setName("Manos y Pies");
+//			nidoRepository.save(nido);
+//
+//			Admin admin = new Admin();
+//			admin.setPassword(encoder.encode("password"));
+//			admin.setNido(nido);
+//			admin.setEmail("admin@email.com");
+//			admin.setRole(Role.ADMIN);
+//			admin.setNombre("Admin");
+//			admin.setApellido("Admin");
+//			adminRepository.save(admin);
+//
+//			nido.setAdmin(admin);
+//			nidoRepository.save(nido);
+//
+//
+//		};
+//	}
 }
