@@ -134,7 +134,9 @@ public class PublicacionService {
         profesor.getPublicaciones().add(newPublicacion);
         salon.getPublicaciones().add(newPublicacion);
 
+
         publicacionRepository.save(newPublicacion);
+        profesorRepository.save(profesor);
         return "/" + newPublicacion.getId();
     }
 
@@ -169,6 +171,14 @@ public class PublicacionService {
         Long userId = publicacionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Publicación no encontrada")).getProfesor().getId();
         authorizationUtils.verifyUserAuthorization(email, userId);
 
+        Profesor profesor = profesorRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("Profesor no encontrado"));
+        Publicacion publicacion = publicacionRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Publicacion no encontrada"));
+        Salon salon = salonRepository.findById(publicacion.getSalon().getId()).orElseThrow(()-> new ResourceNotFoundException("Salon no encontrado"));
+
+        salon.removePublicacion(publicacion);
+        profesor.removePublicacion(publicacion);
+        salonRepository.save(salon);
+        profesorRepository.save(profesor);
         publicacionRepository.deleteById(id);
     }
 

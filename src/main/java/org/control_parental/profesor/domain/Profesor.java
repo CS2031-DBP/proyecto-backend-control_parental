@@ -27,4 +27,5 @@ public class Profesor extends Usuario {
 
     public void removeSalon(Salon salon) {salones.remove(salon);}
 
+    public void removePublicacion(Publicacion publicacion) {publicaciones.remove(publicacion);}
 }
