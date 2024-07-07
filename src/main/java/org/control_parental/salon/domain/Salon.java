@@ -46,4 +46,6 @@ public class Salon {
 
     void removeProfesor(Profesor profesor) {profesores.remove(profesor);}
 
+    public void removePublicacion(Publicacion publicacion) {publicaciones.remove(publicacion);}
+
 }
