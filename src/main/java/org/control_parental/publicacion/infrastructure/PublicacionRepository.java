@@ -15,7 +15,7 @@ public interface PublicacionRepository extends JpaRepository<Publicacion, Long> 
     List<Publicacion> findAllBySalon(Salon salon);
     //List<Publicacion> findAllByIdAndHijoId(Long id, Hijo hijo);
 
-    Page<Publicacion> findAllBySalonIn(List<Salon> salones, Pageable pageable);
+    Page<Publicacion> findAllBySalonInOrderByFechaDesc(List<Salon> salones, Pageable pageable);
 
     Page<Publicacion> findAllByHijos(Hijo hijo, Pageable pageable);
 }

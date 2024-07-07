@@ -89,10 +89,17 @@ public class PadreController {
     }
 
     @PreAuthorize("hasRole('ROLE_PADRE')")
+    @GetMapping("/liked")
+    public ResponseEntity<List<Long>> getAllLiked() {
+        List<Long> liked = padreService.getLiked();
+        return ResponseEntity.ok(liked);
+    }
+
+    @PreAuthorize("hasRole('ROLE_PADRE')")
     @PatchMapping("/password")
     public ResponseEntity<Void> newPassword(@RequestBody NewPasswordDto newPasswordDto) throws AccessDeniedException {
         padreService.newPassword(newPasswordDto);
         return ResponseEntity.ok().build();
     }
-    
+
 }

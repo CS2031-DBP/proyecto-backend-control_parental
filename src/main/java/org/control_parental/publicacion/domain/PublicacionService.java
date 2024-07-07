@@ -196,7 +196,9 @@ public class PublicacionService {
 
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<Publicacion> publicaciones = publicacionRepository.findAllBySalonIn(salones, pageable);
+        profesorRepository.findAll();
+
+        Page<Publicacion> publicaciones = publicacionRepository.findAllBySalonInOrderByFechaDesc(salones, pageable);
 
         List<PublicacionResponseDto> response = new ArrayList<>();
         publicaciones.forEach(publicacion -> {
@@ -243,4 +245,19 @@ public class PublicacionService {
         likeRepository.delete(like);
     }
 
+    public List<PublicacionResponseDto> findPostsBySalon(Long id, int page, int size) {
+        Salon salon = salonRepository.findById(id).orElseThrow();
+        List<Salon> salonList = new ArrayList<>();
+        salonList.add(salon);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Publicacion> publicacionesPage = publicacionRepository.findAllBySalonInOrderByFechaDesc(salonList, pageable);
+        List<PublicacionResponseDto> publicacionesData = new ArrayList<>();
+
+        for(Publicacion i : publicacionesPage) {
+            publicacionesData.add(modelMapper.map(i, PublicacionResponseDto.class));
+        }
+
+        return publicacionesData;
+
+    }
 }

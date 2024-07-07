@@ -65,6 +65,11 @@ public class PublicacionController {
         return ResponseEntity.ok(publicacionService.findPostsForPadre(page, size));
     }
 
+    @GetMapping("/salon/{id}")
+    public ResponseEntity<List<PublicacionResponseDto>> getPublicacionesBySalon(@PathVariable Long id, @RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(publicacionService.findPostsBySalon(id, page, size));
+    }
+
     /*@PatchMapping("/{id}")
     public ResponseEntity<Void> patchPublicacion(@PathVariable Long id, @RequestBody NewPublicacionDto newPublicacion) {
         publicacionService.patchPublicacion(id, newPublicacion);

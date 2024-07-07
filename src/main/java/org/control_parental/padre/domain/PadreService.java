@@ -10,6 +10,8 @@ import org.control_parental.email.nuevoUsuario.NuevoUsuarioEmailEvent;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.hijo.domain.Hijo;
+import org.control_parental.like.Domain.Padre_Like;
+import org.control_parental.like.Infrastructure.LikeRepository;
 import org.control_parental.padre.dto.NewPadreDto;
 import org.control_parental.padre.dto.PadreResponseDto;
 import org.control_parental.padre.dto.PadreSelfResponseDto;
@@ -52,6 +54,9 @@ public class PadreService {
 
     @Autowired
     private UsuarioRepository<Usuario> usuarioRepository;
+
+    @Autowired
+    private LikeRepository likeRepository;
 
     @Autowired
     ApplicationEventPublisher applicationEventPublisher;
@@ -181,32 +186,19 @@ public class PadreService {
         return responseDtos;
     }
 
+    public List<Long> getLiked() {
+        String email = authorizationUtils.authenticateUser();
+
+        Long id = padreRepository.findByEmail(email).orElseThrow().getId();
+
+        List<Padre_Like> likes = likeRepository.findAllByPadre_Id(id);
+
+        List<Long> ids = new ArrayList<>();
+
+        for(Padre_Like i : likes) {
+            ids.add(i.getPublicacion().getId());
+        }
+
+        return ids;
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
