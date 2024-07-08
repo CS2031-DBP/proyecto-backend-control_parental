@@ -41,6 +41,12 @@ public class Publicacion {
     @Column
     String ubicacion;
 
+    @Column
+    Double latitud;
+
+    @Column
+    Double longitud;
+
     @Column(nullable = false)
     @Size(min = 1, max = 255)
     String titulo;

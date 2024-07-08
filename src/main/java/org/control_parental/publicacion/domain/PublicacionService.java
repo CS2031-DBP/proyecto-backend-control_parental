@@ -93,6 +93,9 @@ public class PublicacionService {
         List<Hijo> hijos = new ArrayList<>();
         newPublicacion.setTitulo(newPublicacionDto.getTitulo());
         newPublicacion.setDescripcion(newPublicacionDto.getDescripcion());
+        newPublicacion.setUbicacion(newPublicacionDto.getUbicacion());
+        newPublicacion.setLatitud(newPublicacionDto.getLatitud());
+        newPublicacion.setLongitud(newPublicacionDto.getLongitud());
         newPublicacion.setFecha(LocalDateTime.now());
         newPublicacion.setProfesor(profesor);
         newPublicacion.setSalon(salon);
@@ -269,5 +272,20 @@ public class PublicacionService {
 
         return publicacionesData;
 
+    }
+
+    public List<PublicacionResponseDto> findOwnPostsBySalon(Long id, int page, int size) {
+        String email = authorizationUtils.authenticateUser();
+        Salon salon = salonRepository.findById(id).orElseThrow();
+        Profesor profesor = profesorRepository.findByEmail(email).orElseThrow();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Publicacion> publicacionesPage = publicacionRepository.findAllBySalonAndProfesorOrderByFechaDesc(salon, profesor, pageable);
+        List<PublicacionResponseDto> publicacionesData = new ArrayList<>();
+
+        for(Publicacion i : publicacionesPage) {
+            publicacionesData.add(modelMapper.map(i, PublicacionResponseDto.class));
+        }
+
+        return publicacionesData;
     }
 }
