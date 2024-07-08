@@ -70,6 +70,12 @@ public class PublicacionController {
         return ResponseEntity.ok(publicacionService.findPostsBySalon(id, page, size));
     }
 
+    @PreAuthorize("hasRole('ROLE_PROFESOR')")
+    @GetMapping("/salon/{id}/me")
+    public ResponseEntity<List<PublicacionResponseDto>> getOwnPublicacionesBySalon(@PathVariable Long id, @RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(publicacionService.findOwnPostsBySalon(id, page, size));
+    }
+
     /*@PatchMapping("/{id}")
     public ResponseEntity<Void> patchPublicacion(@PathVariable Long id, @RequestBody NewPublicacionDto newPublicacion) {
         publicacionService.patchPublicacion(id, newPublicacion);

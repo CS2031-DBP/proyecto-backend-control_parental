@@ -44,4 +44,10 @@ public class PublicacionResponseDto {
     List<PadrePublicacionDto> likers;
 
     Long salonId;
+
+    String ubicacion;
+
+    Double latitud;
+
+    Double longitud;
 }

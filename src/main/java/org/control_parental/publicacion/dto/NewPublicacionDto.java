@@ -22,5 +22,9 @@ public class NewPublicacionDto {
 
     private Long salonId;
 
+    String ubicacion;
 
+    Double latitud;
+
+    Double longitud;
 }
