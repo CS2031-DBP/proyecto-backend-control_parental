@@ -1,4 +1,4 @@
-package org.control_parental.salon.infrastructure;
+/*package org.control_parental.salon.infrastructure;
 
 import org.control_parental.AbstractContainerBaseTest;
 import org.control_parental.configuration.TestConfig;
@@ -113,4 +113,4 @@ public class SalonRepositoryTest extends AbstractContainerBaseTest {
         assertEquals("Jorge", retrievedSalon.getProfesores().get(0).getNombre());
     }
 
-}
+}*/

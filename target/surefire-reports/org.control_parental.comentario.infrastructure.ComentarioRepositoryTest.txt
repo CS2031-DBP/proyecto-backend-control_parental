@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: org.control_parental.comentario.infrastructure.ComentarioRepositoryTest
--------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.922 s -- in org.control_parental.comentario.infrastructure.ComentarioRepositoryTest
