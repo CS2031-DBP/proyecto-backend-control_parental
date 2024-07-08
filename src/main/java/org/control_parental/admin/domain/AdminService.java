@@ -2,7 +2,9 @@ package org.control_parental.admin.domain;
 
 import org.control_parental.admin.dto.NewAdminDto;
 import org.control_parental.admin.infrastructure.AdminRepository;
+import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
+import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.usuario.domain.Role;
 import org.control_parental.usuario.domain.Usuario;
 import org.control_parental.usuario.domain.UsuarioService;
@@ -25,6 +27,9 @@ public class AdminService {
     @Autowired
     private UsuarioRepository<Usuario> usuarioRepository;
 
+    @Autowired
+    private AuthorizationUtils authorizationUtils;
+
     public void createAdmin(NewAdminDto newAdminDto) {
         Admin admin = modelMapper.map(newAdminDto, Admin.class);
         if(usuarioRepository.findByEmail(newAdminDto.getEmail()).isPresent()) {
@@ -32,6 +37,14 @@ public class AdminService {
         }
         admin.setRole(Role.ADMIN);
         admin.setPassword(passwordEncoder.encode(newAdminDto.getPassword()));
+        adminRepository.save(admin);
+    }
+
+    public void patchPassword(String password) {
+        String email = authorizationUtils.authenticateUser();
+        Admin admin = adminRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("Admin no encontrado"));
+        admin.setPassword(passwordEncoder.encode(password));
+
         adminRepository.save(admin);
     }
 }
