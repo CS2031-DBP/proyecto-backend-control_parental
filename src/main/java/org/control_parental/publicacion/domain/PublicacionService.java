@@ -106,13 +106,13 @@ public class PublicacionService {
             Optional<Hijo> hijo = hijoRepository.findById(hijo_id);
             if (hijo.isPresent()) {
                 hijos.add(hijo.get());
-                applicationEventPublisher.publishEvent(
-                        new PublicacionEmailEvent(this,
-                                hijo.get().getNombre(),
-                                hijo.get().getPadre().getEmail(),
-                                newPublicacion.getTitulo(),
-                                hijo.get().getPadre().getNombre())
-                );
+//                applicationEventPublisher.publishEvent(
+//                        new PublicacionEmailEvent(this,
+//                                hijo.get().getNombre(),
+//                                hijo.get().getPadre().getEmail(),
+//                                newPublicacion.getTitulo(),
+//                                hijo.get().getPadre().getNombre())
+//                );
             }
         });
         newPublicacion.setHijos(hijos);
