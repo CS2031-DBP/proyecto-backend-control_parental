@@ -169,7 +169,7 @@ public class PadreService {
         padre.setPassword(passwordEncoder.encode(newPasswordDto.getPassword()));
         Date date = new Date();
         applicationEventPublisher.publishEvent(
-                new NuevaContaseñaEmailEvent(padre.getNombre(), padre.getEmail(), date)
+                new NuevaContaseñaEmailEvent(padre.getNombre(), padre.getEmail(), date, newPasswordDto.getPassword())
         );
         padreRepository.save(padre);
     }
