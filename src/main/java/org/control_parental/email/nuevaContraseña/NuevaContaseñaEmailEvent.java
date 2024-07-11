@@ -10,10 +10,13 @@ public class NuevaContaseñaEmailEvent {
 
     private Date hora;
 
-    public NuevaContaseñaEmailEvent(String nombre, String email, Date hora) {
+    private String password;
+
+    public NuevaContaseñaEmailEvent(String nombre, String email, Date hora, String password) {
         this.nombre = nombre;
         this.email = email;
         this.hora = hora;
+        this.password = password;
     }
 
     public Date getHora() {
@@ -35,4 +38,6 @@ public class NuevaContaseñaEmailEvent {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getPassword() {return password;}
 }

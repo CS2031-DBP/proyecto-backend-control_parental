@@ -119,7 +119,7 @@ public class ProfesorService {
          Profesor profesor = profesorRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("El profesor no fue encontrado"));
          Date hora = new Date();
          applicationEventPublisher.publishEvent(
-                 new NuevaContaseñaEmailEvent(profesor.getNombre(), profesor.getEmail(), hora)
+                 new NuevaContaseñaEmailEvent(profesor.getNombre(), profesor.getEmail(), hora, newPasswordDto.getPassword())
          );
          profesor.setPassword(passwordEncoder.encode(newPasswordDto.getPassword()));
          profesorRepository.save(profesor);
