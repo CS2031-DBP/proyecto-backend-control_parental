@@ -3,7 +3,7 @@ package org.control_parental.comentario.domain;
 import org.control_parental.comentario.dto.ComentarioResponseDto;
 import org.control_parental.comentario.dto.NewComentarioDto;
 import org.control_parental.comentario.infrastructure.ComentarioRepository;
-import org.control_parental.configuration.AuthorizationUtils;
+import org.control_parental.auth.AuthorizationUtils;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.publicacion.domain.Publicacion;
 import org.control_parental.publicacion.infrastructure.PublicacionRepository;
