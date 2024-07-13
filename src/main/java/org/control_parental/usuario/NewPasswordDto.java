@@ -4,6 +4,6 @@ import lombok.*;
 
 @Data
 public class NewPasswordDto {
-    String email;
-    String password;
+    String oldPassword;
+    String newPassword;
 }

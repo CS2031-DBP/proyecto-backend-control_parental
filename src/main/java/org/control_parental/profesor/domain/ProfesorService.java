@@ -7,6 +7,7 @@ import org.control_parental.configuration.RandomCode;
 import org.control_parental.csv.CSVHelper;
 import org.control_parental.email.nuevaContraseña.NuevaContaseñaEmailEvent;
 import org.control_parental.email.nuevoUsuario.NuevoUsuarioEmailEvent;
+import org.control_parental.exceptions.IllegalArgumentException;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.profesor.dto.NewProfesorDto;
@@ -117,12 +118,19 @@ public class ProfesorService {
     public void patchPassword(NewPasswordDto newPasswordDto) {
         String email = authorizationUtils.authenticateUser();
          Profesor profesor = profesorRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("El profesor no fue encontrado"));
-         Date hora = new Date();
-         applicationEventPublisher.publishEvent(
-                 new NuevaContaseñaEmailEvent(profesor.getNombre(), profesor.getEmail(), hora, newPasswordDto.getPassword())
-         );
-         profesor.setPassword(passwordEncoder.encode(newPasswordDto.getPassword()));
-         profesorRepository.save(profesor);
+
+        if(!passwordEncoder.matches(newPasswordDto.getOldPassword(), profesor.getPassword())) {
+            throw new IllegalArgumentException("Contraseña incorrecta");
+        }
+
+        profesor.setPassword(passwordEncoder.encode(newPasswordDto.getNewPassword()));
+
+        Date hora = new Date();
+        applicationEventPublisher.publishEvent(
+            new NuevaContaseñaEmailEvent(profesor.getNombre(), profesor.getEmail(), hora, newPasswordDto.getNewPassword())
+        );
+
+        profesorRepository.save(profesor);
 
     }
 

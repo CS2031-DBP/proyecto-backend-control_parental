@@ -7,6 +7,7 @@ import org.control_parental.configuration.RandomCode;
 import org.control_parental.csv.CSVHelper;
 import org.control_parental.email.nuevaContraseña.NuevaContaseñaEmailEvent;
 import org.control_parental.email.nuevoUsuario.NuevoUsuarioEmailEvent;
+import org.control_parental.exceptions.IllegalArgumentException;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.hijo.domain.Hijo;
@@ -162,14 +163,18 @@ public class PadreService {
 
     public void newPassword(NewPasswordDto newPasswordDto) throws AccessDeniedException {
         String email = authorizationUtils.authenticateUser();
-        if (!Objects.equals(email, newPasswordDto.getEmail()))
-            throw new AccessDeniedException("Usuario no authorizado para cambiar esta contraseña");
+
         Padre padre = padreRepository.findByEmail(email).orElseThrow(
                 ()-> new ResourceNotFoundException("Padre no encontrado"));
-        padre.setPassword(passwordEncoder.encode(newPasswordDto.getPassword()));
+
+        if(!passwordEncoder.matches(newPasswordDto.getOldPassword(), padre.getPassword())) {
+            throw new IllegalArgumentException("Contraseña incorrecta");
+        }
+
+        padre.setPassword(passwordEncoder.encode(newPasswordDto.getNewPassword()));
         Date date = new Date();
         applicationEventPublisher.publishEvent(
-                new NuevaContaseñaEmailEvent(padre.getNombre(), padre.getEmail(), date, newPasswordDto.getPassword())
+                new NuevaContaseñaEmailEvent(padre.getNombre(), padre.getEmail(), date, newPasswordDto.getNewPassword())
         );
         padreRepository.save(padre);
     }
