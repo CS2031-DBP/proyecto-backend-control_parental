@@ -33,7 +33,7 @@ public class ControlParentalApplication {
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
 
-			Nido nido = new Nido();
+			/*Nido nido = new Nido();
 			nido.setName("Manos y Pies");
 			nidoRepository.save(nido);
 
@@ -48,7 +48,7 @@ public class ControlParentalApplication {
 
 			nido.setAdmin(admin);
 			nidoRepository.save(nido);
-
+*/
 
 		};
 	}
