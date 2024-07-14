@@ -1,6 +1,7 @@
 package org.control_parental.events.notification;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
+import io.github.jav.exposerversdk.PushClientException;
 import org.control_parental.hijo.domain.Hijo;
 import org.control_parental.hijo.dto.HijoResponseDto;
 import org.control_parental.hijo.infrastructure.HijoRepository;
@@ -47,7 +48,7 @@ public class NotificationEventListener {
                     notificationEvent.getBody());
             try {
                 notificationService.sendNotification(message);
-            } catch (FirebaseMessagingException e) {
+            } catch (FirebaseMessagingException | PushClientException e) {
                 throw new RuntimeException(e);
             }
         });

@@ -1,33 +1,27 @@
 package org.control_parental.notifications.Service;
 
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
-import com.google.firebase.messaging.Notification;
+import io.github.jav.exposerversdk.*;
 import org.control_parental.notifications.Domain.NotificationMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 
 @Service
 public class NotificationService {
 
-    @Autowired
-    private FirebaseMessaging firebaseMessaging;
-
     @Async
-    public void sendNotification(NotificationMessage notificationMessage) throws FirebaseMessagingException {
-        Notification notification = Notification
-                .builder()
-                .setTitle(notificationMessage.getTitle())
-                .setBody(notificationMessage.getBody())
-                .build();
+    public void sendNotification(NotificationMessage notificationMessage) throws PushClientException {
+        ExpoPushMessage expoPushMessage = new ExpoPushMessage();
+        expoPushMessage.getTo().add(notificationMessage.getRecipientToken());
+        expoPushMessage.setTitle(notificationMessage.getTitle());
+        expoPushMessage.setBody(notificationMessage.getBody());
 
-        Message message = Message.builder()
-                .setToken(notificationMessage.getRecipientToken())
-                .setNotification(notification)
-                .build();
+        List<ExpoPushMessage> messages = List.of(expoPushMessage);
 
-        firebaseMessaging.send(message);
+        PushClient client = new PushClient();
+
+        client.sendPushNotificationsAsync(messages);
     }
 }
