@@ -6,15 +6,21 @@ import org.control_parental.comentario.infrastructure.ComentarioRepository;
 import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.publicacion.domain.Publicacion;
+import org.control_parental.publicacion.dto.PublicacionResponseDto;
 import org.control_parental.publicacion.infrastructure.PublicacionRepository;
 import org.control_parental.usuario.domain.Usuario;
 import org.control_parental.usuario.infrastructure.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -92,4 +98,20 @@ public class ComentarioService {
     }
 
 
+    public List<ComentarioResponseDto> getByPublicacionId(Long id, int page, int size) {
+        Publicacion publicacion = publicacionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Publicacion no encontrada"));
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Comentario> comentarioPage = comentarioRepository.findAllByPublicacion_IdOrderByFecha(id, pageable);
+
+        List<ComentarioResponseDto> comentariosData = new ArrayList<>();
+
+        comentarioPage.forEach(comentario -> {
+            ComentarioResponseDto res = modelMapper.map(comentario, ComentarioResponseDto.class);
+            comentariosData.add(res);
+        });
+
+        return comentariosData;
+    }
 }
