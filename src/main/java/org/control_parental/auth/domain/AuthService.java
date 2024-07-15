@@ -35,6 +35,8 @@ public class AuthService {
         // -- para las push notifications, token es creado y mapeado en el front
         usuario.setNotificationToken(authLoginRequest.getNotificationToken());
 
+        usuarioRepository.save(usuario);
+
         authJwtResponse.setToken(jwtService.generateToken(usuario));
         return authJwtResponse;
     }

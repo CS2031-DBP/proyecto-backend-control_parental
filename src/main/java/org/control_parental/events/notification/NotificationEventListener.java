@@ -48,12 +48,21 @@ public class NotificationEventListener {
                     notificationEvent.getBody());
             try {
                 notificationService.sendNotification(message);
-            } catch (FirebaseMessagingException | PushClientException e) {
+            } catch ( PushClientException e) {
                 throw new RuntimeException(e);
             }
         });
     }
 
+    @Async
+    @EventListener
+    public void sendNotificationToProfessorWhenPublicationWasUploaded(ProfessorNotificationEvent notificationEvent) throws PushClientException {
+        NotificationMessage message = new NotificationMessage(
+                notificationEvent.getToken(),
+                notificationEvent.getTitle(),
+                notificationEvent.getBody());
 
+        notificationService.sendNotification(message);
+    }
 
 }
