@@ -1,6 +1,6 @@
 package org.control_parental.nido.Domain;
 
-import org.control_parental.auth.AuthorizationUtils;
+import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.nido.Infrastructure.NidoRepository;
 import org.control_parental.usuario.domain.Usuario;

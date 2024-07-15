@@ -1,7 +1,7 @@
 package org.control_parental.hijo.domain;
 
 import org.control_parental.admin.infrastructure.AdminRepository;
-import org.control_parental.auth.AuthorizationUtils;
+import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.csv.CSVHelper;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.hijo.dto.HijoResponseDto;

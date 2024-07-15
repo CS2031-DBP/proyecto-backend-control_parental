@@ -2,7 +2,7 @@ package org.control_parental.padre.domain;
 
 import org.control_parental.admin.domain.Admin;
 import org.control_parental.admin.infrastructure.AdminRepository;
-import org.control_parental.auth.AuthorizationUtils;
+import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.configuration.RandomCode;
 import org.control_parental.csv.CSVHelper;
 import org.control_parental.email.nuevaContraseña.NuevaContaseñaEmailEvent;
@@ -37,7 +37,6 @@ import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class PadreService {

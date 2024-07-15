@@ -1,8 +1,7 @@
 package org.control_parental.publicacion.domain;
 
 import jakarta.transaction.Transactional;
-import org.control_parental.auth.AuthorizationUtils;
-import org.control_parental.configuration.RandomCode;
+import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.events.notification.NotificationEvent;
 import org.control_parental.events.uploadImage.UploadImageEvent;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
@@ -26,7 +25,6 @@ import org.control_parental.salon.domain.Salon;
 import org.control_parental.salon.infrastructure.SalonRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

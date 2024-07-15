@@ -1,4 +1,4 @@
-package org.control_parental.auth;
+package org.control_parental.configuration;
 
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.usuario.domain.Usuario;
