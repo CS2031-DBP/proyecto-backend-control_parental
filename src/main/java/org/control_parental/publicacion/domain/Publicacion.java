@@ -83,5 +83,5 @@ public class Publicacion {
         likes--;
     }
 
-    void addFoto(String foto) {fotos.add(foto);}
+    public void addFoto(String foto) {fotos.add(foto);}
 }

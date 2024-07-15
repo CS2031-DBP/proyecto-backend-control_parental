@@ -1,5 +1,6 @@
 package org.control_parental.profesor.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
@@ -16,7 +17,7 @@ import java.util.List;
 @Entity
 public class Profesor extends Usuario {
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE)
     List<Publicacion> publicaciones = new ArrayList<>();
 
     @ManyToMany

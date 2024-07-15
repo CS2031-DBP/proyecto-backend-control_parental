@@ -43,6 +43,9 @@ public class Usuario implements UserDetails {
     @Column
     Role role;
 
+    @Column
+    String notificationToken;
+
     @OneToMany
     List<Comentario> comentarios = new ArrayList<>();
 

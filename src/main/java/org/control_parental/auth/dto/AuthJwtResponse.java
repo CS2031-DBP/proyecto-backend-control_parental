@@ -6,5 +6,4 @@ import lombok.Data;
 public class AuthJwtResponse {
     private String Token;
 
-    private String Code;
 }

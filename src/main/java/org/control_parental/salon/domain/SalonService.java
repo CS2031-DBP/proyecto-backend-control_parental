@@ -2,7 +2,7 @@ package org.control_parental.salon.domain;
 
 import org.control_parental.admin.domain.Admin;
 import org.control_parental.admin.infrastructure.AdminRepository;
-import org.control_parental.configuration.AuthorizationUtils;
+import org.control_parental.auth.AuthorizationUtils;
 import org.control_parental.email.nuevoSalon.AgregacionHijoSalonEmailEvent;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;

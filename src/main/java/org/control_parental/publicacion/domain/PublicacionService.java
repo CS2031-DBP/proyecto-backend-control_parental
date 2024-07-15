@@ -1,8 +1,10 @@
 package org.control_parental.publicacion.domain;
 
 import jakarta.transaction.Transactional;
-import org.control_parental.configuration.AuthorizationUtils;
-import org.control_parental.email.nuevaPublicacion.PublicacionEmailEvent;
+import org.control_parental.auth.AuthorizationUtils;
+import org.control_parental.configuration.RandomCode;
+import org.control_parental.events.notification.NotificationEvent;
+import org.control_parental.events.uploadImage.UploadImageEvent;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.comentario.dto.ComentarioPublicacionDto;
@@ -37,7 +39,6 @@ import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +51,13 @@ public class PublicacionService {
     SalonRepository salonRepository;
 
     @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
+    @Autowired
     ModelMapper modelMapper;
+
+    @Autowired
+    private S3 cliente;
 
     @Autowired
     HijoRepository hijoRepository;
@@ -59,28 +66,18 @@ public class PublicacionService {
     private ProfesorRepository profesorRepository;
 
     @Autowired
-    private ApplicationEventPublisher applicationEventPublisher;
-
-    @Autowired
     private AuthorizationUtils authorizationUtils;
-    @Autowired
-    private S3 cliente;
+
     @Autowired
     private PadreRepository padreRepository;
 
     @Autowired
     private LikeRepository likeRepository;
 
-    @Value("${application.bucket.name}")
-    private String bucketName;
 
-    @Value("${cloud.aws.region.static}")
-    private String bucketRegion;
 
     @Transactional
     public String savePublicacion(NewPublicacionDto newPublicacionDto, List<MultipartFile> fotos) throws IOException {
-
-
         //obtener quien lo esta publicando con Sprnig Scurity
         String email = authorizationUtils.authenticateUser();
 
@@ -106,40 +103,42 @@ public class PublicacionService {
             Optional<Hijo> hijo = hijoRepository.findById(hijo_id);
             if (hijo.isPresent()) {
                 hijos.add(hijo.get());
-//                applicationEventPublisher.publishEvent(
-//                        new PublicacionEmailEvent(this,
-//                                hijo.get().getNombre(),
-//                                hijo.get().getPadre().getEmail(),
-//                                newPublicacion.getTitulo(),
-//                                hijo.get().getPadre().getNombre())
-//                );
             }
         });
         newPublicacion.setHijos(hijos);
-        // ------------------- Foto -------------------------
-
-        fotos.forEach(foto -> {
-            final File file;
-            try {
-                file = cliente.convertMultiPartFileToFile(foto);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            Date date = new Date();
-            String fileName = newPublicacion.getTitulo().replace(" ", "-") + "-" + newPublicacion.getFecha().toString().replace(":", "-");
-            cliente.uploadFileToS3Bucket(bucketName, file, fileName);
-            file.deleteOnExit();
-            fileName = fileName.replace(" ", "-");
-            String URI = String.format("https://%s.s3.amazonaws.com/%s",bucketName,fileName);
-            newPublicacion.addFoto(URI);
-        });
 
         profesor.getPublicaciones().add(newPublicacion);
         salon.getPublicaciones().add(newPublicacion);
 
-
         publicacionRepository.save(newPublicacion);
         profesorRepository.save(profesor);
+
+        // Conversion de MultipartFile a File aqui y no en el listener porque en el listener moria, botaba un
+        // java.nio.NoSuchFileException, yo presumo porque debe de tratarse de algun path que se muere en el camino.
+        // pero no estoy seguro la verdad
+
+        List<File> files = new ArrayList<>();
+        fotos.forEach(foto -> {
+            final File file;
+            try {
+                file = cliente.convertMultiPartFileToFile(foto);
+                files.add(file);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        applicationEventPublisher.publishEvent(
+                new UploadImageEvent(newPublicacion.getId(), files)
+        );
+
+        applicationEventPublisher.publishEvent(
+                new NotificationEvent(
+                        newPublicacion.getSalon(),
+                        "¡Nueva Publicación en el Salon " + newPublicacion.getSalon().getNombre(),
+                        newPublicacion.getTitulo())
+        );
+
         return "/" + newPublicacion.getId();
     }
 

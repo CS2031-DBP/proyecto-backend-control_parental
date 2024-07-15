@@ -1,4 +1,4 @@
-package org.control_parental.configuration;
+package org.control_parental.auth;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
