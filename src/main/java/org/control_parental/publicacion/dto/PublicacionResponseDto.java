@@ -9,6 +9,7 @@ import org.control_parental.comentario.dto.ComentarioPublicacionDto;
 import org.control_parental.hijo.dto.HijoPublicacionDto;
 import org.control_parental.padre.dto.PadrePublicacionDto;
 import org.control_parental.profesor.dto.ProfesorResponseDto;
+import org.control_parental.salon.dto.ReducedSalonDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,7 +44,7 @@ public class PublicacionResponseDto {
 
     List<PadrePublicacionDto> likers;
 
-    Long salonId;
+    ReducedSalonDto salon;
 
     String ubicacion;
 
