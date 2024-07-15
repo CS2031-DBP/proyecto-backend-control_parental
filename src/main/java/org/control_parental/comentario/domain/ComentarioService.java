@@ -103,7 +103,7 @@ public class ComentarioService {
 
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<Comentario> comentarioPage = comentarioRepository.findAllByPublicacion_IdOrderByFecha(id, pageable);
+        Page<Comentario> comentarioPage = comentarioRepository.findAllByPublicacion_IdOrderByFechaDesc(id, pageable);
 
         List<ComentarioResponseDto> comentariosData = new ArrayList<>();
 
