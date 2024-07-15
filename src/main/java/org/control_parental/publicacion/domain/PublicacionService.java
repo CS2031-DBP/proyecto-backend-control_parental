@@ -3,6 +3,7 @@ package org.control_parental.publicacion.domain;
 import jakarta.transaction.Transactional;
 import org.control_parental.configuration.AuthorizationUtils;
 import org.control_parental.events.notification.NotificationEvent;
+import org.control_parental.events.notification.ProfessorNotificationEvent;
 import org.control_parental.events.uploadImage.UploadImageEvent;
 import org.control_parental.exceptions.ResourceAlreadyExistsException;
 import org.control_parental.exceptions.ResourceNotFoundException;
@@ -136,6 +137,13 @@ public class PublicacionService {
                         newPublicacion.getSalon(),
                         "¡Nueva Publicación en el Salon " + newPublicacion.getSalon().getNombre(),
                         newPublicacion.getTitulo())
+        );
+
+        applicationEventPublisher.publishEvent(
+                new ProfessorNotificationEvent(
+                        "¡Publicación creada de forma exitosa!",
+                        newPublicacion.getTitulo(),
+                        profesor.getNotificationToken())
         );
 
         return "/" + newPublicacion.getId();
