@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.control_parental.codigoRecuperacion.domain.Codigo;
 import org.control_parental.comentario.domain.Comentario;
 import org.control_parental.nido.Domain.Nido;
 import org.control_parental.reply.domain.Reply;
@@ -45,6 +46,9 @@ public class Usuario implements UserDetails {
 
     @Column
     String notificationToken;
+
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    Codigo codigo;
 
     @OneToMany
     List<Comentario> comentarios = new ArrayList<>();

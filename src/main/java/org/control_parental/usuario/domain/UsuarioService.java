@@ -1,5 +1,6 @@
 package org.control_parental.usuario.domain;
 
+import org.control_parental.exceptions.ResourceNotFoundException;
 import org.control_parental.usuario.dto.UsuarioResponseDto;
 import org.control_parental.usuario.infrastructure.UsuarioRepository;
 import org.hibernate.id.uuid.UuidGenerator;
@@ -40,4 +41,6 @@ public class UsuarioService {
         });
         return usuariosDto;
     }
+
+
 }
