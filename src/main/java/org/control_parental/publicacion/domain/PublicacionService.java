@@ -22,6 +22,7 @@ import org.control_parental.publicacion.dto.PublicacionResponseDto;
 import org.control_parental.publicacion.infrastructure.PublicacionRepository;
 import org.control_parental.s3.S3;
 import org.control_parental.salon.domain.Salon;
+import org.control_parental.salon.dto.ReducedSalonDto;
 import org.control_parental.salon.infrastructure.SalonRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -163,6 +164,7 @@ public class PublicacionService {
         publicacionResponseDto.setHijos(hijoPublicacionDtos);
         publicacionResponseDto.setComentarios(comentarioPublicacionDtos);
         publicacionResponseDto.setLikers(padrePublicacionDtos);
+        publicacionResponseDto.setSalon(modelMapper.map(publicacion.getSalon(), ReducedSalonDto.class));
         return publicacionResponseDto;
     }
 
