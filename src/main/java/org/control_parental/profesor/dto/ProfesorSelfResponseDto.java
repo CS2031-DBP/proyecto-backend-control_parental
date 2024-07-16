@@ -32,9 +32,9 @@ public class ProfesorSelfResponseDto {
     @JsonIgnoreProperties("profesores")
     List<ReducedSalonDto> salones;
 
-    @JsonIgnoreProperties("profesor")
-    List<ComentarioResponseDto> comentarios;
+    //@JsonIgnoreProperties("profesor")
+    //<ComentarioResponseDto> comentarios;
 
-    @JsonIgnoreProperties("profesor")
-    List<PublicacionResponseDto> publicaciones;
+    //@JsonIgnoreProperties("profesor")
+    //List<PublicacionResponseDto> publicaciones;
 }

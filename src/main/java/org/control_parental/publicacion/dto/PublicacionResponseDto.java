@@ -39,8 +39,8 @@ public class PublicacionResponseDto {
 
     List<HijoPublicacionDto> hijos;
 
-    @JsonIgnoreProperties("publicacion")
-    List<ComentarioPublicacionDto> comentarios;
+    //@JsonIgnoreProperties("publicacion")
+    //List<ComentarioPublicacionDto> comentarios;
 
     List<PadrePublicacionDto> likers;
 

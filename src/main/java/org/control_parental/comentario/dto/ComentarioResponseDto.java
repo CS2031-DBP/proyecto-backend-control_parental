@@ -33,10 +33,9 @@ public class ComentarioResponseDto {
     @NotNull
     UsuarioResponseDto usuario;
 
-    @JsonIgnoreProperties("comentarios")
-    PublicacionResponseDto publicacion;
+    //@JsonIgnoreProperties("comentarios")
+    //PublicacionResponseDto publicacion;
 
-    @JsonIgnoreProperties("comentario")
-    @ManyToOne
-    List<ReplyResponseDto> replies;
+    //@JsonIgnoreProperties("comentario")
+    //List<ReplyResponseDto> replies;
 }

@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.control_parental.padre.dto.PadreResponseDto;
 import org.control_parental.publicacion.dto.PublicacionResponseDto;
+import org.control_parental.salon.dto.HijoSalonDto;
+import org.control_parental.salon.dto.ReducedSalonDto;
 import org.control_parental.salon.dto.SalonResponseDto;
 
 import java.util.List;
@@ -24,6 +26,5 @@ public class PadreHijoResponseDto {
     @NotNull
     private String apellido;
 
-    @JsonIgnoreProperties("hijos")
-    private SalonResponseDto salon;
+    private HijoSalonDto salon;
 }
