@@ -27,4 +27,7 @@ public class AuthController {
     public ResponseEntity<Void> check() {
         return ResponseEntity.ok().build();
     }
+
+
+
 }
