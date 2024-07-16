@@ -5,11 +5,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.control_parental.comentario.domain.Comentario;
+import org.control_parental.nido.Domain.Nido;
+import org.control_parental.reply.domain.Reply;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,12 +43,25 @@ public class Usuario implements UserDetails {
     @Column
     Role role;
 
+    @Column
+    String notificationToken;
+
     @OneToMany
-    List<Comentario> comentarios;
+    List<Comentario> comentarios = new ArrayList<>();
+
+    @OneToMany
+    List<Reply> replies = new ArrayList<>();
+
+    @JoinColumn(nullable = false)
+    @ManyToOne
+    Nido nido;
+
+    @Transient
+    private String rolePrefix = "ROLE_";
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));//Esto viene de enum
+        return List.of(new SimpleGrantedAuthority(rolePrefix + role.name()));
     }
 
     @Override

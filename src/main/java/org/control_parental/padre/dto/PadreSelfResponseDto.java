@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.control_parental.comentario.dto.ComentarioResponseDto;
 import org.control_parental.hijo.dto.HijoResponseDto;
+import org.control_parental.hijo.dto.PadreHijoResponseDto;
 import org.control_parental.publicacion.dto.PublicacionResponseDto;
 
 import java.util.List;
@@ -13,6 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PadreSelfResponseDto {
+
+    Long id;
 
     @NotNull
     String phoneNumber;
@@ -27,11 +30,11 @@ public class PadreSelfResponseDto {
     String apellido;
 
     @JsonIgnoreProperties("padre")
-    List<HijoResponseDto> hijos;
+    List<PadreHijoResponseDto> hijos;
 
-    @JsonIgnoreProperties("padre")
-    List<ComentarioResponseDto> comentarios;
+    //@JsonIgnoreProperties("padre")
+    //List<ComentarioResponseDto> comentarios;
 
-    @JsonIgnoreProperties("likers")
-    List<PublicacionResponseDto> publicaciones_likeadas;
+    //@JsonIgnoreProperties("likers")
+    //List<PublicacionResponseDto> publicaciones_likeadas;
 }

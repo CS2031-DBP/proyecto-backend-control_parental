@@ -1,0 +1,9 @@
+{
+    "titulo" : "Publicacion de 1 foto!",
+    "descripcion" : "una foto!",
+    "foto" : "foto",
+    "hijos_id" : [
+        1
+    ],
+    "salonId" : 1
+}

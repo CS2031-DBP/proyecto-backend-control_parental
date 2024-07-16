@@ -18,12 +18,13 @@ public class NewPublicacionDto {
     @NotNull
     String descripcion;
 
-    @NotNull
-    String foto;
-
     List<Long> hijos_id;
 
     private Long salonId;
 
+    String ubicacion;
 
+    Double latitud;
+
+    Double longitud;
 }

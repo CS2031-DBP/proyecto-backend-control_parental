@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.csv.CSVRecord;
 
 @Data
 @NoArgsConstructor
@@ -28,6 +29,11 @@ public class NewPadreDto {
     String phoneNumber;
 
 //    @Size(min = 6, max = 50)
-    @NotNull
-    String password;
+
+    public static NewPadreDto parse(CSVRecord record) {
+        return new NewPadreDto(record.get("Nombre"),
+                record.get("Apellido"),
+                record.get("Email"),
+                record.get("phoneNumber"));
+    }
 }

@@ -6,7 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.control_parental.comentario.dto.ComentarioResponseDto;
 import org.control_parental.publicacion.dto.PublicacionResponseDto;
+import org.control_parental.salon.dto.ReducedSalonDto;
 import org.control_parental.salon.dto.SalonResponseDto;
 
 import java.util.List;
@@ -20,6 +22,7 @@ public class ProfesorSelfResponseDto {
     @Email
     String email;
 
+    Long id;
     @NotNull
     String nombre;
 
@@ -27,8 +30,11 @@ public class ProfesorSelfResponseDto {
     String apellido;
 
     @JsonIgnoreProperties("profesores")
-    List<SalonResponseDto> salones;
+    List<ReducedSalonDto> salones;
 
-    @JsonIgnoreProperties("profesor")
-    List<PublicacionResponseDto> publicaciones;
+    //@JsonIgnoreProperties("profesor")
+    //<ComentarioResponseDto> comentarios;
+
+    //@JsonIgnoreProperties("profesor")
+    //List<PublicacionResponseDto> publicaciones;
 }

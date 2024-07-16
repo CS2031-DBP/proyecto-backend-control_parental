@@ -5,9 +5,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.control_parental.hijo.domain.Hijo;
+import org.control_parental.nido.Domain.Nido;
 import org.control_parental.publicacion.domain.Publicacion;
 import org.control_parental.profesor.domain.Profesor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -22,19 +24,28 @@ public class Salon {
     String nombre;
 
     @ManyToMany(mappedBy = "salones")
-    List<Profesor> profesores;
+    List<Profesor> profesores = new ArrayList<>();
 
     @OneToMany
-    List<Publicacion> publicaciones;
+    List<Publicacion> publicaciones = new ArrayList<>();
 
     @JsonManagedReference
     @OneToMany(mappedBy = "salon")
-    List<Hijo> hijos;
+    List<Hijo> hijos = new ArrayList<>();
+
+    @ManyToOne
+    Nido nido;
 
     void addStudent(Hijo hijo) {
         hijos.add(hijo);
     }
 
     void addProfesor(Profesor profesor) {profesores.add(profesor);}
+
+    void removeStudent(Hijo hijo) {hijos.remove(hijo);}
+
+    void removeProfesor(Profesor profesor) {profesores.remove(profesor);}
+
+    public void removePublicacion(Publicacion publicacion) {publicaciones.remove(publicacion);}
 
 }

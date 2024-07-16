@@ -18,6 +18,9 @@ public class HijoResponseDto {
     private String nombre;
 
     @NotNull
+    private Long id;
+
+    @NotNull
     private String apellido;
 
     @JsonIgnoreProperties("hijos")
