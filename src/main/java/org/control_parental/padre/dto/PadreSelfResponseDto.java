@@ -32,9 +32,9 @@ public class PadreSelfResponseDto {
     @JsonIgnoreProperties("padre")
     List<PadreHijoResponseDto> hijos;
 
-    @JsonIgnoreProperties("padre")
-    List<ComentarioResponseDto> comentarios;
+    //@JsonIgnoreProperties("padre")
+    //List<ComentarioResponseDto> comentarios;
 
-    @JsonIgnoreProperties("likers")
-    List<PublicacionResponseDto> publicaciones_likeadas;
+    //@JsonIgnoreProperties("likers")
+    //List<PublicacionResponseDto> publicaciones_likeadas;
 }

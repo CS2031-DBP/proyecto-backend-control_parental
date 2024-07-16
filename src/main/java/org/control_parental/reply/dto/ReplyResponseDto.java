@@ -27,7 +27,7 @@ public class ReplyResponseDto {
     @NotNull
     UsuarioResponseDto usuario;
 
-    @JsonIgnoreProperties("replies")
-    ComentarioResponseDto comentario;
+    //@JsonIgnoreProperties("replies")
+    //ComentarioResponseDto comentario;
 }
 

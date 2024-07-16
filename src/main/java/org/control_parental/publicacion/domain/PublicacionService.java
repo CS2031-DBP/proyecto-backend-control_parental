@@ -159,10 +159,10 @@ public class PublicacionService {
             hijoPublicacionDtos.add(modelMapper.map(hijo, HijoPublicacionDto.class));
         });
 
-        List<ComentarioPublicacionDto> comentarioPublicacionDtos = new ArrayList<>();
-        publicacion.getComentarios().forEach((comentario) -> {
-            comentarioPublicacionDtos.add(modelMapper.map(comentario, ComentarioPublicacionDto.class));
-        });
+        //List<ComentarioPublicacionDto> comentarioPublicacionDtos = new ArrayList<>();
+        //publicacion.getComentarios().forEach((comentario) -> {
+        //    comentarioPublicacionDtos.add(modelMapper.map(comentario, ComentarioPublicacionDto.class));
+        //});
 
         List<PadrePublicacionDto> padrePublicacionDtos = new ArrayList<>();
         publicacion.getLikers().forEach((liker) -> {
@@ -170,7 +170,7 @@ public class PublicacionService {
         });
 
         publicacionResponseDto.setHijos(hijoPublicacionDtos);
-        publicacionResponseDto.setComentarios(comentarioPublicacionDtos);
+        //publicacionResponseDto.setComentarios(comentarioPublicacionDtos);
         publicacionResponseDto.setLikers(padrePublicacionDtos);
         publicacionResponseDto.setSalon(modelMapper.map(publicacion.getSalon(), ReducedSalonDto.class));
         return publicacionResponseDto;

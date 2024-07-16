@@ -132,12 +132,12 @@ public class PadreService {
 
         PadreSelfResponseDto response = modelMapper.map(padre, PadreSelfResponseDto.class);
 
-        List<PublicacionResponseDto> publicacionResponseDtos = new ArrayList<>();
-        padre.getPosts_likeados().forEach(post -> {
-            publicacionResponseDtos.add(modelMapper.map(post.getPublicacion(), PublicacionResponseDto.class));
-        });
+        //List<PublicacionResponseDto> publicacionResponseDtos = new ArrayList<>();
+        //padre.getPosts_likeados().forEach(post -> {
+        //    publicacionResponseDtos.add(modelMapper.map(post.getPublicacion(), PublicacionResponseDto.class));
+        //});
 
-        response.setPublicaciones_likeadas(publicacionResponseDtos);
+        //response.setPublicaciones_likeadas(publicacionResponseDtos);
         return response;
     }
 
